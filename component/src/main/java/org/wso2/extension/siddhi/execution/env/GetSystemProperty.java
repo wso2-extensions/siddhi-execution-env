@@ -24,7 +24,6 @@ import org.wso2.siddhi.annotation.Parameter;
 import org.wso2.siddhi.annotation.ReturnAttribute;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.executor.function.FunctionExecutor;
 import org.wso2.siddhi.core.util.config.ConfigReader;
@@ -43,7 +42,7 @@ import java.util.Map;
         namespace = "env",
         description = "This function returns system property given the system property key",
         returnAttributes = @ReturnAttribute(
-                description = "Returned type will be string.",
+                description = "Return type will be string.",
                 type = {org.wso2.siddhi.annotation.util.DataType.STRING}),
         parameters = {
                 @Parameter(name = "key",
@@ -56,11 +55,10 @@ import java.util.Map;
         },
         examples = {
                 @Example(
-                        syntax = "define stream inputStream (symbol string, price long, volume long);\n" +
-                                "from inputStream select symbol , env:getSystemProperty() as FunctionOutput \n" +
+                        syntax = "define stream keyStream (key string);\n" +
+                                "from keyStream env:getSystemProperty(key) as FunctionOutput \n" +
                                 "insert into outputStream;",
-                        description = "This query returns symbol from inputStream and"
-                                + "TheFun function output as "
+                        description = "This query returns system property corresponding to the key from inputStream as"
                                 + " FunctionOutput to the outputStream"
                 )
         }
@@ -112,25 +110,12 @@ public class GetSystemProperty extends FunctionExecutor {
     @Override
     protected Object execute(Object[] data) {
 
-        if (data.length > 1) {
-            if (data[0] instanceof String) {
-                String key = (String) data[0];
-                String defaultValue = (String) data[1];
+        String key = (String) data[0];
+        String defaultValue = (String) data[1];
 
-                String returnValue = System.getenv(key);
+        String returnValue = System.getenv(key);
 
-                if (returnValue != null) {
-                    return returnValue;
-                } else {
-                    return defaultValue;
-                }
-
-            } else {
-                throw new SiddhiAppRuntimeException("Input to the getSystemProperty() function must be a String");
-            }
-        }
-
-        return null;
+        return (returnValue != null) ? returnValue : defaultValue;
     }
 
     /**
@@ -144,17 +129,9 @@ public class GetSystemProperty extends FunctionExecutor {
     @Override
     protected Object execute(Object data) {
 
-        if (data != null) {
+        String key = (String) data;
+        return System.getenv(key);
 
-            if (data instanceof String) {
-                String key = (String) data;
-                return System.getenv(key);
-            } else {
-                throw new SiddhiAppRuntimeException("Input to the getSystemProperty() function must be a String");
-            }
-        } else {
-            throw new SiddhiAppRuntimeException("Input to the getSystemProperty() function cannot be null");
-        }
     }
 
     /**
