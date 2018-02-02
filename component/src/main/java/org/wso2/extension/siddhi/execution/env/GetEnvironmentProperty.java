@@ -24,7 +24,6 @@ import org.wso2.siddhi.annotation.Parameter;
 import org.wso2.siddhi.annotation.ReturnAttribute;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.executor.function.FunctionExecutor;
 import org.wso2.siddhi.core.util.config.ConfigReader;
@@ -40,7 +39,7 @@ import java.util.Map;
 @Extension(
         name = "getEnvironmentProperty",
         namespace = "env",
-        description = "This function returns environment property given the environment property key",
+        description = "This function returns Java environment property given the environment property key",
         returnAttributes = @ReturnAttribute(
                 description = "Returned type will be string.",
                 type = {org.wso2.siddhi.annotation.util.DataType.STRING}),
@@ -55,12 +54,11 @@ import java.util.Map;
         },
         examples = {
                 @Example(
-                        syntax = "define stream inputStream (symbol string, price long, volume long);\n" +
-                                "from inputStream select symbol , SampleFunction:TheFun() as FunctionOutput \n" +
+                        syntax = "define stream keyStream (key string);\n" +
+                                "from keyStream env:getEnvironmentProperty(key) as FunctionOutput \n" +
                                 "insert into outputStream;",
-                        description = "This query returns symbol from inputStream and"
-                                + "TheFun function output as "
-                                + " FunctionOutput to the outputStream"
+                        description = "This query returns Java environment property corresponding to " +
+                                "the key from inputStream as FunctionOutput to the outputStream"
                 )
         }
 )
@@ -111,19 +109,11 @@ public class GetEnvironmentProperty extends FunctionExecutor {
      */
     @Override
     protected Object execute(Object[] data) {
-        if (data.length > 1) {
-            if (data[0] instanceof String) {
-                String key = (String) data[0];
-                String defaultValue = (String) data[1];
 
-                return System.getProperty(key, defaultValue);
+        String key = (String) data[0];
+        String defaultValue = (String) data[1];
 
-            } else {
-                throw new SiddhiAppRuntimeException("Input to the getSystemProperty() function must be a String");
-            }
-        }
-
-        return null;
+        return System.getProperty(key, defaultValue);
     }
 
     /**
@@ -137,17 +127,8 @@ public class GetEnvironmentProperty extends FunctionExecutor {
     @Override
     protected Object execute(Object data) {
 
-        if (data != null) {
-
-            if (data instanceof String) {
-                String inputString = (String) data;
-                return System.getProperty(inputString, null);
-            } else {
-                throw new SiddhiAppRuntimeException("Input to the getEnvironmentProperty() function must be a String");
-            }
-        } else {
-            throw new SiddhiAppRuntimeException("Input to the getEnvironmentProperty() function cannot be null");
-        }
+        String inputString = (String) data;
+        return System.getProperty(inputString, null);
     }
 
     /**
