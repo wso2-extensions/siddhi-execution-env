@@ -31,14 +31,13 @@ import org.wso2.siddhi.core.util.EventPrinter;
 
 public class GetSystemPropertyFunctionExtensionTestCase {
 
-    protected static SiddhiManager siddhiManager;
     private static Logger logger = Logger.getLogger(GetEnvironmentPropertyFunctionExtensionTestCase.class);
 
     @Test
     public void testProcess() throws Exception {
         logger.info("GetSystemPropertyFunctionExtension TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         
         String stream = "define stream inputStream (key string);\n";
 
@@ -69,7 +68,7 @@ public class GetSystemPropertyFunctionExtensionTestCase {
     public void testProcessWithDefault() throws Exception {
         logger.info("GetSystemPropertyFunctionExtensionWithDefault TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         
         String stream = "define stream inputStream (key string);\n";
 
@@ -101,7 +100,7 @@ public class GetSystemPropertyFunctionExtensionTestCase {
     public void testProcessWithDefault2() throws Exception {
         logger.info("GetSystemPropertyFunctionExtensionWithDefault2 TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         
         String stream = "define stream inputStream (key string);\n";
 
@@ -132,7 +131,7 @@ public class GetSystemPropertyFunctionExtensionTestCase {
     public void exceptionTestCase1() {
         logger.info("GetSystemPropertyFunctionExtension exceptionTestCase1");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -148,7 +147,7 @@ public class GetSystemPropertyFunctionExtensionTestCase {
     public void exceptionTestCase2() {
         logger.info("GetSystemPropertyFunctionExtension exceptionTestCase2");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -163,7 +162,7 @@ public class GetSystemPropertyFunctionExtensionTestCase {
     public void exceptionTestCase3() {
         logger.info("GetSystemPropertyFunctionExtension exceptionTestCase3");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 

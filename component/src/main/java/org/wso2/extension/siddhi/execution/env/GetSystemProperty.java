@@ -82,7 +82,7 @@ public class GetSystemProperty extends FunctionExecutor {
                             "required at least 1, but found " + attributeExpressionExecutors.length);
         }
         Attribute.Type attributeType = attributeExpressionExecutors[0].getReturnType();
-        if (!((attributeType == Attribute.Type.STRING))) {
+        if (attributeType != Attribute.Type.STRING) {
             throw new SiddhiAppValidationException("Invalid parameter type found " +
                     "for the argument key of getSystemProperty() function, " +
                     "required " + Attribute.Type.STRING +
@@ -91,7 +91,7 @@ public class GetSystemProperty extends FunctionExecutor {
 
         if (attributeExpressionExecutors.length == 2) {
             Attribute.Type attribute2Type = attributeExpressionExecutors[1].getReturnType();
-            if (!((attribute2Type == Attribute.Type.STRING))) {
+            if (attribute2Type != Attribute.Type.STRING) {
                 throw new SiddhiAppValidationException("Invalid parameter type found " +
                         "for the argument default.value of getSystemProperty() function, " +
                         "required " + Attribute.Type.STRING +

@@ -24,13 +24,11 @@
     <modules>
         <module>component</module>
     </modules>
-
     <parent>
         <groupId>org.wso2</groupId>
         <artifactId>wso2</artifactId>
         <version>5</version>
     </parent>
-
     <groupId>org.wso2.extension.siddhi.execution.env</groupId>
     <artifactId>siddhi-execution-env-parent</artifactId>
     <packaging>pom</packaging>
@@ -57,7 +55,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -93,7 +90,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <build>
         <plugins>
             <plugin>
@@ -118,7 +114,6 @@
             </plugin>
         </plugins>
     </build>
-
     <pluginRepositories>
         <pluginRepository>
             <id>wso2.releases</id>
@@ -153,7 +148,6 @@
             </releases>
         </pluginRepository>
     </pluginRepositories>
-
     <repositories>
         <repository>
             <id>wso2-nexus</id>
@@ -188,7 +182,6 @@
             </releases>
         </repository>
     </repositories>
-
     <distributionManagement>
         <repository>
             <id>nexus-releases</id>
@@ -201,5 +194,4 @@
             <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
-
 </project>
