@@ -49,7 +49,6 @@ public class LoggerAppender extends AppenderSkeleton {
 
     @Override
     public void close() {
-        loggerCallBack = null;
     }
 
     @Override
