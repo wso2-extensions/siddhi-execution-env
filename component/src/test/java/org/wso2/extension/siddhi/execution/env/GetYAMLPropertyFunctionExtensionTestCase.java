@@ -38,8 +38,6 @@ import java.util.Map;
 
 public class GetYAMLPropertyFunctionExtensionTestCase {
 
-
-    protected static SiddhiManager siddhiManager;
     private static Logger logger = Logger.getLogger(GetYAMLPropertyFunctionExtensionTestCase.class);
     private boolean isLogEventArrived;
     private static String regexPattern = "The type of property value and parameter dataType does not match ";
@@ -48,7 +46,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcess() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtension TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
@@ -82,7 +80,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"integerProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -90,7 +87,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcess2() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtension TestCase2");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
@@ -124,7 +121,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"integerProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -132,7 +128,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessWithDefault() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionWithDefault TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -156,7 +152,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"stringProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -164,7 +159,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessWithoutDefault() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionWithoutDefault TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -188,7 +183,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"stringProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -196,7 +190,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessBoolean() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionBoolean TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
 
@@ -225,7 +219,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"booleanProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -233,7 +226,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessBooleanWithDefault() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionBooleanWithDefault TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -258,7 +251,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"booleanProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -266,7 +258,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessInt() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionInt TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
@@ -300,7 +292,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"integerProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -308,7 +299,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessIntWithDefault() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionIntWithDefault TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
@@ -342,7 +333,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"integerProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -350,7 +340,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessLong() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionLong TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
@@ -384,7 +374,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"longProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -392,7 +381,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessLongWithDefault() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionLongWithDefault TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
@@ -426,7 +415,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"longProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -434,7 +422,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessDouble() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionDouble TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
@@ -468,7 +456,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"doubleProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -476,7 +463,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessDoubleWithDefault() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionDoubleWithDefault TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
@@ -510,7 +497,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"longProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -518,7 +504,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessFloat() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionFloat TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
@@ -552,7 +538,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"floatProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -560,7 +545,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void testProcessFloatWithDefault() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionFloatWithDefault TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
@@ -594,7 +579,6 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"floatProperty"});
-        Thread.sleep(100);
         siddhiAppRuntime.shutdown();
     }
 
@@ -602,7 +586,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void exceptionTestCase1() {
         logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase1");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -617,7 +601,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void exceptionTestCase2() {
         logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase2");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -632,7 +616,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void exceptionTestCase3() {
         logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase3");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -647,7 +631,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void exceptionTestCase4() {
         logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase4");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -662,7 +646,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void exceptionTestCase5() {
         logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase5");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
+
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1') from inputStream "
@@ -676,7 +661,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     public void exceptionTestCase6() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase6");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");

@@ -80,31 +80,26 @@ public class GetYAMLProperty extends FunctionExecutor {
     private ConfigReader reader;
     private Attribute.Type returnType = Attribute.Type.STRING;
 
-
     /**
      * The initialization method for TheFun, this method will be called before the other methods.
      *
      * @param attributeExpressionExecutors the executors of each function parameter.
      * @param siddhiAppContext             the context of the execution plan.
      */
-
     protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader reader,
                         SiddhiAppContext siddhiAppContext) {
-
         if (attributeExpressionExecutors.length < 1) {
             throw new SiddhiAppValidationException(
                     "Invalid no of arguments passed to env:getYAMLProperty() function, " +
                             "required at least 1, but found " + attributeExpressionExecutors.length);
         }
-
         Attribute.Type attribute1Type = attributeExpressionExecutors[0].getReturnType();
-        if (!((attribute1Type == Attribute.Type.STRING))) {
+        if (attribute1Type != Attribute.Type.STRING) {
             throw new SiddhiAppValidationException("Invalid parameter type found " +
                     "for the argument Key of getYAMLProperty() function, " +
                     "required " + Attribute.Type.STRING +
                     ", but found " + attribute1Type.toString());
         }
-
         if (attributeExpressionExecutors.length > 1) {
             if (!(attributeExpressionExecutors[1] instanceof ConstantExpressionExecutor)) {
                 throw new SiddhiAppValidationException("The second argument has to be a string constant specifying " +
@@ -112,35 +107,39 @@ public class GetYAMLProperty extends FunctionExecutor {
                         + "(int, long, float, double, string, bool)");
             } else {
                 String type = attributeExpressionExecutors[1].execute(null).toString();
-                if ("int".equals(type)) {
-                    returnType = Attribute.Type.INT;
-                } else if ("long".equalsIgnoreCase(type)) {
-                    returnType = Attribute.Type.LONG;
-                } else if ("float".equalsIgnoreCase(type)) {
-                    returnType = Attribute.Type.FLOAT;
-                } else if ("double".equalsIgnoreCase(type)) {
-                    returnType = Attribute.Type.DOUBLE;
-                } else if ("bool".equalsIgnoreCase(type)) {
-                    returnType = Attribute.Type.BOOL;
-                } else if ("string".equalsIgnoreCase(type)) {
-                    returnType = Attribute.Type.STRING;
-                } else {
-                    throw new SiddhiAppValidationException("Type must be one of int, long, float, double, bool, " +
-                            "string");
-                }
+                returnType = getReturnType(type);
             }
         }
 
         if (attributeExpressionExecutors.length > 2) {
             Attribute.Type attribute3Type = attributeExpressionExecutors[2].getReturnType();
-
-            if (!(attribute3Type == returnType)) {
+            if (attribute3Type != returnType) {
                 throw new SiddhiAppValidationException("Type of parameter default.Value " +
                         "needs to match parameter data.type");
             }
         }
-
         this.reader = reader;
+    }
+
+    private Attribute.Type getReturnType(String type) {
+        Attribute.Type theReturnType;
+        if ("int".equalsIgnoreCase(type)) {
+            theReturnType = Attribute.Type.INT;
+        } else if ("long".equalsIgnoreCase(type)) {
+            theReturnType = Attribute.Type.LONG;
+        } else if ("float".equalsIgnoreCase(type)) {
+            theReturnType = Attribute.Type.FLOAT;
+        } else if ("double".equalsIgnoreCase(type)) {
+            theReturnType = Attribute.Type.DOUBLE;
+        } else if ("bool".equalsIgnoreCase(type)) {
+            theReturnType = Attribute.Type.BOOL;
+        } else if ("string".equalsIgnoreCase(type)) {
+            theReturnType = Attribute.Type.STRING;
+        } else {
+            throw new SiddhiAppValidationException("Type must be one of int, long, float, double, bool, " +
+                    "string");
+        }
+        return theReturnType;
     }
 
     /**
@@ -152,29 +151,22 @@ public class GetYAMLProperty extends FunctionExecutor {
      */
     @Override
     protected Object execute(Object[] data) {
-
         String key = (String) data[0];
         String value = reader.readConfig(key, null);
-
         if (value != null) {
             try {
                 switch (returnType) {
                     case INT:
-                        int intValue = Integer.parseInt(value);
-                        return intValue;
+                         return Integer.parseInt(value);
                     case LONG:
-                        long longValue = Long.parseLong(value);
-                        return longValue;
+                         return Long.parseLong(value);
                     case FLOAT:
-                        float floatValue = Float.parseFloat(value);
-                        return floatValue;
+                        return Float.parseFloat(value);
                     case DOUBLE:
-                        double doubleValue = Double.parseDouble(value);
-                        return doubleValue;
+                        return Double.parseDouble(value);
                     case BOOL:
-                        boolean boolValue = Boolean.parseBoolean(value);
-                        return boolValue;
-                    case STRING:
+                        return Boolean.parseBoolean(value);
+                    default:  // case STRING:
                         break;
                 }
                 return value;
@@ -197,11 +189,8 @@ public class GetYAMLProperty extends FunctionExecutor {
      */
     @Override
     protected Object execute(Object data) {
-
         String key = (String) data;
-        String value = reader.readConfig(key, null);
-
-        return value;
+        return reader.readConfig(key, null);
     }
 
     /**

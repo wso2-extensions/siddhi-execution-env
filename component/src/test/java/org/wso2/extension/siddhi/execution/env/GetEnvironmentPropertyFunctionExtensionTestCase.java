@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -33,14 +32,13 @@ import org.wso2.siddhi.core.util.EventPrinter;
 
 public class GetEnvironmentPropertyFunctionExtensionTestCase {
 
-    protected static SiddhiManager siddhiManager;
     private static Logger logger = Logger.getLogger(GetEnvironmentPropertyFunctionExtensionTestCase.class);
 
     @Test
     public void testProcess() throws Exception {
         logger.info("GetEnvironmentPropertyFunctionExtension TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         
         String stream = "define stream inputStream (key string);\n";
 
@@ -72,7 +70,7 @@ public class GetEnvironmentPropertyFunctionExtensionTestCase {
     public void testProcessWithDefault() throws Exception {
         logger.info("GetEnvironmentPropertyFunctionExtensionWithDefault TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
         
         String stream = "define stream inputStream (key string);\n";
 
@@ -103,7 +101,7 @@ public class GetEnvironmentPropertyFunctionExtensionTestCase {
     public void testProcessWithDefault2() throws Exception {
         logger.info("GetEnvironmentPropertyFunctionExtensionWithDefault2 TestCase");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -134,7 +132,7 @@ public class GetEnvironmentPropertyFunctionExtensionTestCase {
     public void exceptionTestCase1() {
         logger.info("GetEnvironmentPropertyFunctionExtension exceptionTestCase1");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -150,7 +148,7 @@ public class GetEnvironmentPropertyFunctionExtensionTestCase {
     public void exceptionTestCase2() {
         logger.info("GetEnvironmentPropertyFunctionExtension exceptionTestCase2");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -165,7 +163,7 @@ public class GetEnvironmentPropertyFunctionExtensionTestCase {
     public void exceptionTestCase3() {
         logger.info("GetEnvironmentPropertyFunctionExtension exceptionTestCase2");
 
-        siddhiManager = new SiddhiManager();
+        SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
