@@ -35,14 +35,14 @@ import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 import java.util.Map;
 
 /**
- * Siddhi Function getYAMLProperty to read property values from deployment YAML.
+ * Siddhi Function getYAMLProperty to read property values from deployment.yaml.
  */
 
 @Extension(
         name = "getYAMLProperty",
         namespace = "env",
-        description = "This function returns the YAML Property requested or the default values specified if such a" +
-                "variable is not available in the Deployment YAML",
+        description = "This function returns the YAML property requested or the default values specified if such a" +
+                "variable is not available in the deployment.yaml",
         parameters = {
                 @Parameter(name = "key",
                         description = "This specifies Key of the property to be read.",
@@ -70,15 +70,16 @@ import java.util.Map;
                                 "from keyStream  env:getYAMLProperty(key) as FunctionOutput \n" +
                                 "insert into outputStream;",
                         description = "This query returns corresponding YAML property for the corresponding key " +
-                                "from inputStream as FunctionOutput to the outputStream"
+                                "from keyStream as FunctionOutput to the outputStream"
                 )
         }
 )
 
-public class GetYAMLProperty extends FunctionExecutor {
+public class GetYAMLPropertyFunction extends FunctionExecutor {
 
-    private ConfigReader reader;
+    private ConfigReader configReader;
     private Attribute.Type returnType = Attribute.Type.STRING;
+    private boolean hasDefaultValue = false;
 
     /**
      * The initialization method for TheFun, this method will be called before the other methods.
@@ -88,37 +89,34 @@ public class GetYAMLProperty extends FunctionExecutor {
      */
     protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader reader,
                         SiddhiAppContext siddhiAppContext) {
-        if (attributeExpressionExecutors.length < 1) {
-            throw new SiddhiAppValidationException(
-                    "Invalid no of arguments passed to env:getYAMLProperty() function, " +
-                            "required at least 1, but found " + attributeExpressionExecutors.length);
-        }
-        Attribute.Type attribute1Type = attributeExpressionExecutors[0].getReturnType();
-        if (attribute1Type != Attribute.Type.STRING) {
-            throw new SiddhiAppValidationException("Invalid parameter type found " +
-                    "for the argument Key of getYAMLProperty() function, " +
-                    "required " + Attribute.Type.STRING +
-                    ", but found " + attribute1Type.toString());
-        }
-        if (attributeExpressionExecutors.length > 1) {
-            if (!(attributeExpressionExecutors[1] instanceof ConstantExpressionExecutor)) {
-                throw new SiddhiAppValidationException("The second argument has to be a string constant specifying " +
-                        "one of the supported data types "
-                        + "(int, long, float, double, string, bool)");
-            } else {
-                String type = attributeExpressionExecutors[1].execute(null).toString();
-                returnType = getReturnType(type);
+        int attributeExpressionExecutorsLength = attributeExpressionExecutors.length;
+        if ((attributeExpressionExecutorsLength > 0) && (attributeExpressionExecutorsLength < 4)) {
+            Attribute.Type typeofKeyAttribute = attributeExpressionExecutors[0].getReturnType();
+            checkKeyAttribute(typeofKeyAttribute);
+            if (attributeExpressionExecutorsLength > 1) {
+                if (!(attributeExpressionExecutors[1] instanceof ConstantExpressionExecutor)) {
+                    throw new SiddhiAppValidationException("The second argument has to be a string constant " +
+                            "specifying one of the supported data types (int, long, float, double, string, bool)");
+                } else {
+                    String type = attributeExpressionExecutors[1].execute(null).toString();
+                    returnType = getReturnType(type);
+                }
             }
+            if (attributeExpressionExecutors.length > 2) {
+                Attribute.Type typeofDefaultValueAttribute = attributeExpressionExecutors[2].getReturnType();
+                if (typeofDefaultValueAttribute != returnType) {
+                    throw new SiddhiAppValidationException("Type of parameter default.Value " +
+                            "needs to match parameter data.type");
+                }
+            }
+        } else {
+            throw new SiddhiAppValidationException("Invalid no of arguments passed to " +
+                    "env:getYAMLProperty(Key, data.type, default.value) function, " +
+                    "required 1,2 or 3, but found " + attributeExpressionExecutorsLength);
         }
 
-        if (attributeExpressionExecutors.length > 2) {
-            Attribute.Type attribute3Type = attributeExpressionExecutors[2].getReturnType();
-            if (attribute3Type != returnType) {
-                throw new SiddhiAppValidationException("Type of parameter default.Value " +
-                        "needs to match parameter data.type");
-            }
-        }
-        this.reader = reader;
+        this.configReader = reader;
+        hasDefaultValue = (attributeExpressionExecutorsLength > 2);
     }
 
     private Attribute.Type getReturnType(String type) {
@@ -142,6 +140,15 @@ public class GetYAMLProperty extends FunctionExecutor {
         return theReturnType;
     }
 
+    private void checkKeyAttribute(Attribute.Type typeofKeyAttribute) {
+        if (typeofKeyAttribute != Attribute.Type.STRING) {
+            throw new SiddhiAppValidationException("Invalid parameter type found " +
+                    "for the argument Key of getYAMLProperty() function, " +
+                    "required " + Attribute.Type.STRING +
+                    ", but found " + typeofKeyAttribute.toString());
+        }
+    }
+
     /**
      * The main execution method which will be called upon event arrival
      * when there are more than one function parameter.
@@ -149,17 +156,18 @@ public class GetYAMLProperty extends FunctionExecutor {
      * @param data the runtime values of function parameters.
      * @return the function result.
      */
+
     @Override
     protected Object execute(Object[] data) {
         String key = (String) data[0];
-        String value = reader.readConfig(key, null);
+        String value = configReader.readConfig(key, null);
         if (value != null) {
             try {
                 switch (returnType) {
                     case INT:
-                         return Integer.parseInt(value);
+                        return Integer.parseInt(value);
                     case LONG:
-                         return Long.parseLong(value);
+                        return Long.parseLong(value);
                     case FLOAT:
                         return Float.parseFloat(value);
                     case DOUBLE:
@@ -175,7 +183,7 @@ public class GetYAMLProperty extends FunctionExecutor {
                         ("The type of property value and parameter dataType does not match");
             }
         } else {
-            return ((data.length > 2) ? data[2] : null);
+            return ((hasDefaultValue) ? data[2] : null);
         }
     }
 
@@ -189,8 +197,15 @@ public class GetYAMLProperty extends FunctionExecutor {
      */
     @Override
     protected Object execute(Object data) {
-        String key = (String) data;
-        return reader.readConfig(key, null);
+        if (data != null) {
+            if (data instanceof String) {
+                String key = (String) data;
+                return configReader.readConfig(key, null);
+            }
+        } else {
+            throw new SiddhiAppRuntimeException("Input to the getYAMLProperty function cannot be null");
+        }
+        return null;
     }
 
     /**

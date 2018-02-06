@@ -24,6 +24,7 @@ import org.wso2.siddhi.annotation.Parameter;
 import org.wso2.siddhi.annotation.ReturnAttribute;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
+import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.executor.function.FunctionExecutor;
 import org.wso2.siddhi.core.util.config.ConfigReader;
@@ -40,7 +41,7 @@ import java.util.Map;
 @Extension(
         name = "getSystemProperty",
         namespace = "env",
-        description = "This function returns system property given the system property key",
+        description = "This function returns the system property pointed by the system property key",
         returnAttributes = @ReturnAttribute(
                 description = "Return type will be string.",
                 type = {org.wso2.siddhi.annotation.util.DataType.STRING}),
@@ -58,14 +59,13 @@ import java.util.Map;
                         syntax = "define stream keyStream (key string);\n" +
                                 "from keyStream env:getSystemProperty(key) as FunctionOutput \n" +
                                 "insert into outputStream;",
-                        description = "This query returns system property corresponding to the key from inputStream as"
+                        description = "This query returns system property corresponding to the key from keyStream as"
                                 + " FunctionOutput to the outputStream"
                 )
         }
 )
 
-public class GetSystemProperty extends FunctionExecutor {
-
+public class GetSystemPropertyFunction extends FunctionExecutor {
 
     /**
      * The initialization method for TheFun, this method will be called before the other methods.
@@ -76,27 +76,28 @@ public class GetSystemProperty extends FunctionExecutor {
 
     protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader reader,
                         SiddhiAppContext siddhiAppContext) {
-        if (attributeExpressionExecutors.length < 1) {
-            throw new SiddhiAppValidationException(
-                    "Invalid no of arguments passed to env:getSystemProperty() function, " +
-                            "required at least 1, but found " + attributeExpressionExecutors.length);
-        }
-        Attribute.Type attributeType = attributeExpressionExecutors[0].getReturnType();
-        if (attributeType != Attribute.Type.STRING) {
-            throw new SiddhiAppValidationException("Invalid parameter type found " +
-                    "for the argument key of getSystemProperty() function, " +
-                    "required " + Attribute.Type.STRING +
-                    ", but found " + attributeType.toString());
-        }
-
-        if (attributeExpressionExecutors.length == 2) {
-            Attribute.Type attribute2Type = attributeExpressionExecutors[1].getReturnType();
-            if (attribute2Type != Attribute.Type.STRING) {
+        int attributeExpressionExecutorsLength = attributeExpressionExecutors.length;
+        if ((attributeExpressionExecutorsLength > 0) && (attributeExpressionExecutorsLength < 3)) {
+            Attribute.Type typeofKeyAttribute = attributeExpressionExecutors[0].getReturnType();
+            if (typeofKeyAttribute != Attribute.Type.STRING) {
                 throw new SiddhiAppValidationException("Invalid parameter type found " +
-                        "for the argument default.value of getSystemProperty() function, " +
+                        "for the argument key of getSystemProperty() function, " +
                         "required " + Attribute.Type.STRING +
-                        ", but found " + attributeType.toString());
+                        ", but found " + typeofKeyAttribute.toString());
             }
+            if (attributeExpressionExecutorsLength == 2) {
+                Attribute.Type typeofDefaultValueAttribute = attributeExpressionExecutors[1].getReturnType();
+                if (typeofDefaultValueAttribute != Attribute.Type.STRING) {
+                    throw new SiddhiAppValidationException("Invalid parameter type found " +
+                            "for the argument default.value of getSystemProperty() function, " +
+                            "required " + Attribute.Type.STRING +
+                            ", but found " + typeofDefaultValueAttribute.toString());
+                }
+            }
+        } else {
+            throw new SiddhiAppValidationException("Invalid no of arguments passed to " +
+                    "env:getSystemProperty(Key, default.value) function, " +
+                    "required 1 or 2, but found " + attributeExpressionExecutors.length);
         }
     }
 
@@ -128,10 +129,16 @@ public class GetSystemProperty extends FunctionExecutor {
      */
     @Override
     protected Object execute(Object data) {
-
-        String key = (String) data;
-        return System.getenv(key);
-
+        if (data != null) {
+            if (data instanceof String) {
+                String key = (String) data;
+                return System.getenv(key);
+            } else {
+                throw new SiddhiAppRuntimeException("Input to the getSystemProperty() function must be a String");
+            }
+        } else {
+            throw new SiddhiAppRuntimeException("Input to the getSystemProperty() function cannot be null");
+        }
     }
 
     /**
