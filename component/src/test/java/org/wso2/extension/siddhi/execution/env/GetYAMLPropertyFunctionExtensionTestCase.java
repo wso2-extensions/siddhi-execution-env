@@ -56,7 +56,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -97,12 +97,12 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1') from inputStream "
-                + "select env:getYAMLProperty(key,'string','defaultValue') as propertyValue "
+                + "select env:getYAMLProperty(key,'int') as propertyValue "
                 + "insert into outputStream;");
 
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(stream + query);
@@ -195,7 +195,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -268,7 +268,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -309,7 +309,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -350,7 +350,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -391,7 +391,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -432,7 +432,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -473,7 +473,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
        // configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -514,7 +514,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -555,7 +555,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 
@@ -671,7 +671,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
-        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLProperty.class);
+        siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
 
         String stream = "define stream inputStream (key string);\n";
 

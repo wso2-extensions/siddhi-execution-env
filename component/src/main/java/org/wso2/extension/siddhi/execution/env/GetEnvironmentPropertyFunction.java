@@ -15,7 +15,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.wso2.extension.siddhi.execution.env;
 
 import org.wso2.siddhi.annotation.Example;
@@ -24,6 +23,7 @@ import org.wso2.siddhi.annotation.Parameter;
 import org.wso2.siddhi.annotation.ReturnAttribute;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
+import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.executor.function.FunctionExecutor;
 import org.wso2.siddhi.core.util.config.ConfigReader;
@@ -39,7 +39,7 @@ import java.util.Map;
 @Extension(
         name = "getEnvironmentProperty",
         namespace = "env",
-        description = "This function returns Java environment property given the environment property key",
+        description = "This function returns Java environment property corresponding to the key provided",
         returnAttributes = @ReturnAttribute(
                 description = "Returned type will be string.",
                 type = {org.wso2.siddhi.annotation.util.DataType.STRING}),
@@ -58,12 +58,11 @@ import java.util.Map;
                                 "from keyStream env:getEnvironmentProperty(key) as FunctionOutput \n" +
                                 "insert into outputStream;",
                         description = "This query returns Java environment property corresponding to " +
-                                "the key from inputStream as FunctionOutput to the outputStream"
+                                "the key from keyStream as FunctionOutput to the outputStream"
                 )
         }
 )
-
-public class GetEnvironmentProperty extends FunctionExecutor {
+public class GetEnvironmentPropertyFunction extends FunctionExecutor {
 
     /**
      * The initialization method for TheFun, this method will be called before the other methods.
@@ -74,28 +73,28 @@ public class GetEnvironmentProperty extends FunctionExecutor {
 
     protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader reader,
                         SiddhiAppContext siddhiAppContext) {
-
-        if (attributeExpressionExecutors.length < 1) {
-            throw new SiddhiAppValidationException(
-                    "Invalid no of arguments passed to env:getEnvironmentProperty() function, " +
-                            "required at least 1, but found " + attributeExpressionExecutors.length);
-        }
-        Attribute.Type attributeType = attributeExpressionExecutors[0].getReturnType();
-        if (attributeType != Attribute.Type.STRING) {
-            throw new SiddhiAppValidationException("Invalid parameter type found " +
-                    "for the argument key of getEnvironmentProperty() function, " +
-                    "required " + Attribute.Type.STRING +
-                    ", but found " + attributeType.toString());
-        }
-
-        if (attributeExpressionExecutors.length > 1) {
-            Attribute.Type attribute2Type = attributeExpressionExecutors[1].getReturnType();
-            if (attribute2Type != Attribute.Type.STRING) {
+        int attributeExpressionExecutorsLength = attributeExpressionExecutors.length;
+        if ((attributeExpressionExecutorsLength > 0) && (attributeExpressionExecutorsLength < 3)) {
+            Attribute.Type typeofKeyAttribute = attributeExpressionExecutors[0].getReturnType();
+            if (typeofKeyAttribute != Attribute.Type.STRING) {
                 throw new SiddhiAppValidationException("Invalid parameter type found " +
-                        "for the argument default.value of getEnvironmentProperty() function, " +
+                        "for the argument key of getEnvironmentProperty() function, " +
                         "required " + Attribute.Type.STRING +
-                        ", but found " + attributeType.toString());
+                        ", but found " + typeofKeyAttribute.toString());
             }
+            if (attributeExpressionExecutorsLength == 2) {
+                Attribute.Type typeofDefaultValueAttribute = attributeExpressionExecutors[1].getReturnType();
+                if (typeofDefaultValueAttribute != Attribute.Type.STRING) {
+                    throw new SiddhiAppValidationException("Invalid parameter type found " +
+                            "for the argument default.value of getEnvironmentProperty() function, " +
+                            "required " + Attribute.Type.STRING +
+                            ", but found " + typeofDefaultValueAttribute.toString());
+                }
+            }
+        } else {
+            throw new SiddhiAppValidationException("Invalid no of arguments passed to " +
+                    "env:getEnvironmentProperty(Key,default.value) function, " +
+                    "required 1 or 2, but found " + attributeExpressionExecutors.length);
         }
     }
 
@@ -125,9 +124,16 @@ public class GetEnvironmentProperty extends FunctionExecutor {
      */
     @Override
     protected Object execute(Object data) {
-
-        String inputString = (String) data;
-        return System.getProperty(inputString, null);
+        if (data != null) {
+            if (data instanceof String) {
+                String inputString = (String) data;
+                return System.getProperty(inputString);
+            } else {
+                throw new SiddhiAppRuntimeException("Input to the getEnvironmentProperty() function must be a String");
+            }
+        } else {
+            throw new SiddhiAppRuntimeException("Input to the getEnvironmentProperty() function cannot be null");
+        }
     }
 
     /**
