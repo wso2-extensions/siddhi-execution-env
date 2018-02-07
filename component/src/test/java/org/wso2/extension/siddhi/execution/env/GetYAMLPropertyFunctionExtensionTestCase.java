@@ -32,9 +32,13 @@ import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
 import org.wso2.siddhi.core.util.config.InMemoryConfigManager;
+
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Test case for GetYAMLPropertyFunction function extension.
+ */
 
 public class GetYAMLPropertyFunctionExtensionTestCase {
 
@@ -43,8 +47,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     private static String regexPattern = "The type of property value and parameter dataType does not match ";
 
     @Test
-    public void testProcess() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtension TestCase");
+    public void testDefaultBehaviour() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensiontestDefaultBehaviour TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
@@ -84,8 +88,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcess2() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtension TestCase2");
+    public void testDefaultBehaviourWithDefaultType() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensiontestDefaultBehaviourWithDefaultType TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
@@ -125,8 +129,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessWithDefault() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionWithDefault TestCase");
+    public void testDefaultBehaviourWithWithDefaultValueProvided() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestDefaultBehaviourWithWithDefaultValue TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -156,8 +160,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessWithoutDefault() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionWithoutDefault TestCase");
+    public void testBehaviourWithWithoutDefaultValue() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestBehaviourWithWithoutDefaultValue TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -187,7 +191,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessBoolean() throws Exception {
+    public void testBehaviourWithBoolean() throws Exception {
         logger.info("GetYAMLPropertyFunctionExtensionBoolean TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
@@ -223,8 +227,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessBooleanWithDefault() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionBooleanWithDefault TestCase");
+    public void testBehaviourWithBooleanWithDefaultValueProvided() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestBehaviourWithBooleanWithDefaultValueProvided TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -255,8 +259,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessInt() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionInt TestCase");
+    public void testBehaviourWithInt() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestBehaviourWithInt TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
@@ -296,8 +300,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessIntWithDefault() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionIntWithDefault TestCase");
+    public void testBehaviourWithIntWithDefaultValueProvided() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestBehaviourWithIntWithDefaultValueProvided TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
@@ -337,8 +341,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessLong() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionLong TestCase");
+    public void testBehaviourWithLong() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestBehaviourWithLong TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
@@ -378,15 +382,15 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessLongWithDefault() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionLongWithDefault TestCase");
+    public void testBehaviourWithLongWithDefaultValueProvided() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestBehaviourWithLongWithDefaultValueProvided TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-      //  configMap.put("env.getYAMLProperty.longProperty", "999l");
+        //  configMap.put("env.getYAMLProperty.longProperty", "999l");
         configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
@@ -419,8 +423,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessDouble() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionDouble TestCase");
+    public void testBehaviourWithDouble() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestBehaviourWithDouble TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
@@ -460,8 +464,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessDoubleWithDefault() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionDoubleWithDefault TestCase");
+    public void testBehaviourWithDoubleWithDefaultValueProvided() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestBehaviourWithDoubleWithDefaultValueProvided TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
@@ -470,7 +474,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.integerProperty", "99");
         configMap.put("env.getYAMLProperty.longProperty", "999l");
         configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
-       // configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
+        // configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
         siddhiManager.setExtension("env:getYAMLProperty", GetYAMLPropertyFunction.class);
@@ -501,8 +505,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessFloat() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionFloat TestCase");
+    public void testBehaviourWithFloat() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestBehaviourWithFloat TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
@@ -542,8 +546,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessFloatWithDefault() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensionFloatWithDefault TestCase");
+    public void testBehaviourWithFloatWithDefaultValueProvided() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtensionTestBehaviourWithFloatWithDefaultValueProvided TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
@@ -583,8 +587,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class)
-    public void exceptionTestCase1() {
-        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase1");
+    public void exceptionTestCaseNullKey() {
+        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCaseNullKey");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -598,8 +602,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class)
-    public void exceptionTestCase2() {
-        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase2");
+    public void exceptionTestCaseNonStringKey() {
+        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCaseNonStringKey");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -613,8 +617,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class)
-    public void exceptionTestCase3() {
-        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase3");
+    public void exceptionTestCaseNonMatchingTypeDefaultValue() {
+        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCaseNonMatchingTypeDefaultValue");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -628,8 +632,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class)
-    public void exceptionTestCase4() {
-        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase4");
+    public void exceptionTestCaseInvalidDataType() {
+        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCaseInvalidDataType");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -643,8 +647,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class)
-    public void exceptionTestCase5() {
-        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase5");
+    public void exceptionTestCaseVariableDataType() {
+        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCaseVariableDataType");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -658,8 +662,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void exceptionTestCase6() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCase6");
+    public void exceptionTestCaseNonMatchingDataTypeForPropertyValue() throws Exception {
+        logger.info("GetYAMLPropertyFunctionExtension exceptionTestCaseNonMatchingDataTypeForPropertyValue");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
