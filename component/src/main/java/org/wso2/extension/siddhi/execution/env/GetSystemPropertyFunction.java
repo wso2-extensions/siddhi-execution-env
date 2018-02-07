@@ -68,7 +68,7 @@ import java.util.Map;
 public class GetSystemPropertyFunction extends FunctionExecutor {
 
     /**
-     * The initialization method for TheFun, this method will be called before the other methods.
+     * The initialization method for GetSystemPropertyFunction, this method will be called before the other methods.
      *
      * @param attributeExpressionExecutors the executors of each function parameter.
      * @param siddhiAppContext             the context of the execution plan.
@@ -96,7 +96,7 @@ public class GetSystemPropertyFunction extends FunctionExecutor {
             }
         } else {
             throw new SiddhiAppValidationException("Invalid no of arguments passed to " +
-                    "env:getSystemProperty(Key, default.value) function, " +
+                    "env:getSystemProperty(Key,  default.value) function, " +
                     "required 1 or 2, but found " + attributeExpressionExecutors.length);
         }
     }
