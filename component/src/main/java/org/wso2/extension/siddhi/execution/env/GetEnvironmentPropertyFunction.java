@@ -65,7 +65,8 @@ import java.util.Map;
 public class GetEnvironmentPropertyFunction extends FunctionExecutor {
 
     /**
-     * The initialization method for TheFun, this method will be called before the other methods.
+     * The initialization method for GetEnvironmentPropertyFunction,
+     * this method will be called before the other methods.
      *
      * @param attributeExpressionExecutors the executors of each function parameter.
      * @param siddhiAppContext             the context of the execution plan.

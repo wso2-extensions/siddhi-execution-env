@@ -29,22 +29,26 @@ import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
 
+/**
+ * Test case for GetSystemPropertyFunction function extension.
+ */
+
 public class GetSystemPropertyFunctionExtensionTestCase {
 
     private static Logger logger = Logger.getLogger(GetEnvironmentPropertyFunctionExtensionTestCase.class);
 
     @Test
-    public void testProcess() throws Exception {
-        logger.info("GetSystemPropertyFunctionExtension TestCase");
+    public void testDefaultBehaviour() throws Exception {
+        logger.info("GetSystemPropertyFunctionExtensionTestDefaultBehaviour TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
-        
+
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1') from inputStream "
                 + "select env:getSystemProperty(key) as propertyValue "
                 + "insert into outputStream;");
-        
+
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(stream + query);
         siddhiAppRuntime.addCallback("query1", new QueryCallback() {
             @Override
@@ -65,17 +69,17 @@ public class GetSystemPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessWithDefault() throws Exception {
-        logger.info("GetSystemPropertyFunctionExtensionWithDefault TestCase");
+    public void testDefaultBehaviourWithWithDefaultValueProvided() throws Exception {
+        logger.info("GetSystemPropertyFunctionExtensionTestDefaultBehaviourWithWithDefaultValueProvided TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
-        
+
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1') from inputStream "
                 + "select env:getSystemProperty(key,'defaultValue') as propertyValue "
                 + "insert into outputStream;");
-        
+
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(stream + query);
         siddhiAppRuntime.addCallback("query1", new QueryCallback() {
             @Override
@@ -97,17 +101,17 @@ public class GetSystemPropertyFunctionExtensionTestCase {
     }
 
     @Test
-    public void testProcessWithDefault2() throws Exception {
-        logger.info("GetSystemPropertyFunctionExtensionWithDefault2 TestCase");
+    public void testDefaultBehaviourWithWithDefaultValueProvided2() throws Exception {
+        logger.info("GetSystemPropertyFunctionExtensionTestDefaultBehaviourWithWithDefaultValueProvided TestCase2");
 
         SiddhiManager siddhiManager = new SiddhiManager();
-        
+
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1') from inputStream "
                 + "select env:getSystemProperty(key,'defaultValue') as propertyValue "
                 + "insert into outputStream;");
-        
+
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(stream + query);
         siddhiAppRuntime.addCallback("query1", new QueryCallback() {
             @Override
@@ -128,8 +132,8 @@ public class GetSystemPropertyFunctionExtensionTestCase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class)
-    public void exceptionTestCase1() {
-        logger.info("GetSystemPropertyFunctionExtension exceptionTestCase1");
+    public void exceptionTestCaseNonStringKey() {
+        logger.info("GetSystemPropertyFunctionExtension exceptionTestCaseNonStringKey");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -144,8 +148,8 @@ public class GetSystemPropertyFunctionExtensionTestCase {
 
 
     @Test(expectedExceptions = SiddhiAppCreationException.class)
-    public void exceptionTestCase2() {
-        logger.info("GetSystemPropertyFunctionExtension exceptionTestCase2");
+    public void exceptionTestCaseNullKey() {
+        logger.info("GetSystemPropertyFunctionExtension exceptionTestCaseNullKey");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
@@ -159,8 +163,8 @@ public class GetSystemPropertyFunctionExtensionTestCase {
     }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class)
-    public void exceptionTestCase3() {
-        logger.info("GetSystemPropertyFunctionExtension exceptionTestCase3");
+    public void exceptionTestCaseNonStringDefault() {
+        logger.info("GetSystemPropertyFunctionExtension exceptionTestCaseNonStringDefault");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
