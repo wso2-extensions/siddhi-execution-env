@@ -93,9 +93,9 @@
                         <Export-Package>
                             org.wso2.extension.siddhi.execution.env.*
                         </Export-Package>
-                        <Import-Package>
-                            *;resolution:=optional 
-                        </Import-Package>
+                        <!--<Import-Package>-->
+                        <!--*;resolution:=optional -->
+                        <!--</Import-Package>-->
                         <Include-Resource>
                             META-INF=target/classes/META-INF
                         </Include-Resource>
