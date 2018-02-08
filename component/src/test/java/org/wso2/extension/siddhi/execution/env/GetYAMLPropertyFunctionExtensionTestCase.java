@@ -55,8 +55,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-        configMap.put("env.getYAMLProperty.longProperty", "999l");
-        configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
+        configMap.put("env.getYAMLProperty.longProperty", "999");
+        configMap.put("env.getYAMLProperty.floatProperty", "99.99");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
@@ -74,30 +74,30 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                int result;
+                String result;
                 for (Event event : inEvents) {
-                    result = (Integer) event.getData(0);
-                    AssertJUnit.assertEquals(99, result);
+                    result = (String) event.getData(0);
+                    AssertJUnit.assertEquals("StringValue", result);
                 }
             }
         });
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
-        inputHandler.send(new String[]{"integerProperty"});
+        inputHandler.send(new String[]{"stringProperty"});
         siddhiAppRuntime.shutdown();
     }
 
     @Test
     public void testDefaultBehaviourWithDefaultType() throws Exception {
-        logger.info("GetYAMLPropertyFunctionExtensiontestDefaultBehaviourWithDefaultType TestCase");
+        logger.info("GetYAMLPropertyFunctionExtensionTestDefaultBehaviourWithType TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
         Map<String, String> configMap = new HashMap<>();
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-        configMap.put("env.getYAMLProperty.longProperty", "999l");
-        configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
+        configMap.put("env.getYAMLProperty.longProperty", "999");
+        configMap.put("env.getYAMLProperty.floatProperty", "99.99");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
@@ -106,7 +106,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1') from inputStream "
-                + "select env:getYAMLProperty(key,'int') as propertyValue "
+                + "select env:getYAMLProperty(key,'string') as propertyValue "
                 + "insert into outputStream;");
 
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(stream + query);
@@ -115,16 +115,16 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                int result;
+                String result;
                 for (Event event : inEvents) {
-                    result = (Integer) event.getData(0);
-                    AssertJUnit.assertEquals(99, result);
+                    result = (String) event.getData(0);
+                    AssertJUnit.assertEquals("StringValue", result);
                 }
             }
         });
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
-        inputHandler.send(new String[]{"integerProperty"});
+        inputHandler.send(new String[]{"stringProperty"});
         siddhiAppRuntime.shutdown();
     }
 
@@ -267,8 +267,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-        configMap.put("env.getYAMLProperty.longProperty", "999l");
-        configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
+        configMap.put("env.getYAMLProperty.longProperty", "999");
+        configMap.put("env.getYAMLProperty.floatProperty", "99.99");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
@@ -308,8 +308,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         //     configMap.put("env.getYAMLProperty.integerProperty", "99");
-        configMap.put("env.getYAMLProperty.longProperty", "999l");
-        configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
+        configMap.put("env.getYAMLProperty.longProperty", "999");
+        configMap.put("env.getYAMLProperty.floatProperty", "99.99");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
@@ -349,8 +349,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-        configMap.put("env.getYAMLProperty.longProperty", "999l");
-        configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
+        configMap.put("env.getYAMLProperty.longProperty", "999");
+        configMap.put("env.getYAMLProperty.floatProperty", "99.99");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
@@ -390,8 +390,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-        //  configMap.put("env.getYAMLProperty.longProperty", "999l");
-        configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
+        //  configMap.put("env.getYAMLProperty.longProperty", "999");
+        configMap.put("env.getYAMLProperty.floatProperty", "99.99");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
@@ -409,9 +409,9 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                int result;
+                long result;
                 for (Event event : inEvents) {
-                    result = (Integer) event.getData(0);
+                    result = (long) event.getData(0);
                     AssertJUnit.assertEquals(100, result);
                 }
             }
@@ -431,8 +431,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-        configMap.put("env.getYAMLProperty.longProperty", "999l");
-        configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
+        configMap.put("env.getYAMLProperty.longProperty", "999");
+        configMap.put("env.getYAMLProperty.floatProperty", "99.99");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
@@ -450,10 +450,10 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                long result;
+                double result;
                 for (Event event : inEvents) {
-                    result = (long) event.getData(0);
-                    AssertJUnit.assertEquals(999, result);
+                    result = (double) event.getData(0);
+                    AssertJUnit.assertEquals(99.99, result);
                 }
             }
         });
@@ -472,8 +472,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-        configMap.put("env.getYAMLProperty.longProperty", "999l");
-        configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
+        configMap.put("env.getYAMLProperty.longProperty", "999");
+        configMap.put("env.getYAMLProperty.floatProperty", "99.99");
         // configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
@@ -500,7 +500,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         });
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
-        inputHandler.send(new String[]{"longProperty"});
+        inputHandler.send(new String[]{"doubleProperty"});
         siddhiAppRuntime.shutdown();
     }
 
@@ -513,8 +513,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-        configMap.put("env.getYAMLProperty.longProperty", "999l");
-        configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
+        configMap.put("env.getYAMLProperty.longProperty", "999");
+        configMap.put("env.getYAMLProperty.floatProperty", "99.99");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
@@ -532,10 +532,10 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                long result;
+                float result;
                 for (Event event : inEvents) {
-                    result = (long) event.getData(0);
-                    AssertJUnit.assertEquals(999, result);
+                    result = (float) event.getData(0);
+                    AssertJUnit.assertEquals(99.99f, result, 0.0f);
                 }
             }
         });
@@ -554,8 +554,8 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-        configMap.put("env.getYAMLProperty.longProperty", "999l");
-        //configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
+        configMap.put("env.getYAMLProperty.longProperty", "999");
+        //configMap.put("env.getYAMLProperty.floatProperty", "99.99");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 
         siddhiManager.setConfigManager(new InMemoryConfigManager(configMap, null));
@@ -670,7 +670,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         configMap.put("env.getYAMLProperty.stringProperty", "StringValue");
         configMap.put("env.getYAMLProperty.booleanProperty", "true");
         configMap.put("env.getYAMLProperty.integerProperty", "99");
-        configMap.put("env.getYAMLProperty.longProperty", "999l");
+        configMap.put("env.getYAMLProperty.longProperty", "999");
         configMap.put("env.getYAMLProperty.floatProperty", "99.99f");
         configMap.put("env.getYAMLProperty.doubleProperty", "99.99");
 

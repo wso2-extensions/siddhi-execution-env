@@ -51,7 +51,7 @@
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <testng.version>6.11</testng.version>
         <jacoco.maven.version>0.7.9</jacoco.maven.version>
-        <siddhi.import.version.range>[4.1.0, 4.2.0)</siddhi.import.version.range>
+        <siddhi.import.version.range>[4.0.0, 5.0.0)</siddhi.import.version.range>
     </properties>
     <dependencyManagement>
         <dependencies>
