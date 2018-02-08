@@ -106,7 +106,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1') from inputStream "
-                + "select env:getYAMLProperty(key,'int') as propertyValue "
+                + "select env:getYAMLProperty(key,'string') as propertyValue "
                 + "insert into outputStream;");
 
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(stream + query);
@@ -115,16 +115,16 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                int result;
+                String result;
                 for (Event event : inEvents) {
-                    result = (Integer) event.getData(0);
-                    AssertJUnit.assertEquals(99, result);
+                    result = (String) event.getData(0);
+                    AssertJUnit.assertEquals("StringValue", result);
                 }
             }
         });
         InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
         siddhiAppRuntime.start();
-        inputHandler.send(new String[]{"integerProperty"});
+        inputHandler.send(new String[]{"stringProperty"});
         siddhiAppRuntime.shutdown();
     }
 
