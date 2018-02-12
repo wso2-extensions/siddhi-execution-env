@@ -1,7 +1,7 @@
 Siddhi Execution Extension - Env
 ======================================
 
-The **siddhi-execution-env extension** is an extension to <a target="_blank" href="https://wso2.github.io/siddhi">Siddhi</a> that provides the capability to read environment properties inside Siddhi stream definitions and use it inside queries. The following are the functions of the map extension..
+The **siddhi-execution-env extension** is an extension to <a target="_blank" href="https://wso2.github.io/siddhi">Siddhi</a> that provides the capability to read environment properties inside Siddhi stream definitions and use it inside queries. Functions of the env extension are as follows..
 
 Find some useful links below:
 
