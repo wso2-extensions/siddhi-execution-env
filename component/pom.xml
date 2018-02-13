@@ -21,7 +21,7 @@
     <parent>
         <artifactId>siddhi-execution-env-parent</artifactId>
         <groupId>org.wso2.extension.siddhi.execution.env</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>siddhi-execution-env</artifactId>
