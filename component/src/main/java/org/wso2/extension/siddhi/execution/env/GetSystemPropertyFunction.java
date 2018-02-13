@@ -48,11 +48,14 @@ import java.util.Map;
         parameters = {
                 @Parameter(name = "key",
                         description = "This specifies Key of the property to be read.",
-                        type = {DataType.STRING}),
+                        type = {DataType.STRING},
+                        optional = false),
                 @Parameter(name = "default.value",
                         description = "This specifies the default Value to be returned " +
                                 "if the property value is not available.",
-                        type = {DataType.STRING})
+                        type = {DataType.STRING},
+                        optional = true,
+                        defaultValue = "null")
         },
         examples = {
                 @Example(

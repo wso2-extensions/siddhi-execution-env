@@ -32,9 +32,9 @@
     <tr>
         <td style="vertical-align: top">default.value</td>
         <td style="vertical-align: top; word-wrap: break-word">This specifies the default Value to be returned if the property value is not available.</td>
-        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">null</td>
         <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
 </table>
@@ -78,9 +78,9 @@ insert into outputStream;
     <tr>
         <td style="vertical-align: top">default.value</td>
         <td style="vertical-align: top; word-wrap: break-word">This specifies the default Value to be returned if the property value is not available.</td>
-        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">null</td>
         <td style="vertical-align: top">STRING</td>
-        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
 </table>
@@ -124,7 +124,7 @@ insert into outputStream;
     <tr>
         <td style="vertical-align: top">data.type</td>
         <td style="vertical-align: top; word-wrap: break-word">A string constant parameter expressing the data type of the propertyusing one of the following string values: int, long, float, double, string, bool.</td>
-        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">string</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">No</td>
         <td style="vertical-align: top">No</td>
@@ -132,9 +132,9 @@ insert into outputStream;
     <tr>
         <td style="vertical-align: top">default.value</td>
         <td style="vertical-align: top; word-wrap: break-word">This specifies the default Value to be returned if the property value is not available.</td>
-        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">null</td>
         <td style="vertical-align: top">INT<br>LONG<br>DOUBLE<br>FLOAT<br>STRING<br>BOOL</td>
-        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">Yes</td>
         <td style="vertical-align: top">No</td>
     </tr>
 </table>

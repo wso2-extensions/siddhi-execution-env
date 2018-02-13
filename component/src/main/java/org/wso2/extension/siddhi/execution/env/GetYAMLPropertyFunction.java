@@ -46,16 +46,21 @@ import java.util.Map;
         parameters = {
                 @Parameter(name = "key",
                         description = "This specifies Key of the property to be read.",
-                        type = {DataType.STRING}),
+                        type = {DataType.STRING},
+                        optional = false),
                 @Parameter(name = "data.type",
                         description = "A string constant parameter expressing the data type of the property" +
                                 "using one of the following string values: int, long, float, double, string, bool.",
-                        type = {DataType.STRING}),
+                        type = {DataType.STRING},
+                        optional = false,
+                        defaultValue = "string"),
                 @Parameter(name = "default.value",
                         description = "This specifies the default Value to be returned " +
                                 "if the property value is not available.",
                         type = {DataType.INT, DataType.LONG, DataType.DOUBLE, DataType.FLOAT,
-                                DataType.STRING, DataType.BOOL})
+                                DataType.STRING, DataType.BOOL},
+                        optional = true,
+                        defaultValue = "null")
         },
         returnAttributes = @ReturnAttribute(
                 description = "Returned type will be default to string, but it could be any of the following: " +
