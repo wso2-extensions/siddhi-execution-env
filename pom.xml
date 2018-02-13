@@ -53,6 +53,13 @@
         <jacoco.maven.version>0.7.9</jacoco.maven.version>
         <siddhi.import.version.range>[4.0.0, 5.0.0)</siddhi.import.version.range>
     </properties>
+    <scm>
+        <connection>scm:git:https://github.com/wso2-extensions/siddhi-execution-env.git</connection>
+        <url>https://github.com/wso2-extensions/siddhi-execution-env.git</url>
+        <developerConnection>scm:git:https://github.com/wso2-extensions/siddhi-execution-env.git
+        </developerConnection>
+        <tag>HEAD</tag>
+    </scm>
     <dependencyManagement>
         <dependencies>
             <dependency>
