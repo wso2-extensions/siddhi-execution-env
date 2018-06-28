@@ -24,6 +24,7 @@ import org.wso2.siddhi.annotation.ReturnAttribute;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
+import org.wso2.siddhi.core.executor.ConstantExpressionExecutor;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.executor.function.FunctionExecutor;
 import org.wso2.siddhi.core.util.config.ConfigReader;
@@ -33,6 +34,9 @@ import ua_parser.Client;
 import ua_parser.Parser;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -48,14 +52,12 @@ import java.util.Map;
         parameters = {
                 @Parameter(name = "user.agent",
                         description = "This specifies the user agent from which property is extracted.",
-                        type = {DataType.STRING},
-                        optional = false),
+                        type = {DataType.STRING}),
                 @Parameter(name = "property.name",
                         description = "This specifies property name which should be extracted. Currently " +
                                 "supported properties are " + UserAgentConstants.BROWSER + ", "
-                                + UserAgentConstants.OPERATING_SYSTEM + ", " + UserAgentConstants.DEVICE + ".",
-                        type = {DataType.STRING},
-                        optional = false)
+                                + UserAgentConstants.OPERATING_SYSTEM + " and " + UserAgentConstants.DEVICE + ".",
+                        type = {DataType.STRING})
         },
         examples = {
                 @Example(
@@ -89,12 +91,19 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
                         "required " + Attribute.Type.STRING +
                         ", but found " + typeofUserAgentAttribute.toString());
             }
-            Attribute.Type typeofPropertyNameAttribute = attributeExpressionExecutors[1].getReturnType();
-            if (typeofPropertyNameAttribute != Attribute.Type.STRING) {
-                throw new SiddhiAppValidationException("Invalid parameter type found " +
-                        "for the argument property.name of getUserAgentProperty() function, " +
-                        "required " + Attribute.Type.STRING +
-                        ", but found " + typeofPropertyNameAttribute.toString());
+            if (attributeExpressionExecutors[1] instanceof ConstantExpressionExecutor) {
+                String propertyName = ((ConstantExpressionExecutor) attributeExpressionExecutors[1])
+                        .getValue().toString();
+                List<String> listOfProperties = Arrays.asList(UserAgentConstants.DEVICE, UserAgentConstants
+                        .OPERATING_SYSTEM, UserAgentConstants.BROWSER);
+                if (!listOfProperties.contains(propertyName.toLowerCase(Locale.ENGLISH))) {
+                    throw new SiddhiAppValidationException("Invalid parameter found " +
+                            "for the argument property.name of getUserAgentProperty() function, " +
+                            "required " + listOfProperties.toString() + ", but found " + propertyName);
+                }
+            } else {
+                throw new SiddhiAppValidationException("Parameter property.name of getUserAgentProperty() should be a" +
+                        " constant, but found a dynamic attribute.");
             }
         } else {
             throw new SiddhiAppValidationException("Invalid no of arguments passed to " +
@@ -113,7 +122,7 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
     @Override
     protected Object execute(Object[] data) {
         String userAgent = (String) data[0];
-        String propertyName = (String) data[1];
+        String propertyName = ((String) data[1]).toLowerCase(Locale.ENGLISH);
         String propertyValue;
         try {
             Parser parser = new Parser();
@@ -179,8 +188,7 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
      * Used to restore serialized state of the processing element, for reconstructing
      * the element to the same state as if was on a previous point of time.
      *
-     * @param state the stateful objects of the element as an array on
-     *              the same order provided by currentState().
+     * @param state the stateful objects of the element as an array on the same order provided by currentState().
      */
     @Override
     public void restoreState(Map<String, Object> state) {
