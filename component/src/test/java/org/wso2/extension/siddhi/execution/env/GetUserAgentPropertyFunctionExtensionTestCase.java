@@ -10,6 +10,10 @@ import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
+import org.wso2.siddhi.core.util.config.InMemoryConfigManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GetUserAgentPropertyFunctionExtensionTestCase {
 
@@ -186,5 +190,88 @@ public class GetUserAgentPropertyFunctionExtensionTestCase {
                 "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/62.0.3202.73 Mobile Safari/537.36 " +
                 "GSA/7.23.26.21.arm64"});
         siddhiAppRuntime.shutdown();
+    }
+
+    @Test
+    public void testCustomRegexFile() throws Exception {
+        logger.info("GetUserAgentPropertyFunctionExtensionTestCase testCustomRegexFile");
+
+        Map<String, String> systemConfigs = new HashMap<>();
+        ClassLoader classLoader = getClass().getClassLoader();
+        String filePath = classLoader.getResource("regexes.yaml").getPath();
+        systemConfigs.put("env.getUserAgentProperty.regexFilePath", filePath);
+        InMemoryConfigManager inMemoryConfigManager = new InMemoryConfigManager(systemConfigs, null);
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setConfigManager(inMemoryConfigManager);
+
+        String stream = "define stream inputStream (userAgent string);\n";
+
+        String query = ("@info(name = 'query1') from inputStream "
+                + "select env:getUserAgentProperty(userAgent, 'device') as functionOutput "
+                + "insert into outputStream;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(stream + query);
+        siddhiAppRuntime.addCallback("query1", new QueryCallback() {
+            @Override
+            public void receive(long timeStamp, Event[] inEvents,
+                                Event[] removeEvents) {
+                EventPrinter.print(timeStamp, inEvents, removeEvents);
+                String result;
+                for (Event event : inEvents) {
+                    result = (String) event.getData(0);
+                    AssertJUnit.assertEquals("Nexus 5X", result);
+                }
+            }
+        });
+        InputHandler inputHandler = siddhiAppRuntime
+                .getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+        inputHandler.send(new String[]{"Mozilla/5.0 (Linux; Android 7.1.1; Nexus 5X Build/N4F26T; wv) " +
+                "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/62.0.3202.73 Mobile Safari/537.36 " +
+                "GSA/7.23.26.21.arm64"});
+        siddhiAppRuntime.shutdown();
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void testExceptionCustomRegexFileNotFound() {
+        logger.info("GetUserAgentPropertyFunctionExtensionTestCase testExceptionCustomRegexFileNotFound");
+
+        Map<String, String> systemConfigs = new HashMap<>();
+        systemConfigs.put("env.getUserAgentProperty.regexFilePath", "/regexes.yaml");
+        InMemoryConfigManager inMemoryConfigManager = new InMemoryConfigManager(systemConfigs, null);
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setConfigManager(inMemoryConfigManager);
+
+        String stream = "define stream inputStream (userAgent string);\n";
+
+        String query = ("@info(name = 'query1') from inputStream "
+                + "select env:getUserAgentProperty(userAgent, 'device') as functionOutput "
+                + "insert into outputStream;");
+
+        siddhiManager.createSiddhiAppRuntime(stream + query);
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void testExceptionIncorrectCustomRegexFile() {
+        logger.info("GetUserAgentPropertyFunctionExtensionTestCase testExceptionIncorrectCustomRegexFile");
+
+        Map<String, String> systemConfigs = new HashMap<>();
+        ClassLoader classLoader = getClass().getClassLoader();
+        String filePath = classLoader.getResource("regexes-incorrect.yaml").getPath();
+        systemConfigs.put("env.getUserAgentProperty.regexFilePath", filePath);
+        InMemoryConfigManager inMemoryConfigManager = new InMemoryConfigManager(systemConfigs, null);
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+        siddhiManager.setConfigManager(inMemoryConfigManager);
+
+        String stream = "define stream inputStream (userAgent string);\n";
+
+        String query = ("@info(name = 'query1') from inputStream "
+                + "select env:getUserAgentProperty(userAgent, 'device') as functionOutput "
+                + "insert into outputStream;");
+
+        siddhiManager.createSiddhiAppRuntime(stream + query);
     }
 }
