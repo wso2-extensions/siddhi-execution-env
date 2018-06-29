@@ -21,6 +21,7 @@ import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
 import org.wso2.siddhi.annotation.Parameter;
 import org.wso2.siddhi.annotation.ReturnAttribute;
+import org.wso2.siddhi.annotation.SystemParameter;
 import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
@@ -34,7 +35,10 @@ import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 import ua_parser.Client;
 import ua_parser.Parser;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -58,6 +62,15 @@ import java.util.Map;
                         description = "This specifies property name which should be extracted. " +
                                 "Supported property names are `'browser'`, `'os'` and `'device'`.",
                         type = {DataType.STRING})
+        },
+
+        systemParameter = {
+                @SystemParameter(
+                        name = "regexFilePath",
+                        description = "Location of the yaml file which contains the regex to process the user agent. ",
+                        defaultValue = "Default regexes in the ua parser.",
+                        possibleParameters = "N/A"
+                )
         },
         examples = {
                 @Example(
@@ -112,12 +125,22 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
                     "env:getUserAgentProperty(user.agent,property.name) function, " +
                     "required 2, but found " + attributeExpressionExecutors.length);
         }
+        String regexFilePath = configReader.readConfig("regexFilePath", "");
         try {
-            uaParser = new Parser();
+            if (!regexFilePath.isEmpty()) {
+                InputStream inputStream = new FileInputStream(regexFilePath);
+                uaParser = new Parser(inputStream);
+            } else {
+                uaParser = new Parser();
+            }
+        } catch (FileNotFoundException e) {
+            throw new SiddhiAppCreationException("Regexes file is not found in the given location '" + regexFilePath +
+                    "', failed to initiate user agent parser.", e);
+        } catch (IllegalArgumentException e) {
+            throw new SiddhiAppCreationException("Invalid Regexes file found at " + regexFilePath + ", failed to " +
+                    "initiate user agent parser.", e);
         } catch (IOException e) {
-
-            throw new SiddhiAppCreationException("Failed to initiate user agent parser for the Siddhi app'" +
-                    siddhiAppContext.getName() + "'.", e);
+            throw new SiddhiAppCreationException("Failed to initiate user agent parser for the Siddhi app.", e);
         }
 
     }
