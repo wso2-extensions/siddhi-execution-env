@@ -63,12 +63,11 @@ import java.util.Map;
                                 "Supported property names are `'browser'`, `'os'` and `'device'`.",
                         type = {DataType.STRING})
         },
-
         systemParameter = {
                 @SystemParameter(
                         name = "regexFilePath",
                         description = "Location of the yaml file which contains the regex to process the user agent. ",
-                        defaultValue = "Default regexes in the ua parser.",
+                        defaultValue = "Default regexes included in the ua_parser library",
                         possibleParameters = "N/A"
                 )
         },
@@ -105,7 +104,7 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
                 throw new SiddhiAppValidationException("Invalid parameter type found " +
                         "for the first argument 'user.agent' of getUserAgentProperty() function, " +
                         "required " + Attribute.Type.STRING +
-                        ", but found " + typeofUserAgentAttribute.toString());
+                        ", but found '" + typeofUserAgentAttribute.toString() + "'.");
             }
             if (attributeExpressionExecutors[1] instanceof ConstantExpressionExecutor) {
                 propertyName = ((ConstantExpressionExecutor) attributeExpressionExecutors[1])
@@ -148,14 +147,14 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
     @Override
     protected Object execute(Object[] data) {
         String userAgent = (String) data[0];
-        Client client = uaParser.parse(userAgent);
+        Client clientParser = uaParser.parse(userAgent);
         switch (propertyName.toLowerCase(Locale.ENGLISH)) {
             case BROWSER:
-                return client.userAgent.family;
+                return clientParser.userAgent.family;
             case OPERATING_SYSTEM:
-                return client.os.family;
+                return clientParser.os.family;
             case DEVICE:
-                return client.device.family;
+                return clientParser.device.family;
             // Default condition will never occur.
             default:
                 return null;
