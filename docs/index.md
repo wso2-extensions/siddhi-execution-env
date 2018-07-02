@@ -11,7 +11,7 @@ Find some useful links below:
 
 ## Latest API Docs 
 
-Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-env/api/1.0.2">1.0.2</a>.
+Latest API Docs is <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-env/api/1.0.3">1.0.3</a>.
 
 ## How to use 
 
@@ -46,9 +46,10 @@ directory.
 
 ## Features
 
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-env/api/1.0.2/#getenvironmentproperty-function">getEnvironmentProperty</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*<br><div style="padding-left: 1em;"><p>This function returns Java environment property corresponding to the key provided</p></div>
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-env/api/1.0.2/#getsystemproperty-function">getSystemProperty</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*<br><div style="padding-left: 1em;"><p>This function returns the system property pointed by the system property key</p></div>
-* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-env/api/1.0.2/#getyamlproperty-function">getYAMLProperty</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*<br><div style="padding-left: 1em;"><p>This function returns the YAML property requested or the default values specified if such avariable is not available in the deployment.yaml</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-env/api/1.0.3/#getenvironmentproperty-function">getEnvironmentProperty</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*<br><div style="padding-left: 1em;"><p>This function returns Java environment property corresponding to the key provided</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-env/api/1.0.3/#getsystemproperty-function">getSystemProperty</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*<br><div style="padding-left: 1em;"><p>This function returns the system property pointed by the system property key</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-env/api/1.0.3/#getuseragentproperty-function">getUserAgentProperty</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*<br><div style="padding-left: 1em;"><p>This function returns the value corresponding to a given property name in a given user agent</p></div>
+* <a target="_blank" href="https://wso2-extensions.github.io/siddhi-execution-env/api/1.0.3/#getyamlproperty-function">getYAMLProperty</a> *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*<br><div style="padding-left: 1em;"><p>This function returns the YAML property requested or the default values specified if such avariable is not available in the deployment.yaml</p></div>
 
 ## How to Contribute
  
