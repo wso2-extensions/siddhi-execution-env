@@ -183,6 +183,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../1.0.3/" title="1.0.3" class="md-nav__link">
+      1.0.3
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../1.0.2/" title="1.0.2" class="md-nav__link">
       1.0.2
     </a>
@@ -268,6 +280,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#getuseragentproperty-function" title="getUserAgentProperty (Function)" class="md-nav__link">
+    getUserAgentProperty (Function)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#getyamlproperty-function" title="getYAMLProperty (Function)" class="md-nav__link">
     getYAMLProperty (Function)
   </a>
@@ -348,6 +367,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#getuseragentproperty-function" title="getUserAgentProperty (Function)" class="md-nav__link">
+    getUserAgentProperty (Function)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#getyamlproperty-function" title="getYAMLProperty (Function)" class="md-nav__link">
     getYAMLProperty (Function)
   </a>
@@ -374,7 +400,7 @@
               
                 
                 
-                <h1 id="api-docs-v102">API Docs - v1.0.2</h1>
+                <h1 id="api-docs-v103">API Docs - v1.0.3</h1>
 <h2 id="env">Env</h2>
 <h3 id="getenvironmentproperty-function">getEnvironmentProperty <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a></em></h3>
 <p style="word-wrap: break-word">This function returns Java environment property corresponding to the key provided</p>
@@ -461,6 +487,65 @@ insert into outputStream;
 </code></pre>
 
 <p style="word-wrap: break-word">This query returns system property corresponding to the key from keyStream as FunctionOutput to the outputStream</p>
+
+<h3 id="getuseragentproperty-function">getUserAgentProperty <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a></em></h3>
+<p style="word-wrap: break-word">This function returns the value corresponding to a given property name in a given user agent</p>
+
+<p><span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
+<pre><code>&lt;STRING&gt; env:getUserAgentProperty(&lt;STRING&gt; user.agent, &lt;STRING&gt; property.name)
+</code></pre>
+
+<p><span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">user.agent</td>
+        <td style="vertical-align: top; word-wrap: break-word">This specifies the user agent from which property will be extracted.</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">property.name</td>
+        <td style="vertical-align: top; word-wrap: break-word">This specifies property name which should be extracted. Supported property names are <code>'browser'</code>, <code>'os'</code> and <code>'device'</code>.</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table></p>
+<p><span id="system-parameters" class="md-typeset" style="display: block; font-weight: bold;">System Parameters</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Parameters</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">regexFilePath</td>
+        <td style="vertical-align: top; word-wrap: break-word">Location of the yaml file which contains the regex to process the user agent. </td>
+        <td style="vertical-align: top">Default regexes included in the ua_parser library</td>
+        <td style="vertical-align: top">N/A</td>
+    </tr>
+</table></p>
+<p><span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span></p>
+<pre><code>define stream UserAgentStream (userAgent string);
+from UserAgentStream 
+select env:getUserAgentProperty(userAgent, &quot;browser&quot;) as functionOutput 
+insert into OutputStream;
+</code></pre>
+
+<p style="word-wrap: break-word">This query returns browser name of the userAgent from UserAgentStream as <code>functionOutput</code> to the OutputStream</p>
 
 <h3 id="getyamlproperty-function">getYAMLProperty <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a></em></h3>
 <p style="word-wrap: break-word">This function returns the YAML property requested or the default values specified if such avariable is not available in the deployment.yaml</p>
