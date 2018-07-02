@@ -95,7 +95,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
-                            ua_parser.*
+                            ua_parser.*;version="${orbit.version.ua_parser}"
                         </Private-Package>
                         <Export-Package>
                             org.wso2.extension.siddhi.execution.env.*
