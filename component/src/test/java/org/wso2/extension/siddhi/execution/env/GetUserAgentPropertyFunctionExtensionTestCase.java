@@ -2,6 +2,7 @@ package org.wso2.extension.siddhi.execution.env;
 
 import org.apache.log4j.Logger;
 import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
@@ -10,14 +11,24 @@ import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 import org.wso2.siddhi.core.util.EventPrinter;
+import org.wso2.siddhi.core.util.SiddhiTestHelper;
 import org.wso2.siddhi.core.util.config.InMemoryConfigManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GetUserAgentPropertyFunctionExtensionTestCase {
 
     private static Logger logger = Logger.getLogger(GetUserAgentPropertyFunctionExtensionTestCase.class);
+    private AtomicInteger eventCount = new AtomicInteger(0);
+    private int waitTime = 50;
+    private int timeout = 30000;
+
+    @BeforeMethod
+    public void testInit() {
+        eventCount.set(0);
+    }
 
     @Test(expectedExceptions = SiddhiAppCreationException.class)
     public void exceptionTestCaseNonStringUserAgent() {
@@ -112,6 +123,7 @@ public class GetUserAgentPropertyFunctionExtensionTestCase {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 String result;
                 for (Event event : inEvents) {
+                    eventCount.incrementAndGet();
                     result = (String) event.getData(0);
                     AssertJUnit.assertEquals("Chrome", result);
                 }
@@ -122,6 +134,7 @@ public class GetUserAgentPropertyFunctionExtensionTestCase {
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) " +
                 "Chrome/67.0.3396.79 Safari/537.36"});
+        SiddhiTestHelper.waitForEvents(waitTime, 1, eventCount, timeout);
         siddhiAppRuntime.shutdown();
     }
 
@@ -145,6 +158,7 @@ public class GetUserAgentPropertyFunctionExtensionTestCase {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 String result;
                 for (Event event : inEvents) {
+                    eventCount.incrementAndGet();
                     result = (String) event.getData(0);
                     AssertJUnit.assertEquals("Linux", result);
                 }
@@ -155,6 +169,7 @@ public class GetUserAgentPropertyFunctionExtensionTestCase {
         siddhiAppRuntime.start();
         inputHandler.send(new String[]{"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) " +
                 "Chrome/67.0.3396.79 Safari/537.36"});
+        SiddhiTestHelper.waitForEvents(waitTime, 1, eventCount, timeout);
         siddhiAppRuntime.shutdown();
     }
 
@@ -178,6 +193,7 @@ public class GetUserAgentPropertyFunctionExtensionTestCase {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 String result;
                 for (Event event : inEvents) {
+                    eventCount.incrementAndGet();
                     result = (String) event.getData(0);
                     AssertJUnit.assertEquals("Nexus 5X", result);
                 }
@@ -189,6 +205,7 @@ public class GetUserAgentPropertyFunctionExtensionTestCase {
         inputHandler.send(new String[]{"Mozilla/5.0 (Linux; Android 7.1.1; Nexus 5X Build/N4F26T; wv) " +
                 "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/62.0.3202.73 Mobile Safari/537.36 " +
                 "GSA/7.23.26.21.arm64"});
+        SiddhiTestHelper.waitForEvents(waitTime, 1, eventCount, timeout);
         siddhiAppRuntime.shutdown();
     }
 
@@ -219,6 +236,7 @@ public class GetUserAgentPropertyFunctionExtensionTestCase {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 String result;
                 for (Event event : inEvents) {
+                    eventCount.incrementAndGet();
                     result = (String) event.getData(0);
                     AssertJUnit.assertEquals("Nexus 5X", result);
                 }
@@ -230,6 +248,7 @@ public class GetUserAgentPropertyFunctionExtensionTestCase {
         inputHandler.send(new String[]{"Mozilla/5.0 (Linux; Android 7.1.1; Nexus 5X Build/N4F26T; wv) " +
                 "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/62.0.3202.73 Mobile Safari/537.36 " +
                 "GSA/7.23.26.21.arm64"});
+        SiddhiTestHelper.waitForEvents(waitTime, 1, eventCount, timeout);
         siddhiAppRuntime.shutdown();
     }
 
