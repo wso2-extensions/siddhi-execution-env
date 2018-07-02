@@ -29,7 +29,7 @@
     <groupId>org.wso2.extension.siddhi.execution.env</groupId>
     <artifactId>siddhi-execution-env-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>WSO2 Siddhi Execution Extension - env Pom</name>
     <url>http://wso2.org</url>
 
@@ -59,7 +59,7 @@
         <url>https://github.com/wso2-extensions/siddhi-execution-env.git</url>
         <developerConnection>scm:git:https://github.com/wso2-extensions/siddhi-execution-env.git
         </developerConnection>
-        <tag>v1.0.3</tag>
+        <tag>HEAD</tag>
     </scm>
     <dependencyManagement>
         <dependencies>
