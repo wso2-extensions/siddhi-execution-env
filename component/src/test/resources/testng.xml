@@ -27,6 +27,7 @@
             <class name="org.wso2.extension.siddhi.execution.env.GetEnvironmentPropertyFunctionExtensionTestCase" />
             <class name="org.wso2.extension.siddhi.execution.env.GetYAMLPropertyFunctionExtensionTestCase" />
             <class name="org.wso2.extension.siddhi.execution.env.GetUserAgentPropertyFunctionExtensionTestCase"/>
+            <class name="org.wso2.extension.siddhi.execution.env.GetOriginIPFromXForwardedFunctionTestCase"/>
         </classes>
     </test>
 </suite>
