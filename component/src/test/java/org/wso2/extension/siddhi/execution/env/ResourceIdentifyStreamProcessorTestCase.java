@@ -41,7 +41,7 @@ public class ResourceIdentifyStreamProcessorTestCase {
     private static AtomicInteger actualEventCount;
 
     @BeforeMethod
-    public void beforeTest(){
+    public void beforeTest() {
         actualEventCount = new AtomicInteger(0);
     }
 
