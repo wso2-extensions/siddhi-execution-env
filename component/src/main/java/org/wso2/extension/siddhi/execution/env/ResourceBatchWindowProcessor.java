@@ -24,24 +24,15 @@ import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.event.ComplexEvent;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
-import org.wso2.siddhi.core.event.state.StateEvent;
 import org.wso2.siddhi.core.event.stream.StreamEvent;
 import org.wso2.siddhi.core.event.stream.StreamEventCloner;
 import org.wso2.siddhi.core.executor.ConstantExpressionExecutor;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.executor.VariableExpressionExecutor;
 import org.wso2.siddhi.core.query.processor.Processor;
-import org.wso2.siddhi.core.query.processor.stream.window.FindableProcessor;
 import org.wso2.siddhi.core.query.processor.stream.window.WindowProcessor;
-import org.wso2.siddhi.core.table.Table;
-import org.wso2.siddhi.core.util.collection.operator.CompiledCondition;
-import org.wso2.siddhi.core.util.collection.operator.MatchingMetaInfoHolder;
-import org.wso2.siddhi.core.util.collection.operator.Operator;
 import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.core.util.parser.OperatorParser;
 import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
-import org.wso2.siddhi.query.api.expression.Expression;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,7 +76,7 @@ import java.util.Map;
                 )
         }
 )
-public class ResourceBatchWindowProcessor extends WindowProcessor implements FindableProcessor {
+public class ResourceBatchWindowProcessor extends WindowProcessor {
     private ComplexEventChunk<StreamEvent> currentEventChunk = new ComplexEventChunk<StreamEvent>(false);
     private ComplexEventChunk<StreamEvent> eventsToBeExpired = new ComplexEventChunk<StreamEvent>(false);
     private SiddhiAppContext siddhiAppContext;
@@ -214,7 +205,6 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Fin
         return state;
     }
 
-
     @Override
     public synchronized void restoreState(Map<String, Object> state) {
         currentEventChunk.clear();
@@ -223,23 +213,5 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Fin
         eventsToBeExpired.add((StreamEvent) state.get("ExpiredEventChunk"));
         resetEvent = (StreamEvent) state.get("ResetEvent");
         groupEventMap = (Map<Object, List<StreamEvent>>) state.get("GroupEventMap");
-    }
-
-    @Override
-    public synchronized StreamEvent find(StateEvent matchingEvent, CompiledCondition compiledCondition) {
-        synchronized (this) {
-            return ((Operator) compiledCondition).find(matchingEvent, eventsToBeExpired, streamEventCloner);
-        }
-    }
-
-    @Override
-    public CompiledCondition compileCondition(Expression condition, MatchingMetaInfoHolder matchingMetaInfoHolder,
-                                              SiddhiAppContext siddhiAppContext,
-                                              List<VariableExpressionExecutor> variableExpressionExecutors,
-                                              Map<String, Table> tableMap, String queryName) {
-        synchronized (this) {
-            return OperatorParser.constructOperator(eventsToBeExpired, condition, matchingMetaInfoHolder,
-                    siddhiAppContext, variableExpressionExecutors, tableMap, this.queryName);
-        }
     }
 }
