@@ -309,6 +309,57 @@ public class ResourceBatchWindowProcessorTestCase {
         siddhiAppRuntime.shutdown();
     }
 
+    @Test(dependsOnMethods = "testAggregateMoreEventsThanResourcesBehaviour")
+    public void testAggregateWithTwoKeysBehaviour() throws Exception {
+        logger.info("ResourceBatchWindowAggregateWithTwoKeys TestCase");
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String stream = "define stream inputStream (key string, volume long);\n";
+
+        String query = ("@info(name = 'query1')\n" +
+                "from inputStream#env:resourceIdentify(\"X\")\n"
+                + "select *\n"
+                + "insert into outputStream;");
+        String query2 = ("@info(name = 'query2')\n" +
+                "from inputStream#env:resourceIdentify(\"X\")\n"
+                + "select *\n"
+                + "insert into outputStream2;");
+        String query3 = ("@info(name = 'query3')\n" +
+                "from inputStream#window.env:resourceBatch(\"X\", key)\n"
+                + "select key, sum(volume) as totalVolume\n"
+                + "insert into outputStream3;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(stream + query + query2 + query3);
+        siddhiAppRuntime.addCallback("query3", new QueryCallback() {
+            @Override
+            public void receive(long timeStamp, Event[] inEvents,
+                                Event[] removeEvents) {
+                EventPrinter.print(timeStamp, inEvents, removeEvents);
+                int count = actualEventCount.incrementAndGet();
+                switch (count) {
+                    case 1:
+                        AssertJUnit.assertTrue(inEvents[0].getData(0).equals("stringProperty") &&
+                                inEvents[0].getData(1).equals(30L));
+                        break;
+                    case 2:
+                        AssertJUnit.assertTrue(inEvents[0].getData(0).equals("stringProperty1") &&
+                                inEvents[0].getData(1).equals(100L));
+                        break;
+                    default: //do nothing
+                }
+            }
+        });
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+        inputHandler.send(new Object[]{"stringProperty", 10L});
+        inputHandler.send(new Object[]{"stringProperty", 20L});
+        inputHandler.send(new Object[]{"stringProperty1", 50L});
+        inputHandler.send(new Object[]{"stringProperty1", 50L});
+        waitTillVariableCountMatches(2, Duration.ONE_MINUTE);
+        siddhiAppRuntime.shutdown();
+    }
+
     private static void waitTillVariableCountMatches(long expected, Duration duration) {
         Awaitility.await().atMost(duration).until(() -> actualEventCount.get() == expected);
     }
