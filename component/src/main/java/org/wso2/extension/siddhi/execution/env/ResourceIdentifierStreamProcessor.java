@@ -61,6 +61,39 @@ import java.util.Map;
                                 "select *\n" +
                                 "insert into barStream;",
                         description = "This will registering the resource 'X' in static map and unregister at the stop."
+                ),
+                @Example(
+                        syntax =
+                                "@info(name='product_color_code_rule') \n" +
+                                "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
+                                "select productId, if(colorCode == '#FF0000', true, false) as isValid\n" +
+                                "insert into DefectDetectionResult;\n" +
+                                "\n" +
+                                "@info(name='product_dimensions_rule') \n" +
+                                "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
+                                "select productId, if(height == 5 && width ==10, true, false) as isValid\n" +
+                                "insert into DefectDetectionResult;\n" +
+                                "@info(name='defect_analyzer') \n" +
+                                "from DefectDetectionResult#window.env:resourceBatch(\"rule-group-1\", productId, " +
+                                "60000)\n" +
+                                "select productId, and(not isValid) as isDefected\n" +
+                                "insert into SweetProductDefectAlert;",
+                        description = "These are two rule base queries, which processing the same events from " +
+                                "the SweetProductDefectsDetector and output the process results into same stream " +
+                                "DefectDetectionResult. Also, the queries like this can be newly introduce into " +
+                                "Siddhi Application and the number of output events(in DefectDetectionResult) " +
+                                "depends on the number of available queries. If we need to further aggregate " +
+                                "results for particular correlation.id: productId from the DefectDetectionResult" +
+                                " stream, follow-up queries should wait for events with same correlation.id from " +
+                                "all these available queries. For that future queries should know the number of " +
+                                "events which can expect from these 'rule' base queries for given correlation id." +
+                                "To address this requirement, in above example, we have defined the resource " +
+                                "identifier with 'resource.group.id: rule-group-1' in both the 'rule' queries, so " +
+                                "that the other extensions can be used the number of registered " +
+                                "resource 'rule-group-1' count for their internal processing. Here the " +
+                                "'defect_analyzer' query has Resource Batch Window where it uses registered " +
+                                "resource 'rule-group-1' count to determine the event waiting condition for events " +
+                                "from DefectDetectionResult stream."
                 )
         }
 )

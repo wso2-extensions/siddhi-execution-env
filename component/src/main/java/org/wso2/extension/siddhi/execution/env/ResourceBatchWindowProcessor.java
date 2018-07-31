@@ -104,22 +104,22 @@ import java.util.Map;
                                 "select productId, and(not isValid) as isDefected\n" +
                                 "insert into SweetProductDefectAlert;",
                         description = "This example demonstrate the usage of 'ResourceBatchWindowProcessor' " +
-                                "extension with 'ResourceIdentifyStreamProcessor' and 'AndAttributeAggregator' " +
+                                "extension with 'ResourceIdentifierStreamProcessor' and 'AndAttributeAggregator' " +
                                 "extensions.\n " +
-                                "Use Case: The SweetProductDefectsDitector gets the Sweet Production data as " +
+                                "Use Case: The SweetProductDefectsDetector gets the Sweet Production data as " +
                                 "an input stream and each event will be sent to the 'rule' queries( " +
-                                "'product_color_code_rule' and 'product_dimentions_rule') . The query " +
+                                "'product_color_code_rule' and 'product_dimensions_rule') . The query " +
                                 "'defect_analyzer' should wait for both the output results from the 'rule' " +
                                 "queries output and based on the aggregated results(take the logical AND " +
                                 "aggregation of the 'isValid' attribute both events from 'product_color_code_rule' " +
-                                "and 'product_dimentions_rule'), generate events and insert into the output stream  " +
+                                "and 'product_dimensions_rule'), generate events and insert into the output stream  " +
                                 "'SweetProductDefectAlert'.\n" +
                                 "In the above example, a number of 'rule' queries can be changed and the " +
                                 "'defect_analyzer' query should wait for results from the all available rules.\n" +
                                 "\n" +
                                 "To address this use case, we have defined the same resource.group.id: rule-group-1 " +
-                                "for all the 'rule' queries registered the resources using " +
-                                "env:resourceIdentify(\"rule-group-1\") extension.  In the 'defect_analyzer' " +
+                                "in all the 'rule' queries, and its registering the resources using " +
+                                "ResourceIdentifierStreamProcessor extension.  In the 'defect_analyzer' " +
                                 "query we defined the env:resourceBatch(\"rule-group-1\", productId, 2000) " +
                                 "window as it will accumulating the events with correlation.id:productId, " +
                                 "where it holds the events for same 'productId' until it matches the number of " +
@@ -129,7 +129,7 @@ import java.util.Map;
                                 "(AndAttributeAggregator) where it logically computes AND operation of not isValid " +
                                 "boolean attribute values and outputs the results as a boolean value.\n" +
                                 "\n" +
-                                "Input 1: [SweetProductDefectsDitector]\n" +
+                                "Input 1: [SweetProductDefectsDetector]\n" +
                                 "{  \n" +
                                 "   \"event\":{  \n" +
                                 "      \"productId\":\"Cake\",\n" +
@@ -148,7 +148,7 @@ import java.util.Map;
                                 "   }\n" +
                                 "}\n" +
                                 "\n" +
-                                "Input 2: [SweetProductDefectsDitector]\n" +
+                                "Input 2: [SweetProductDefectsDetector]\n" +
                                 "{  \n" +
                                 "   \"event\":{  \n" +
                                 "      \"productId\":\"Cake\",\n" +
