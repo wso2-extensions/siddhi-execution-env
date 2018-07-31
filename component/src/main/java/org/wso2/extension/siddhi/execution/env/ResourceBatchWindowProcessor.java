@@ -245,7 +245,6 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
             while (streamEventChunk.hasNext()) {
                 StreamEvent streamEvent = streamEventChunk.next();
                 StreamEvent clonedStreamEvent = streamEventCloner.copyStreamEvent(streamEvent);
-                int groupEventMapSize = 0;
                 if (!streamEvent.getType().equals(ComplexEvent.Type.TIMER)) {
                     Object groupEventMapKey = groupKeyExpressionExecutor.execute(clonedStreamEvent);
                     if (groupEventMap.get(groupEventMapKey) != null) {
@@ -256,10 +255,9 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                         groupEventMap.put(groupEventMapKey, new ResourceStreamEventList(list,
                                 clonedStreamEvent.getTimestamp() + timeInMilliSeconds));
                     }
-                    groupEventMapSize = groupEventMap.get(groupEventMapKey).streamEventList.size();
                 }
                 for (Map.Entry<Object, ResourceStreamEventList> entry : groupEventMap.entrySet()) {
-                    if (groupEventMapSize == windowLength || entry.getValue().expiryTimestamp <
+                    if (entry.getValue().streamEventList.size() == windowLength || entry.getValue().expiryTimestamp <
                             currentTime) {
                         //update current event chunk with event batch
                         for (StreamEvent event : entry.getValue().streamEventList) {
