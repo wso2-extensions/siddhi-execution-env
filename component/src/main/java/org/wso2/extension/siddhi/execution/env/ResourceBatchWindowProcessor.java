@@ -225,7 +225,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
             }
         } else {
             throw new SiddhiAppValidationException(
-                    "Resource batch window should only have two parameters, " + "but found "
+                    "Resource batch window should only have two or three parameters, " + "but found "
                             + attributeExpressionExecutors.length + " input attributes");
         }
     }
