@@ -145,12 +145,14 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor nextProcessor,
                            StreamEventCloner streamEventCloner) {
         synchronized (this) {
-            ComplexEventChunk<StreamEvent> outputStreamEventChunk = new ComplexEventChunk<StreamEvent>(true);
             long currentTime = siddhiAppContext.getTimestampGenerator().currentTime();
             if (nextEmitTime == -1) {
                 nextEmitTime = currentTime + timeInMilliSeconds;
-                scheduler.notifyAt(nextEmitTime);
+                if (scheduler != null) {
+                    scheduler.notifyAt(nextEmitTime);
+                }
             }
+            ComplexEventChunk<StreamEvent> outputStreamEventChunk = new ComplexEventChunk<StreamEvent>(true);
             while (streamEventChunk.hasNext()) {
                 StreamEvent streamEvent = streamEventChunk.next();
                 StreamEvent clonedStreamEvent = streamEventCloner.copyStreamEvent(streamEvent);
@@ -167,13 +169,14 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                     }
                     groupEventMapSize = groupEventMap.get(groupEventMapKey).streamEventList.size();
                 }
-                for (Object key : groupEventMap.keySet()) {
-                    if (groupEventMapSize == windowLength || groupEventMap.get(key).expiryTimestamp < currentTime) {
+                for (Map.Entry<Object, ResourceStreamEventList> entry : groupEventMap.entrySet()) {
+                    if (groupEventMapSize == windowLength || entry.getValue().expiryTimestamp <
+                            currentTime) {
                         //update current event chunk with event batch
-                        for (StreamEvent event : groupEventMap.get(key).streamEventList) {
+                        for (StreamEvent event : entry.getValue().streamEventList) {
                             currentEventChunk.add(event);
                         }
-                        groupEventMap.remove(key);
+                        groupEventMap.remove(entry.getKey());
                         //update outputStreamEventChunk with expired events chunk
                         if (outputExpectsExpiredEvents) {
                             if (eventsToBeExpired.getFirst() != null) {
@@ -264,7 +267,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     /**
      * Resource Stream Event List internal data structure.
      */
-    public class ResourceStreamEventList {
+    public static class ResourceStreamEventList {
         private List<StreamEvent> streamEventList;
         private long expiryTimestamp;
 
