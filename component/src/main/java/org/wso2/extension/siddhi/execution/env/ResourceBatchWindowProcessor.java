@@ -293,9 +293,12 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                                     toExpireEvent.setType(StreamEvent.Type.EXPIRED);
                                     eventsToBeExpired.add(toExpireEvent);
                                 }
+                                resetEvent = streamEventCloner.copyStreamEvent(eventsToBeExpired.getFirst());
+                                resetEvent.setType(ComplexEvent.Type.RESET);
+                            } else {
+                                resetEvent = streamEventCloner.copyStreamEvent(currentEventChunk.getFirst());
+                                resetEvent.setType(ComplexEvent.Type.RESET);
                             }
-                            resetEvent = streamEventCloner.copyStreamEvent(currentEventChunk.getFirst());
-                            resetEvent.setType(ComplexEvent.Type.RESET);
                             outputStreamEventChunk.add(currentEventChunk.getFirst());
                         }
                         currentEventChunk.clear();
