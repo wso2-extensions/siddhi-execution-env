@@ -206,16 +206,21 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
             this.groupKeyExpressionExecutor = attributeExpressionExecutors[1];
             if (attributeExpressionExecutors.length == 3) {
                 this.groupKeyExpressionExecutor = attributeExpressionExecutors[1];
-                if (attributeExpressionExecutors[2].getReturnType() == Attribute.Type.INT) {
-                    timeInMilliSeconds = Integer.parseInt(String.valueOf(((ConstantExpressionExecutor)
-                            attributeExpressionExecutors[2]).getValue()));
-                } else if (attributeExpressionExecutors[2].getReturnType() == Attribute.Type.LONG) {
-                    timeInMilliSeconds = Long.parseLong(String.valueOf(((ConstantExpressionExecutor)
-                            attributeExpressionExecutors[2]).getValue()));
+                if ((attributeExpressionExecutors[2] instanceof ConstantExpressionExecutor)) {
+                    if (attributeExpressionExecutors[2].getReturnType() == Attribute.Type.INT) {
+                        timeInMilliSeconds = Integer.parseInt(String.valueOf(((ConstantExpressionExecutor)
+                                attributeExpressionExecutors[2]).getValue()));
+                    } else if (attributeExpressionExecutors[2].getReturnType() == Attribute.Type.LONG) {
+                        timeInMilliSeconds = Long.parseLong(String.valueOf(((ConstantExpressionExecutor)
+                                attributeExpressionExecutors[2]).getValue()));
+                    } else {
+                        throw new SiddhiAppValidationException("ResourceBatch window's 3rd parameter " +
+                                "'time.in.milliseconds' should be either be a constant (of type int or long), " +
+                                "but found " + attributeExpressionExecutors[2].getReturnType());
+                    }
                 } else {
-                    throw new SiddhiAppValidationException("ResourceBatch window's 3rd parameter timeout " +
-                            "should be either int or long, but found " + attributeExpressionExecutors[2]
-                            .getReturnType());
+                    throw new SiddhiAppValidationException("ResourceBatch window's 3rd parameter " +
+                            "'time.in.milliseconds' should either be a constant (of type int or long)");
                 }
             }
         } else {
