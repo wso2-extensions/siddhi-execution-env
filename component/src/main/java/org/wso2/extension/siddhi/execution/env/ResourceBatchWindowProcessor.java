@@ -239,12 +239,6 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                            StreamEventCloner streamEventCloner) {
         synchronized (this) {
             long currentTime = siddhiAppContext.getTimestampGenerator().currentTime();
-            if (nextEmitTime == -1) {
-                nextEmitTime = currentTime + timeInMilliSeconds;
-                if (scheduler != null) {
-                    scheduler.notifyAt(nextEmitTime);
-                }
-            }
             ComplexEventChunk<StreamEvent> outputStreamEventChunk = new ComplexEventChunk<StreamEvent>(true);
             while (streamEventChunk.hasNext()) {
                 StreamEvent streamEvent = streamEventChunk.next();
@@ -258,6 +252,12 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                         list.add(clonedStreamEvent);
                         groupEventMap.put(groupEventMapKey, new ResourceStreamEventList(list,
                                 clonedStreamEvent.getTimestamp() + timeInMilliSeconds));
+                        if (nextEmitTime == -1) {
+                            nextEmitTime = currentTime + timeInMilliSeconds;
+                            if (scheduler != null) {
+                                scheduler.notifyAt(nextEmitTime);
+                            }
+                        }
                     }
                 }
                 for (Map.Entry<Object, ResourceStreamEventList> entry : groupEventMap.entrySet()) {
