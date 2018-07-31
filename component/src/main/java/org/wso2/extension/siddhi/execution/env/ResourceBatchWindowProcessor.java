@@ -225,7 +225,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
             }
         } else {
             throw new SiddhiAppValidationException(
-                    "Resource batch window should only have two or three parameters, " + "but found "
+                    "Resource batch window should only have two or three parameters, but found "
                             + attributeExpressionExecutors.length + " input attributes");
         }
     }
@@ -248,7 +248,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                 int groupEventMapSize = 0;
                 if (!streamEvent.getType().equals(ComplexEvent.Type.TIMER)) {
                     Object groupEventMapKey = groupKeyExpressionExecutor.execute(clonedStreamEvent);
-                    if (groupEventMap.containsKey(groupEventMapKey)) {
+                    if (groupEventMap.get(groupEventMapKey) != null) {
                         groupEventMap.get(groupEventMapKey).streamEventList.add(clonedStreamEvent);
                     } else {
                         List<StreamEvent> list = new ArrayList<>();
