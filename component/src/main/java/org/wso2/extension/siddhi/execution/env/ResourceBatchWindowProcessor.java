@@ -195,13 +195,13 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                     windowLength = ResourceIdentifyStreamProcessor.getResourceCount(resourceName);
                 } else {
                     throw new SiddhiAppValidationException(
-                            "Resource Batch window's resource name parameter should be String, but found "
+                            "Resource Batch window's 'resource.group.id' parameter should be String, but found "
                                     + attributeExpressionExecutors[1].getReturnType());
                 }
             } else {
                 throw new SiddhiAppValidationException("Resource Batch window should have constant "
-                        + "for resource name parameter but found a dynamic attribute " + attributeExpressionExecutors[1]
-                        .getClass().getCanonicalName());
+                        + "for 'resource.group.id' parameter but found a dynamic attribute " +
+                        attributeExpressionExecutors[1].getClass().getCanonicalName());
             }
             this.groupKeyExpressionExecutor = attributeExpressionExecutors[1];
             if (attributeExpressionExecutors.length == 3) {
