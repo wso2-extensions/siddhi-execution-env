@@ -360,6 +360,50 @@ public class ResourceBatchWindowProcessorTestCase {
         siddhiAppRuntime.shutdown();
     }
 
+    @Test(dependsOnMethods = "testAggregateWithTwoKeysBehaviour")
+    public void testAggregateWithTimeoutBehaviour() throws Exception {
+        logger.info("ResourceBatchWindowAggregateWithTimeout TestCase");
+
+        SiddhiManager siddhiManager = new SiddhiManager();
+
+        String stream = "define stream inputStream (key string, volume long);\n";
+
+        String query = ("@info(name = 'query1')\n" +
+                "from inputStream#env:resourceIdentify(\"X\")\n"
+                + "select *\n"
+                + "insert into outputStream;");
+        String query2 = ("@info(name = 'query2')\n" +
+                "from inputStream#env:resourceIdentify(\"X\")\n"
+                + "select *\n"
+                + "insert into outputStream2;");
+        String query3 = ("@info(name = 'query3')\n" +
+                "from inputStream#window.env:resourceBatch(\"X\", key, 2000)\n"
+                + "select key, sum(volume) as totalVolume\n"
+                + "insert into outputStream3;");
+
+        SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(stream + query + query2 + query3);
+        siddhiAppRuntime.addCallback("query3", new QueryCallback() {
+            @Override
+            public void receive(long timeStamp, Event[] inEvents,
+                                Event[] removeEvents) {
+                EventPrinter.print(timeStamp, inEvents, removeEvents);
+                int count = actualEventCount.incrementAndGet();
+                switch (count) {
+                    case 1:
+                        AssertJUnit.assertTrue(inEvents[0].getData(0).equals("stringProperty") &&
+                                inEvents[0].getData(1).equals(10L));
+                        break;
+                    default: //do nothing
+                }
+            }
+        });
+        InputHandler inputHandler = siddhiAppRuntime.getInputHandler("inputStream");
+        siddhiAppRuntime.start();
+        inputHandler.send(new Object[]{"stringProperty", 10L});
+        waitTillVariableCountMatches(1, Duration.ONE_MINUTE);
+        siddhiAppRuntime.shutdown();
+    }
+
     private static void waitTillVariableCountMatches(long expected, Duration duration) {
         Awaitility.await().atMost(duration).until(() -> actualEventCount.get() == expected);
     }
