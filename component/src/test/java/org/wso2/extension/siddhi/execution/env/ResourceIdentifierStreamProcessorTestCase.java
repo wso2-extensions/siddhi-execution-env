@@ -34,10 +34,10 @@ import org.wso2.siddhi.core.util.EventPrinter;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Test case for ResourceIdentifyStreamProcessor extension.
+ * Test case for ResourceIdentifierStreamProcessor extension.
  */
-public class ResourceIdentifyStreamProcessorTestCase {
-    private static Logger logger = Logger.getLogger(ResourceIdentifyStreamProcessorTestCase.class);
+public class ResourceIdentifierStreamProcessorTestCase {
+    private static Logger logger = Logger.getLogger(ResourceIdentifierStreamProcessorTestCase.class);
     private static AtomicInteger actualEventCount;
 
     @BeforeMethod
@@ -47,18 +47,18 @@ public class ResourceIdentifyStreamProcessorTestCase {
 
     @Test
     public void testDefaultBehaviour() throws Exception {
-        logger.info("ResourceIdentifyStreamProcessorDefaultBehaviour TestCase");
+        logger.info("ResourceIdentifierStreamProcessorDefaultBehaviour TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
 
@@ -68,7 +68,7 @@ public class ResourceIdentifyStreamProcessorTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                AssertJUnit.assertEquals(2, ResourceIdentifyStreamProcessor.
+                AssertJUnit.assertEquals(2, ResourceIdentifierStreamProcessor.
                         getResourceCount("X"));
                 actualEventCount.incrementAndGet();
             }
@@ -82,18 +82,18 @@ public class ResourceIdentifyStreamProcessorTestCase {
 
     @Test(dependsOnMethods = "testDefaultBehaviour")
     public void testResourceGenerateWithTwoSiddhiRuntime() throws Exception {
-        logger.info("ResourceIdentifyStreamProcessorResourceGenerateWithTwoSiddhiRuntime TestCase");
+        logger.info("ResourceIdentifierStreamProcessorResourceGenerateWithTwoSiddhiRuntime TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
 
@@ -104,7 +104,7 @@ public class ResourceIdentifyStreamProcessorTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                AssertJUnit.assertEquals(2, ResourceIdentifyStreamProcessor.
+                AssertJUnit.assertEquals(2, ResourceIdentifierStreamProcessor.
                         getResourceCount("X"));
                 actualEventCount.incrementAndGet();
             }
@@ -123,18 +123,18 @@ public class ResourceIdentifyStreamProcessorTestCase {
 
     @Test(dependsOnMethods = "testResourceGenerateWithTwoSiddhiRuntime")
     public void testRemoveResource() throws Exception {
-        logger.info("ResourceIdentifyStreamProcessorRemoveResource TestCase");
+        logger.info("ResourceIdentifierStreamProcessorRemoveResource TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
 
@@ -144,7 +144,7 @@ public class ResourceIdentifyStreamProcessorTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                AssertJUnit.assertEquals(1, ResourceIdentifyStreamProcessor.
+                AssertJUnit.assertEquals(1, ResourceIdentifierStreamProcessor.
                         getResourceCount("X"));
                 actualEventCount.incrementAndGet();
             }
@@ -163,7 +163,7 @@ public class ResourceIdentifyStreamProcessorTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                AssertJUnit.assertEquals(1, ResourceIdentifyStreamProcessor.
+                AssertJUnit.assertEquals(1, ResourceIdentifierStreamProcessor.
                         getResourceCount("X"));
                 actualEventCount.incrementAndGet();
             }
@@ -175,18 +175,18 @@ public class ResourceIdentifyStreamProcessorTestCase {
 
     @Test(dependsOnMethods = "testRemoveResource")
     public void testTwoResources() throws Exception {
-        logger.info("ResourceIdentifyStreamProcessorTwoResources TestCase");
+        logger.info("ResourceIdentifierStreamProcessorTwoResources TestCase");
 
         SiddhiManager siddhiManager = new SiddhiManager();
 
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"Y\")\n"
+                "from inputStream#env:resourceIdentifier(\"Y\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
 
@@ -197,9 +197,9 @@ public class ResourceIdentifyStreamProcessorTestCase {
             public void receive(long timeStamp, Event[] inEvents,
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
-                AssertJUnit.assertEquals(1, ResourceIdentifyStreamProcessor.
+                AssertJUnit.assertEquals(1, ResourceIdentifierStreamProcessor.
                         getResourceCount("X"));
-                AssertJUnit.assertEquals(1, ResourceIdentifyStreamProcessor.
+                AssertJUnit.assertEquals(1, ResourceIdentifierStreamProcessor.
                         getResourceCount("Y"));
                 actualEventCount.incrementAndGet();
             }

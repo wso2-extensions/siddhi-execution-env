@@ -89,12 +89,12 @@ import java.util.Map;
                                 "define stream SweetProductDefectAlert(productId string, isDefected bool);\n" +
                                 "\n" +
                                 "@info(name='product_color_code_rule') \n" +
-                                "from SweetProductDefectsDetector#env:resourceIdentify(\"rule-group-1\")\n" +
+                                "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
                                 "select productId, if(colorCode == '#FF0000', true, false) as isValid\n" +
                                 "insert into DefectDetectionResult;\n" +
                                 "\n" +
                                 "@info(name='product_dimensions_rule') \n" +
-                                "from SweetProductDefectsDetector#env:resourceIdentify(\"rule-group-1\")\n" +
+                                "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
                                 "select productId, if(height == 5 && width ==10, true, false) as isValid\n" +
                                 "insert into DefectDetectionResult;\n" +
                                 "\n" +
@@ -195,7 +195,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                 if (attributeExpressionExecutors[0].getReturnType() == Attribute.Type.STRING) {
                     String resourceName = (String) (((ConstantExpressionExecutor) attributeExpressionExecutors[0])
                             .getValue());
-                    windowLength = ResourceIdentifyStreamProcessor.getResourceCount(resourceName);
+                    windowLength = ResourceIdentifierStreamProcessor.getResourceCount(resourceName);
                 } else {
                     throw new SiddhiAppValidationException(
                             "Resource Batch window's 'resource.group.id' parameter should be String, but found "

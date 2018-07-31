@@ -34,7 +34,7 @@ import org.wso2.siddhi.core.util.EventPrinter;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ResourceBatchWindowProcessorTestCase {
-    private static Logger logger = Logger.getLogger(ResourceIdentifyStreamProcessorTestCase.class);
+    private static Logger logger = Logger.getLogger(ResourceBatchWindowProcessorTestCase.class);
     private static AtomicInteger actualEventCount;
 
     @BeforeMethod
@@ -51,7 +51,7 @@ public class ResourceBatchWindowProcessorTestCase {
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
@@ -85,11 +85,11 @@ public class ResourceBatchWindowProcessorTestCase {
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream2;");
         String query3 = ("@info(name = 'query3')\n" +
@@ -126,11 +126,11 @@ public class ResourceBatchWindowProcessorTestCase {
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"Y\")\n"
+                "from inputStream#env:resourceIdentifier(\"Y\")\n"
                 + "select *\n"
                 + "insert into outputStream2;");
         String query3 = ("@info(name = 'query3')\n" +
@@ -173,11 +173,11 @@ public class ResourceBatchWindowProcessorTestCase {
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"Y\")\n"
+                "from inputStream#env:resourceIdentifier(\"Y\")\n"
                 + "select *\n"
                 + "insert into outputStream2;");
         String query3 = ("@info(name = 'query3')\n" +
@@ -225,11 +225,11 @@ public class ResourceBatchWindowProcessorTestCase {
         String stream = "define stream inputStream (key string, volume long);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream2;");
         String query3 = ("@info(name = 'query3')\n" +
@@ -266,11 +266,11 @@ public class ResourceBatchWindowProcessorTestCase {
         String stream = "define stream inputStream (key string, volume long);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream2;");
         String query3 = ("@info(name = 'query3')\n" +
@@ -318,11 +318,11 @@ public class ResourceBatchWindowProcessorTestCase {
         String stream = "define stream inputStream (key string, volume long);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream2;");
         String query3 = ("@info(name = 'query3')\n" +
@@ -369,11 +369,11 @@ public class ResourceBatchWindowProcessorTestCase {
         String stream = "define stream inputStream (key string, volume long);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentify(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"X\")\n"
                 + "select *\n"
                 + "insert into outputStream2;");
         String query3 = ("@info(name = 'query3')\n" +

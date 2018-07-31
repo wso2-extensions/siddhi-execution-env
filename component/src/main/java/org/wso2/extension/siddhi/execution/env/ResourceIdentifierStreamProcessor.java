@@ -46,26 +46,26 @@ import java.util.Map;
  * resource count for given name.
  */
 @Extension(
-        name = "resourceIdentify",
+        name = "resourceIdentifier",
         namespace = "env",
         description = "The resource identify stream processor registering the resource name with reference " +
                 "in static map. And serve static resources count for specific resource name.",
         parameters = {
-                @Parameter(name = "resource.name",
-                        description = "The resource name.",
+                @Parameter(name = "resource.group.id",
+                        description = "The resource group name.",
                         type = {DataType.STRING})
         },
         examples = {
                 @Example(
-                        syntax = "from fooStream#env:resourceIdentify(\"X\")" +
+                        syntax = "from fooStream#env:resourceIdentifier(\"X\")" +
                                 "select *\n" +
                                 "insert into barStream;",
                         description = "This will registering the resource 'X' in static map and unregister at the stop."
                 )
         }
 )
-public class ResourceIdentifyStreamProcessor extends StreamProcessor {
-    private static Map<String, List<ResourceIdentifyStreamProcessor>> resourceIdentifyStreamProcessorMap =
+public class ResourceIdentifierStreamProcessor extends StreamProcessor {
+    private static Map<String, List<ResourceIdentifierStreamProcessor>> resourceIdentifyStreamProcessorMap =
             new HashMap<>();
     private String resourceName;
 
@@ -86,7 +86,7 @@ public class ResourceIdentifyStreamProcessor extends StreamProcessor {
                     if (resourceIdentifyStreamProcessorMap.containsKey(resourceName)) {
                         resourceIdentifyStreamProcessorMap.get(resourceName).add(this);
                     } else {
-                        List<ResourceIdentifyStreamProcessor> list = new ArrayList<>();
+                        List<ResourceIdentifierStreamProcessor> list = new ArrayList<>();
                         list.add(this);
                         resourceIdentifyStreamProcessorMap.put(resourceName, list);
                     }

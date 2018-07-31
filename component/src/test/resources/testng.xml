@@ -29,7 +29,7 @@
             <class name="org.wso2.extension.siddhi.execution.env.GetUserAgentPropertyFunctionExtensionTestCase"/>
             <class name="org.wso2.extension.siddhi.execution.env.GetOriginIPFromXForwardedFunctionTestCase"/>
             <class name="org.wso2.extension.siddhi.execution.env.ResourceBatchWindowProcessorTestCase"/>
-            <class name="org.wso2.extension.siddhi.execution.env.ResourceIdentifyStreamProcessorTestCase"/>
+            <class name="org.wso2.extension.siddhi.execution.env.ResourceIdentifierStreamProcessorTestCase"/>
         </classes>
     </test>
 </suite>
