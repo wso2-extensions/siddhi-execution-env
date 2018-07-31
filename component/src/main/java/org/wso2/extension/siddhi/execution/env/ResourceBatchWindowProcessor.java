@@ -181,6 +181,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     private long timeInMilliSeconds = 300000; //5 minutes
     private Scheduler scheduler;
     private long nextEmitTime = -1;
+    private String resourceName;
 
     @Override
     protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader configReader, boolean
@@ -193,7 +194,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
         if (attributeExpressionExecutors.length >= 2) {
             if (attributeExpressionExecutors[0] instanceof ConstantExpressionExecutor) {
                 if (attributeExpressionExecutors[0].getReturnType() == Attribute.Type.STRING) {
-                    String resourceName = (String) (((ConstantExpressionExecutor) attributeExpressionExecutors[0])
+                    resourceName = (String) (((ConstantExpressionExecutor) attributeExpressionExecutors[0])
                             .getValue());
                     windowLength = ResourceIdentifierStreamProcessor.getResourceCount(resourceName);
                 } else {
@@ -260,7 +261,8 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                     }
                 }
                 for (Map.Entry<Object, ResourceStreamEventList> entry : groupEventMap.entrySet()) {
-                    if (entry.getValue().streamEventList.size() == windowLength || entry.getValue().expiryTimestamp <
+                    windowLength = ResourceIdentifierStreamProcessor.getResourceCount(resourceName);
+                    if (entry.getValue().streamEventList.size() >= windowLength || entry.getValue().expiryTimestamp <
                             currentTime) {
                         //update current event chunk with event batch
                         for (StreamEvent event : entry.getValue().streamEventList) {
