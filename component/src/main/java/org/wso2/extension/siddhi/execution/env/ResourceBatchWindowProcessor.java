@@ -54,8 +54,8 @@ import java.util.Map;
                 "The window is updated each time a batch of events with same key value that equals the number of " +
                 "resources count.",
         parameters = {
-                @Parameter(name = "resource.name",
-                        description = "The resource name.",
+                @Parameter(name = "resource.group.id",
+                        description = "The resource group name.",
                         type = {DataType.STRING}),
                 @Parameter(name = "group.key.name",
                         description = "The attribute that should be used for events grouping.",
