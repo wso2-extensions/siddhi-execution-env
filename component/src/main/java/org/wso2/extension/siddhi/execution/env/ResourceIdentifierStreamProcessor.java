@@ -37,9 +37,9 @@ import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Siddhi Resource Identify Stream Processor Extension to register the resources with name and serve registered
@@ -99,7 +99,7 @@ import java.util.Map;
 )
 public class ResourceIdentifierStreamProcessor extends StreamProcessor {
     private static Map<String, List<ResourceIdentifierStreamProcessor>> resourceIdentifyStreamProcessorMap =
-            new HashMap<>();
+            new ConcurrentHashMap<>();
     private String resourceName;
 
     @Override
