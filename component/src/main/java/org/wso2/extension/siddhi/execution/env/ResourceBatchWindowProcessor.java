@@ -171,7 +171,7 @@ import java.util.Map;
 )
 public class ResourceBatchWindowProcessor extends WindowProcessor implements SchedulingProcessor {
     private ComplexEventChunk<StreamEvent> currentEventChunk = new ComplexEventChunk<StreamEvent>(false);
-    private ComplexEventChunk<StreamEvent> eventsToBeExpired = new ComplexEventChunk<StreamEvent>(false);
+    private ComplexEventChunk<StreamEvent> eventsToBeExpired;
     private SiddhiAppContext siddhiAppContext;
     private StreamEvent resetEvent = null;
     private ExpressionExecutor groupKeyExpressionExecutor;
@@ -187,6 +187,9 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
             outputExpectsExpiredEvents, SiddhiAppContext siddhiAppContext) {
         this.siddhiAppContext = siddhiAppContext;
         this.outputExpectsExpiredEvents = outputExpectsExpiredEvents;
+        if (outputExpectsExpiredEvents) {
+            eventsToBeExpired = new ComplexEventChunk<StreamEvent>(false);
+        }
         if (attributeExpressionExecutors.length >= 2) {
             if (attributeExpressionExecutors[0] instanceof ConstantExpressionExecutor) {
                 if (attributeExpressionExecutors[0].getReturnType() == Attribute.Type.STRING) {
@@ -273,8 +276,6 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                                 }
                                 outputStreamEventChunk.add(eventsToBeExpired.getFirst());
                             }
-                        }
-                        if (eventsToBeExpired != null) {
                             eventsToBeExpired.clear();
                         }
                         //update outputStreamEventChunk and eventsToBeExpired with current event chunk
@@ -282,7 +283,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                             // add reset event in front of current events
                             outputStreamEventChunk.add(resetEvent);
                             resetEvent = null;
-                            if (eventsToBeExpired != null) {
+                            if (outputExpectsExpiredEvents) {
                                 currentEventChunk.reset();
                                 while (currentEventChunk.hasNext()) {
                                     StreamEvent currentEvent = currentEventChunk.next();
@@ -324,7 +325,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
         Map<String, Object> state = new HashMap<>();
         synchronized (this) {
             state.put("CurrentEventChunk", currentEventChunk.getFirst());
-            state.put("ExpiredEventChunk", eventsToBeExpired.getFirst());
+            state.put("ExpiredEventChunk", eventsToBeExpired != null ? eventsToBeExpired.getFirst() : null);
             state.put("ResetEvent", resetEvent);
             state.put("GroupEventMap", groupEventMap);
         }
@@ -335,8 +336,14 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     public synchronized void restoreState(Map<String, Object> state) {
         currentEventChunk.clear();
         currentEventChunk.add((StreamEvent) state.get("CurrentEventChunk"));
-        eventsToBeExpired.clear();
-        eventsToBeExpired.add((StreamEvent) state.get("ExpiredEventChunk"));
+        if (eventsToBeExpired != null) {
+            eventsToBeExpired.clear();
+            eventsToBeExpired.add((StreamEvent) state.get("ExpiredEventChunk"));
+        } else {
+            if (outputExpectsExpiredEvents) {
+                eventsToBeExpired = new ComplexEventChunk<StreamEvent>(false);
+            }
+        }
         resetEvent = (StreamEvent) state.get("ResetEvent");
         groupEventMap = (Map<Object, ResourceStreamEventList>) state.get("GroupEventMap");
     }
