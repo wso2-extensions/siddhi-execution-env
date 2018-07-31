@@ -82,6 +82,90 @@ import java.util.Map;
                         description = "This will processing events as batches based on the registered 'X' resource " +
                                 "count as a batch length and 'symbol' as grouping key and out put all events as " +
                                 "chunk once the batches expired."
+                ),
+                @Example(
+                        syntax = "define stream SweetProductDefectsDetector(productId string, colorCode string, " +
+                                "height long, width long);\n" +
+                                "define stream SweetProductDefectAlert(productId string, isDefected bool);\n" +
+                                "\n" +
+                                "@info(name='product_color_code_rule') \n" +
+                                "from SweetProductDefectsDetector#env:resourceIdentify(\"rule-group-1\")\n" +
+                                "select productId, if(colorCode == '#FF0000', true, false) as isValid\n" +
+                                "insert into DefectDetectionResult;\n" +
+                                "\n" +
+                                "@info(name='product_dimensions_rule') \n" +
+                                "from SweetProductDefectsDetector#env:resourceIdentify(\"rule-group-1\")\n" +
+                                "select productId, if(height == 5 && width ==10, true, false) as isValid\n" +
+                                "insert into DefectDetectionResult;\n" +
+                                "\n" +
+                                "@info(name='defect_analyzer') \n" +
+                                "from DefectDetectionResult#window.env:resourceBatch(\"rule-group-1\", productId, " +
+                                "60000)\n" +
+                                "select productId, and(not isValid) as isDefected\n" +
+                                "insert into SweetProductDefectAlert;",
+                        description = "This example demonstrate the usage of 'ResourceBatchWindowProcessor' " +
+                                "extension with 'ResourceIdentifyStreamProcessor' and 'AndAttributeAggregator' " +
+                                "extensions.\n " +
+                                "Use Case: The SweetProductDefectsDitector gets the Sweet Production data as " +
+                                "an input stream and each event will be sent to the 'rule' queries( " +
+                                "'product_color_code_rule' and 'product_dimentions_rule') . The query " +
+                                "'defect_analyzer' should wait for both the output results from the 'rule' " +
+                                "queries output and based on the aggregated results(take the logical AND " +
+                                "aggregation of the 'isValid' attribute both events from 'product_color_code_rule' " +
+                                "and 'product_dimentions_rule'), generate events and insert into the output stream  " +
+                                "'SweetProductDefectAlert'.\n" +
+                                "In the above example, a number of 'rule' queries can be changed and the " +
+                                "'defect_analyzer' query should wait for results from the all available rules.\n" +
+                                "\n" +
+                                "To address this use case, we have defined the same resource.group.id: rule-group-1 " +
+                                "for all the 'rule' queries registered the resources using " +
+                                "env:resourceIdentify(\"rule-group-1\") extension.  In the 'defect_analyzer' " +
+                                "query we defined the env:resourceBatch(\"rule-group-1\", productId, 2000) " +
+                                "window as it will accumulating the events with correlation.id:productId, " +
+                                "where it holds the events for same 'productId' until it matches the number of " +
+                                "available \"rule-group-1\" resources or flushing the events if the " +
+                                "timeout(time.in.milliseconds:2000) occurs.\n" +
+                                "To aggregate the results from 'rule' queries, we have used 'and(not isValid)' " +
+                                "(AndAttributeAggregator) where it logically computes AND operation of not isValid " +
+                                "boolean attribute values and outputs the results as a boolean value.\n" +
+                                "\n" +
+                                "Input 1: [SweetProductDefectsDitector]\n" +
+                                "{  \n" +
+                                "   \"event\":{  \n" +
+                                "      \"productId\":\"Cake\",\n" +
+                                "      \"colorCode\":\"FF0000\",\n" +
+                                "      \"height\": 5,\n" +
+                                "      \"width\": 10\n" +
+                                "\n" +
+                                "   }\n" +
+                                "}\n" +
+                                "\n" +
+                                "Output 1:[SweetProductDefectAlert]\n" +
+                                "{  \n" +
+                                "   \"event\":{  \n" +
+                                "      \"productId\":\"Cake\",\n" +
+                                "      \"isDefected\":\"false\"\n" +
+                                "   }\n" +
+                                "}\n" +
+                                "\n" +
+                                "Input 2: [SweetProductDefectsDitector]\n" +
+                                "{  \n" +
+                                "   \"event\":{  \n" +
+                                "      \"productId\":\"Cake\",\n" +
+                                "      \"colorCode\":\"FF0000\",\n" +
+                                "      \"height\": 10,\n" +
+                                "      \"width\": 20\n" +
+                                "\n" +
+                                "   }\n" +
+                                "}\n" +
+                                "\n" +
+                                "Output 2:[SweetProductDefectAlert]\n" +
+                                "{  \n" +
+                                "   \"event\":{  \n" +
+                                "      \"productId\":\"Cake\",\n" +
+                                "      \"isDefected\":\"true\"\n" +
+                                "   }\n" +
+                                "}"
                 )
         }
 )
