@@ -53,6 +53,8 @@
         <org.snakeyaml.version>1.17</org.snakeyaml.version>
         <siddhi.import.version.range>[4.0.0, 5.0.0)</siddhi.import.version.range>
         <org.snakeyaml.package.import.version.range>[1.17.0,2.0.0)</org.snakeyaml.package.import.version.range>
+        <awaitility.version>3.0.0</awaitility.version>
+        <mavan.findbugsplugin.exclude.file>findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/wso2-extensions/siddhi-execution-env.git</connection>
@@ -103,6 +105,12 @@
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
                 <version>${org.snakeyaml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <scope>test</scope>
+                <version>${awaitility.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
