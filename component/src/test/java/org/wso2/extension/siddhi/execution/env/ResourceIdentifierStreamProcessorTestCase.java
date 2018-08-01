@@ -54,11 +54,11 @@ public class ResourceIdentifierStreamProcessorTestCase {
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentifier(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"Y\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentifier(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"Y\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
 
@@ -69,7 +69,7 @@ public class ResourceIdentifierStreamProcessorTestCase {
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 AssertJUnit.assertEquals(2, ResourceIdentifierStreamProcessor.
-                        getResourceCount("X"));
+                        getResourceCount("Y"));
                 actualEventCount.incrementAndGet();
             }
         });
@@ -89,11 +89,11 @@ public class ResourceIdentifierStreamProcessorTestCase {
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentifier(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"Y\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentifier(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"Y\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
 
@@ -105,7 +105,7 @@ public class ResourceIdentifierStreamProcessorTestCase {
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 AssertJUnit.assertEquals(2, ResourceIdentifierStreamProcessor.
-                        getResourceCount("X"));
+                        getResourceCount("Y"));
                 actualEventCount.incrementAndGet();
             }
         });
@@ -130,11 +130,11 @@ public class ResourceIdentifierStreamProcessorTestCase {
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentifier(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"Y\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentifier(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"Y\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
 
@@ -145,7 +145,7 @@ public class ResourceIdentifierStreamProcessorTestCase {
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 AssertJUnit.assertEquals(1, ResourceIdentifierStreamProcessor.
-                        getResourceCount("X"));
+                        getResourceCount("Y"));
                 actualEventCount.incrementAndGet();
             }
         });
@@ -164,7 +164,7 @@ public class ResourceIdentifierStreamProcessorTestCase {
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 AssertJUnit.assertEquals(1, ResourceIdentifierStreamProcessor.
-                        getResourceCount("X"));
+                        getResourceCount("Y"));
                 actualEventCount.incrementAndGet();
             }
         });
@@ -182,11 +182,11 @@ public class ResourceIdentifierStreamProcessorTestCase {
         String stream = "define stream inputStream (key string);\n";
 
         String query = ("@info(name = 'query1')\n" +
-                "from inputStream#env:resourceIdentifier(\"X\")\n"
+                "from inputStream#env:resourceIdentifier(\"Y\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
         String query2 = ("@info(name = 'query2')\n" +
-                "from inputStream#env:resourceIdentifier(\"Y\")\n"
+                "from inputStream#env:resourceIdentifier(\"Z\")\n"
                 + "select *\n"
                 + "insert into outputStream;");
 
@@ -198,9 +198,9 @@ public class ResourceIdentifierStreamProcessorTestCase {
                                 Event[] removeEvents) {
                 EventPrinter.print(timeStamp, inEvents, removeEvents);
                 AssertJUnit.assertEquals(1, ResourceIdentifierStreamProcessor.
-                        getResourceCount("X"));
-                AssertJUnit.assertEquals(1, ResourceIdentifierStreamProcessor.
                         getResourceCount("Y"));
+                AssertJUnit.assertEquals(1, ResourceIdentifierStreamProcessor.
+                        getResourceCount("Z"));
                 actualEventCount.incrementAndGet();
             }
         });
