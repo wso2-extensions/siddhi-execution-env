@@ -156,14 +156,12 @@ import java.util.Map;
         }
 )
 public class ResourceBatchWindowProcessor extends WindowProcessor implements SchedulingProcessor {
-    private ComplexEventChunk<StreamEvent> currentEventChunk = new ComplexEventChunk<StreamEvent>(false);
-    private ComplexEventChunk<StreamEvent> eventsToBeExpired;
+    private static final int LATE_EVENT_FLUSHING_DURATION = 300000; //5 minutes
+    private ComplexEventChunk<StreamEvent> eventsToBeExpiredEventChunk = new ComplexEventChunk<StreamEvent>(false);
     private SiddhiAppContext siddhiAppContext;
-    private StreamEvent resetEvent = null;
     private ExpressionExecutor groupKeyExpressionExecutor;
     private Map<Object, ResourceStreamEventList> groupEventMap = new LinkedHashMap<>();
     private boolean outputExpectsExpiredEvents;
-    private int windowLength;
     private long timeInMilliSeconds = 300000; //5 minutes
     private Scheduler scheduler;
     private long nextEmitTime = -1;
@@ -174,15 +172,11 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
             outputExpectsExpiredEvents, SiddhiAppContext siddhiAppContext) {
         this.siddhiAppContext = siddhiAppContext;
         this.outputExpectsExpiredEvents = outputExpectsExpiredEvents;
-        if (outputExpectsExpiredEvents) {
-            eventsToBeExpired = new ComplexEventChunk<StreamEvent>(false);
-        }
         if (attributeExpressionExecutors.length >= 2) {
             if (attributeExpressionExecutors[0] instanceof ConstantExpressionExecutor) {
                 if (attributeExpressionExecutors[0].getReturnType() == Attribute.Type.STRING) {
                     resourceName = (String) (((ConstantExpressionExecutor) attributeExpressionExecutors[0])
                             .getValue());
-                    windowLength = ResourceIdentifierStreamProcessor.getResourceCount(resourceName);
                 } else {
                     throw new SiddhiAppValidationException(
                             "Resource Batch window's 'resource.group.id' parameter should be String, but found "
@@ -226,6 +220,14 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
         synchronized (this) {
             long currentTime = siddhiAppContext.getTimestampGenerator().currentTime();
             ComplexEventChunk<StreamEvent> outputStreamEventChunk = new ComplexEventChunk<StreamEvent>(true);
+            //update outputStreamEventChunk with expired events chunk
+            if (eventsToBeExpiredEventChunk.getFirst() != null) {
+                while (eventsToBeExpiredEventChunk.hasNext()) {
+                    eventsToBeExpiredEventChunk.next().setTimestamp(currentTime);
+                }
+                outputStreamEventChunk.add(eventsToBeExpiredEventChunk.getFirst());
+            }
+            eventsToBeExpiredEventChunk.clear();
             while (streamEventChunk.hasNext()) {
                 StreamEvent streamEvent = streamEventChunk.next();
                 StreamEvent clonedStreamEvent = streamEventCloner.copyStreamEvent(streamEvent);
@@ -240,76 +242,55 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                         groupEventMap.put(groupEventMapKey, new ResourceStreamEventList(list,
                                 clonedStreamEvent.getTimestamp() + timeInMilliSeconds));
                         long newNextEmitTime = currentTime + timeInMilliSeconds;
-                        if (nextEmitTime == -1 || newNextEmitTime > nextEmitTime) {
+                        if (newNextEmitTime > nextEmitTime) {
                             nextEmitTime = newNextEmitTime;
                             if (scheduler != null) {
                                 scheduler.notifyAt(nextEmitTime);
+                                //schedule the notifier for late event flushing
+                                scheduler.notifyAt(nextEmitTime + LATE_EVENT_FLUSHING_DURATION);
                             }
                         }
                     }
                 }
-                if (outputExpectsExpiredEvents) {
-                    for (Map.Entry<Object, ResourceStreamEventList> entry : groupEventMap.entrySet()) {
-                        windowLength = ResourceIdentifierStreamProcessor.getResourceCount(resourceName);
-                        if (entry.getValue().streamEventList.size() >= windowLength ||
-                                entry.getValue().expiryTimestamp < currentTime) {
-                            //update current event chunk with event batch
-                            for (StreamEvent event : entry.getValue().streamEventList) {
-                                currentEventChunk.add(event);
-                            }
+                for (Map.Entry<Object, ResourceStreamEventList> entry : groupEventMap.entrySet()) {
+                    int windowLength = ResourceIdentifierStreamProcessor.getResourceCount(resourceName);
+                    List<StreamEvent> streamEventList = null;
+                    if (entry.getValue().isExpired) {
+                        //flushing the late events if the entries already expired and late event flushing interval
+                        //less than the current time.
+                        if ((entry.getValue().expiryTimestamp + LATE_EVENT_FLUSHING_DURATION) < currentTime) {
                             groupEventMap.remove(entry.getKey());
-                            //update outputStreamEventChunk with expired events chunk
-                            if (eventsToBeExpired.getFirst() != null) {
-                                while (eventsToBeExpired.hasNext()) {
-                                    StreamEvent expiredEvent = eventsToBeExpired.next();
-                                    expiredEvent.setTimestamp(currentTime);
-                                }
-                                outputStreamEventChunk.add(eventsToBeExpired.getFirst());
-                            }
-                            eventsToBeExpired.clear();
-                            //update outputStreamEventChunk and eventsToBeExpired with current event chunk
-                            if (currentEventChunk.getFirst() != null) {
-                                // add reset event in front of current events
-                                outputStreamEventChunk.add(resetEvent);
-                                resetEvent = null;
-                                currentEventChunk.reset();
-                                while (currentEventChunk.hasNext()) {
-                                    StreamEvent currentEvent = currentEventChunk.next();
-                                    StreamEvent toExpireEvent = streamEventCloner.copyStreamEvent(currentEvent);
-                                    toExpireEvent.setType(StreamEvent.Type.EXPIRED);
-                                    eventsToBeExpired.add(toExpireEvent);
-                                }
-                                resetEvent = streamEventCloner.copyStreamEvent(eventsToBeExpired.getFirst());
-                                resetEvent.setType(ComplexEvent.Type.RESET);
-                                outputStreamEventChunk.add(currentEventChunk.getFirst());
-                            }
-                            currentEventChunk.clear();
+                        }
+                    } else {
+                        if (entry.getValue().streamEventList.size() >= windowLength ||
+                                //flushing the late events if the entries already expired.
+                                entry.getValue().expiryTimestamp + LATE_EVENT_FLUSHING_DURATION < currentTime) {
+                            streamEventList = entry.getValue().streamEventList;
+                            groupEventMap.remove(entry.getKey());
+                        } else if (entry.getValue().expiryTimestamp < currentTime) {
+                                //events add into output stream event list.
+                            streamEventList = entry.getValue().streamEventList;
+                            entry.getValue().setExpired(true);
                         }
                     }
-                } else {
-                    for (Map.Entry<Object, ResourceStreamEventList> entry : groupEventMap.entrySet()) {
-                        windowLength = ResourceIdentifierStreamProcessor.getResourceCount(resourceName);
-                        if (entry.getValue().streamEventList.size() >= windowLength ||
-                                entry.getValue().expiryTimestamp < currentTime) {
-                            //update current event chunk with event batch
+                    if (streamEventList != null) {
+                        if (outputExpectsExpiredEvents) {
                             for (StreamEvent event : entry.getValue().streamEventList) {
-                                currentEventChunk.add(event);
+                                StreamEvent toExpireEvent = streamEventCloner.copyStreamEvent(event);
+                                toExpireEvent.setType(StreamEvent.Type.EXPIRED);
+                                eventsToBeExpiredEventChunk.add(toExpireEvent);
                             }
-                            groupEventMap.remove(entry.getKey());
-                            //update outputStreamEventChunk and eventsToBeExpired with current event chunk
-                            if (currentEventChunk.getFirst() != null) {
-                                // add reset event in front of current events
-                                outputStreamEventChunk.add(resetEvent);
-                                resetEvent = null;
-                                resetEvent = streamEventCloner.copyStreamEvent(currentEventChunk.getFirst());
-                                resetEvent.setType(ComplexEvent.Type.RESET);
-                                outputStreamEventChunk.add(currentEventChunk.getFirst());
-                            }
-                            currentEventChunk.clear();
+                        }
+                        StreamEvent toResetEvent = streamEventCloner.copyStreamEvent(streamEventList.get(0));
+                        toResetEvent.setType(ComplexEvent.Type.RESET);
+                        eventsToBeExpiredEventChunk.add(toResetEvent);
+                        for (StreamEvent event : entry.getValue().streamEventList) {
+                            StreamEvent currentEvent = streamEventCloner.copyStreamEvent(event);
+                            currentEvent.setType(StreamEvent.Type.CURRENT);
+                            outputStreamEventChunk.add(currentEvent);
                         }
                     }
                 }
-
             }
             streamEventChunk.clear();
             if (outputStreamEventChunk.getFirst() != null) {
@@ -334,9 +315,8 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     public Map<String, Object> currentState() {
         Map<String, Object> state = new HashMap<>();
         synchronized (this) {
-            state.put("CurrentEventChunk", currentEventChunk.getFirst());
-            state.put("ExpiredEventChunk", eventsToBeExpired != null ? eventsToBeExpired.getFirst() : null);
-            state.put("ResetEvent", resetEvent);
+            state.put("ExpiredEventChunk", eventsToBeExpiredEventChunk != null ?
+                    eventsToBeExpiredEventChunk.getFirst() : null);
             state.put("GroupEventMap", groupEventMap);
         }
         return state;
@@ -344,17 +324,14 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
 
     @Override
     public synchronized void restoreState(Map<String, Object> state) {
-        currentEventChunk.clear();
-        currentEventChunk.add((StreamEvent) state.get("CurrentEventChunk"));
-        if (eventsToBeExpired != null) {
-            eventsToBeExpired.clear();
-            eventsToBeExpired.add((StreamEvent) state.get("ExpiredEventChunk"));
+        if (eventsToBeExpiredEventChunk != null) {
+            eventsToBeExpiredEventChunk.clear();
+            eventsToBeExpiredEventChunk.add((StreamEvent) state.get("ExpiredEventChunk"));
         } else {
             if (outputExpectsExpiredEvents) {
-                eventsToBeExpired = new ComplexEventChunk<StreamEvent>(false);
+                eventsToBeExpiredEventChunk = new ComplexEventChunk<StreamEvent>(false);
             }
         }
-        resetEvent = (StreamEvent) state.get("ResetEvent");
         groupEventMap = (Map<Object, ResourceStreamEventList>) state.get("GroupEventMap");
     }
 
@@ -374,10 +351,15 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     public static class ResourceStreamEventList {
         private List<StreamEvent> streamEventList;
         private long expiryTimestamp;
+        private boolean isExpired;
 
         public ResourceStreamEventList(List<StreamEvent> streamEventList, long expiryTimestamp) {
             this.streamEventList = streamEventList;
             this.expiryTimestamp = expiryTimestamp;
+        }
+
+        public void setExpired(boolean isExpired) {
+            this.isExpired = isExpired;
         }
     }
 }
