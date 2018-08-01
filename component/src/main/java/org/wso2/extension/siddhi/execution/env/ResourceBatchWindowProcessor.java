@@ -50,7 +50,7 @@ import java.util.Map;
         name = "resourceBatch",
         namespace = "env",
         description = "A resource batch (tumbling) window that holds a number of events with specified attribute " +
-                "as grouping key and based on the resource count inferred from env:resourceIdentify extension. " +
+                "as grouping key and based on the resource count inferred from env:resourceIdentifier extension. " +
                 "The window is updated each time a batch of events with same key value that equals the number of " +
                 "resources count.",
         parameters = {
