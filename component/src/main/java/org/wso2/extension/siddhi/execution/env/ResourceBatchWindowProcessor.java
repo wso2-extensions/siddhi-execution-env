@@ -231,15 +231,17 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                 StreamEvent clonedStreamEvent = streamEventCloner.copyStreamEvent(streamEvent);
                 if (!streamEvent.getType().equals(ComplexEvent.Type.TIMER)) {
                     Object groupEventMapKey = groupKeyExpressionExecutor.execute(clonedStreamEvent);
-                    if (groupEventMap.get(groupEventMapKey) != null) {
-                        groupEventMap.get(groupEventMapKey).streamEventList.add(clonedStreamEvent);
+                    ResourceStreamEventList resourceStreamEventList = groupEventMap.get(groupEventMapKey);
+                    if (resourceStreamEventList != null) {
+                        resourceStreamEventList.streamEventList.add(clonedStreamEvent);
                     } else {
                         List<StreamEvent> list = new ArrayList<>();
                         list.add(clonedStreamEvent);
                         groupEventMap.put(groupEventMapKey, new ResourceStreamEventList(list,
                                 clonedStreamEvent.getTimestamp() + timeInMilliSeconds));
-                        if (nextEmitTime == -1) {
-                            nextEmitTime = currentTime + timeInMilliSeconds;
+                        long newNextEmitTime = currentTime + timeInMilliSeconds;
+                        if (nextEmitTime == -1 || newNextEmitTime > nextEmitTime) {
+                            nextEmitTime = newNextEmitTime;
                             if (scheduler != null) {
                                 scheduler.notifyAt(nextEmitTime);
                             }
