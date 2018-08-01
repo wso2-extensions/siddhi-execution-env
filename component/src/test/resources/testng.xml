@@ -28,6 +28,10 @@
             <class name="org.wso2.extension.siddhi.execution.env.GetYAMLPropertyFunctionExtensionTestCase" />
             <class name="org.wso2.extension.siddhi.execution.env.GetUserAgentPropertyFunctionExtensionTestCase"/>
             <class name="org.wso2.extension.siddhi.execution.env.GetOriginIPFromXForwardedFunctionTestCase"/>
+        </classes>
+    </test>
+    <test name="resource-tests" enabled="true" preserve-order="true" parallel="false">
+        <classes>
             <class name="org.wso2.extension.siddhi.execution.env.ResourceBatchWindowProcessorTestCase"/>
             <class name="org.wso2.extension.siddhi.execution.env.ResourceIdentifierStreamProcessorTestCase"/>
         </classes>
