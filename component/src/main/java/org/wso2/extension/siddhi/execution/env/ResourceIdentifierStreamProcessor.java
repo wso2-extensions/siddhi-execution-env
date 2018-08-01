@@ -57,12 +57,6 @@ import java.util.concurrent.ConcurrentHashMap;
         },
         examples = {
                 @Example(
-                        syntax = "from fooStream#env:resourceIdentifier(\"X\")" +
-                                "select *\n" +
-                                "insert into barStream;",
-                        description = "This will registering the resource 'X' in static map and unregister at the stop."
-                ),
-                @Example(
                         syntax =
                                 "@info(name='product_color_code_rule') \n" +
                                 "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
@@ -91,7 +85,7 @@ import java.util.concurrent.ConcurrentHashMap;
                                 "identifier with 'resource.group.id: rule-group-1' in both the 'rule' queries, so " +
                                 "that the other extensions can be used the number of registered " +
                                 "resource 'rule-group-1' count for their internal processing. Here the " +
-                                "'defect_analyzer' query has Resource Batch Window where it uses registered " +
+                                "'defect_analyzer' query has env:resourceBatch window where it uses registered " +
                                 "resource 'rule-group-1' count to determine the event waiting condition for events " +
                                 "from DefectDetectionResult stream."
                 )

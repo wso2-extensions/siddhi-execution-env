@@ -70,20 +70,6 @@ import java.util.Map;
         },
         examples = {
                 @Example(
-                        syntax = "define window cseEventWindow (symbol string, price float, volume int) " +
-                                "evn:resourceBatch('X', symbol) output all events;\n\n" +
-                                "@info(name = 'query0')\n" +
-                                "from cseEventStream\n" +
-                                "insert into cseEventWindow;\n\n" +
-                                "@info(name = 'query1')\n" +
-                                "from cseEventWindow\n" +
-                                "select symbol, sum(price) as price\n" +
-                                "insert all events into outputStream ;",
-                        description = "This will processing events as batches based on the registered 'X' resource " +
-                                "count as a batch length and 'symbol' as grouping key and out put all events as " +
-                                "chunk once the batches expired."
-                ),
-                @Example(
                         syntax = "define stream SweetProductDefectsDetector(productId string, colorCode string, " +
                                 "height long, width long);\n" +
                                 "define stream SweetProductDefectAlert(productId string, isDefected bool);\n" +
@@ -103,9 +89,9 @@ import java.util.Map;
                                 "60000)\n" +
                                 "select productId, and(not isValid) as isDefected\n" +
                                 "insert into SweetProductDefectAlert;",
-                        description = "This example demonstrate the usage of 'ResourceBatchWindowProcessor' " +
-                                "extension with 'ResourceIdentifierStreamProcessor' and 'AndAttributeAggregator' " +
-                                "extensions.\n " +
+                        description = "This example demonstrate the usage of 'env:resourceBatch' widow " +
+                                "extension with 'env:resourceIdentifier' stream processor and 'and' attribute " +
+                                "aggregator extensions.\n " +
                                 "Use Case: The SweetProductDefectsDetector gets the Sweet Production data as " +
                                 "an input stream and each event will be sent to the 'rule' queries( " +
                                 "'product_color_code_rule' and 'product_dimensions_rule') . The query " +
@@ -119,14 +105,14 @@ import java.util.Map;
                                 "\n" +
                                 "To address this use case, we have defined the same resource.group.id: rule-group-1 " +
                                 "in all the 'rule' queries, and its registering the resources using " +
-                                "ResourceIdentifierStreamProcessor extension.  In the 'defect_analyzer' " +
+                                "'resourceIdentifier' extension.  In the 'defect_analyzer' " +
                                 "query we defined the env:resourceBatch(\"rule-group-1\", productId, 2000) " +
                                 "window as it will accumulating the events with correlation.id:productId, " +
                                 "where it holds the events for same 'productId' until it matches the number of " +
                                 "available \"rule-group-1\" resources or flushing the events if the " +
                                 "timeout(time.in.milliseconds:2000) occurs.\n" +
                                 "To aggregate the results from 'rule' queries, we have used 'and(not isValid)' " +
-                                "(AndAttributeAggregator) where it logically computes AND operation of not isValid " +
+                                "attribute aggregator where it logically computes AND operation of not isValid " +
                                 "boolean attribute values and outputs the results as a boolean value.\n" +
                                 "\n" +
                                 "Input 1: [SweetProductDefectsDetector]\n" +
