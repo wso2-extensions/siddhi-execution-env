@@ -263,12 +263,14 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                         }
                     } else {
                         if (entry.getValue().streamEventList.size() >= windowLength ||
-                                //flushing the late events if the entries already expired.
                                 entry.getValue().expiryTimestamp + LATE_EVENT_FLUSHING_DURATION < currentTime) {
+                            //events add into output stream event list and remove entry map entry as
+                            // the LATE_EVENT_FLUSHING_DURATION interval exceed
                             streamEventList = entry.getValue().streamEventList;
                             groupEventMap.remove(entry.getKey());
                         } else if (entry.getValue().expiryTimestamp < currentTime) {
-                                //events add into output stream event list.
+                            //events add into output stream event list, and wait 'LATE_EVENT_FLUSHING_DURATION' for
+                            // late events before removing the map entry
                             streamEventList = entry.getValue().streamEventList;
                             entry.getValue().setExpired(true);
                         }
