@@ -360,7 +360,7 @@ public class ResourceBatchWindowProcessorTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test(dependsOnMethods = "testAggregateWithTwoKeysBehaviour")
+    @Test(enabled = false)
     public void testAggregateWithTimeoutBehaviour() throws Exception {
         logger.info("ResourceBatchWindowAggregateWithTimeout TestCase");
 
@@ -404,7 +404,7 @@ public class ResourceBatchWindowProcessorTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test(dependsOnMethods = "testAggregateWithTimeoutBehaviour")
+    @Test(dependsOnMethods = "testAggregateWithTwoKeysBehaviour")
     public void testExpiredEventBehaviour() throws Exception {
         logger.info("ResourceBatchWindowExpiredEventBehaviour TestCase");
 
