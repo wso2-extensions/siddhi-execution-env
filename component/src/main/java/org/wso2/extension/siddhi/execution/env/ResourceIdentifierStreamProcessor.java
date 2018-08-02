@@ -59,19 +59,19 @@ import java.util.concurrent.ConcurrentHashMap;
                 @Example(
                         syntax =
                                 "@info(name='product_color_code_rule') \n" +
-                                "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
-                                "select productId, if(colorCode == '#FF0000', true, false) as isValid\n" +
-                                "insert into DefectDetectionResult;\n" +
-                                "\n" +
-                                "@info(name='product_dimensions_rule') \n" +
-                                "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
-                                "select productId, if(height == 5 && width ==10, true, false) as isValid\n" +
-                                "insert into DefectDetectionResult;\n" +
-                                "@info(name='defect_analyzer') \n" +
-                                "from DefectDetectionResult#window.env:resourceBatch(\"rule-group-1\", productId, " +
-                                "60000)\n" +
-                                "select productId, and(not isValid) as isDefected\n" +
-                                "insert into SweetProductDefectAlert;",
+                                        "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
+                                        "select productId, if(colorCode == '#FF0000', true, false) as isValid\n" +
+                                        "insert into DefectDetectionResult;\n" +
+                                        "\n" +
+                                        "@info(name='product_dimensions_rule') \n" +
+                                        "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
+                                        "select productId, if(height == 5 && width ==10, true, false) as isValid\n" +
+                                        "insert into DefectDetectionResult;\n" +
+                                        "@info(name='defect_analyzer') \n" +
+                                        "from DefectDetectionResult#window.env:resourceBatch(\"rule-group-1\", " +
+                                        "productId, 60000)\n" +
+                                        "select productId, and(not isValid) as isDefected\n" +
+                                        "insert into SweetProductDefectAlert;",
                         description = "These are two rule base queries, which processing the same events from " +
                                 "the SweetProductDefectsDetector and output the process results into same stream " +
                                 "DefectDetectionResult. Also, the queries like this can be newly introduce into " +
@@ -110,13 +110,6 @@ public class ResourceIdentifierStreamProcessor extends StreamProcessor {
             if (attributeExpressionExecutors[0] instanceof ConstantExpressionExecutor) {
                 if (attributeExpressionExecutors[0].getReturnType() == Attribute.Type.STRING) {
                     resourceName = (String) ((ConstantExpressionExecutor) attributeExpressionExecutors[0]).getValue();
-                    if (resourceIdentifyStreamProcessorMap.containsKey(resourceName)) {
-                        resourceIdentifyStreamProcessorMap.get(resourceName).add(this);
-                    } else {
-                        List<ResourceIdentifierStreamProcessor> list = new ArrayList<>();
-                        list.add(this);
-                        resourceIdentifyStreamProcessorMap.put(resourceName, list);
-                    }
                 } else {
                     throw new SiddhiAppValidationException("Resource Identify Stream Processor first parameter " +
                             "attribute should be string type but found " +
@@ -137,14 +130,30 @@ public class ResourceIdentifierStreamProcessor extends StreamProcessor {
 
     @Override
     public void start() {
-
+        if (resourceName != null) {
+            List<ResourceIdentifierStreamProcessor> resourceIdentifierStreamProcessorList =
+                    resourceIdentifyStreamProcessorMap.get(resourceName);
+            if (resourceIdentifierStreamProcessorList != null) {
+                resourceIdentifierStreamProcessorList.add(this);
+            } else {
+                List<ResourceIdentifierStreamProcessor> list = new ArrayList<>();
+                list.add(this);
+                resourceIdentifyStreamProcessorMap.put(resourceName, list);
+            }
+        }
     }
 
     @Override
     public void stop() {
-        resourceIdentifyStreamProcessorMap.get(resourceName).remove(this);
-        if (resourceIdentifyStreamProcessorMap.get(resourceName).size() == 0) {
-            resourceIdentifyStreamProcessorMap.remove(resourceName);
+        if (resourceName != null) {
+            List<ResourceIdentifierStreamProcessor> resourceIdentifierStreamProcessorList =
+                    resourceIdentifyStreamProcessorMap.get(resourceName);
+            if (resourceIdentifierStreamProcessorList != null) {
+                resourceIdentifierStreamProcessorList.remove(this);
+                if (resourceIdentifierStreamProcessorList.size() == 0) {
+                    resourceIdentifyStreamProcessorMap.remove(resourceName);
+                }
+            }
         }
     }
 
@@ -159,8 +168,10 @@ public class ResourceIdentifierStreamProcessor extends StreamProcessor {
     }
 
     public static int getResourceCount(String resourceName) {
-        if (resourceIdentifyStreamProcessorMap.containsKey(resourceName)) {
-            return resourceIdentifyStreamProcessorMap.get(resourceName).size();
+        List<ResourceIdentifierStreamProcessor> resourceIdentifierStreamProcessorList =
+                resourceIdentifyStreamProcessorMap.get(resourceName);
+        if (resourceIdentifierStreamProcessorList != null) {
+            return resourceIdentifierStreamProcessorList.size();
         } else {
             return 0;
         }
