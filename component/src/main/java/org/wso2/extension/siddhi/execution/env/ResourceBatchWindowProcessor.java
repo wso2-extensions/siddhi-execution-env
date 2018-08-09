@@ -26,6 +26,7 @@ import org.wso2.siddhi.core.event.ComplexEvent;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
 import org.wso2.siddhi.core.event.stream.StreamEvent;
 import org.wso2.siddhi.core.event.stream.StreamEventCloner;
+import org.wso2.siddhi.core.event.stream.holder.SnapshotableStreamEventQueue;
 import org.wso2.siddhi.core.executor.ConstantExpressionExecutor;
 import org.wso2.siddhi.core.executor.ExpressionExecutor;
 import org.wso2.siddhi.core.query.processor.Processor;
@@ -33,6 +34,7 @@ import org.wso2.siddhi.core.query.processor.SchedulingProcessor;
 import org.wso2.siddhi.core.query.processor.stream.window.WindowProcessor;
 import org.wso2.siddhi.core.util.Scheduler;
 import org.wso2.siddhi.core.util.config.ConfigReader;
+import org.wso2.siddhi.core.util.snapshot.state.SnapshotStateList;
 import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 
@@ -157,7 +159,8 @@ import java.util.Map;
 )
 public class ResourceBatchWindowProcessor extends WindowProcessor implements SchedulingProcessor {
     private static final int LATE_EVENT_FLUSHING_DURATION = 300000; //5 minutes
-    private ComplexEventChunk<StreamEvent> eventsToBeExpiredEventChunk = new ComplexEventChunk<StreamEvent>(false);
+    private SnapshotableStreamEventQueue eventsToBeExpiredEventChunk =
+            new SnapshotableStreamEventQueue(streamEventClonerHolder);
     private SiddhiAppContext siddhiAppContext;
     private ExpressionExecutor groupKeyExpressionExecutor;
     private Map<Object, ResourceStreamEventList> groupEventMap = new LinkedHashMap<>();
@@ -316,8 +319,9 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     public Map<String, Object> currentState() {
         Map<String, Object> state = new HashMap<>();
         synchronized (this) {
-            state.put("ExpiredEventChunk", eventsToBeExpiredEventChunk != null ?
-                    eventsToBeExpiredEventChunk.getFirst() : null);
+            if (eventsToBeExpiredEventChunk != null) {
+                state.put("ExpiredEventQueue", eventsToBeExpiredEventChunk.getSnapshot());
+            }
             state.put("GroupEventMap", groupEventMap);
         }
         return state;
@@ -326,12 +330,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     @Override
     public synchronized void restoreState(Map<String, Object> state) {
         if (eventsToBeExpiredEventChunk != null) {
-            eventsToBeExpiredEventChunk.clear();
-            eventsToBeExpiredEventChunk.add((StreamEvent) state.get("ExpiredEventChunk"));
-        } else {
-            if (outputExpectsExpiredEvents) {
-                eventsToBeExpiredEventChunk = new ComplexEventChunk<StreamEvent>(false);
-            }
+            eventsToBeExpiredEventChunk.restore((SnapshotStateList) state.get("ExpiredEventQueue"));
         }
         groupEventMap = (Map<Object, ResourceStreamEventList>) state.get("GroupEventMap");
     }
