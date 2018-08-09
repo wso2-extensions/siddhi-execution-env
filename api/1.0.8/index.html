@@ -36,7 +36,7 @@
     
     
       
-        <title>1.0.4 - Siddhi-Execution-Env</title>
+        <title>1.0.8 - Siddhi-Execution-Env</title>
       
     
     
@@ -73,7 +73,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#api-docs-v104" tabindex="1" class="md-skip">
+      <a href="#api-docs-v108" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -99,7 +99,7 @@
                 Siddhi-Execution-Env
               </span>
               <span class="md-header-nav__topic">
-                1.0.4
+                1.0.8
               </span>
             
           
@@ -201,54 +201,6 @@
           
           
 
-
-  <li class="md-nav__item">
-    <a href="../1.0.8/" title="1.0.8" class="md-nav__link">
-      1.0.8
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../1.0.7/" title="1.0.7" class="md-nav__link">
-      1.0.7
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../1.0.6/" title="1.0.6" class="md-nav__link">
-      1.0.6
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../1.0.5/" title="1.0.5" class="md-nav__link">
-      1.0.5
-    </a>
-  </li>
-
-        
-          
-          
-          
-
   
 
 
@@ -260,11 +212,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        1.0.4
+        1.0.8
       </label>
     
-    <a href="./" title="1.0.4" class="md-nav__link md-nav__link--active">
-      1.0.4
+    <a href="./" title="1.0.8" class="md-nav__link md-nav__link--active">
+      1.0.8
     </a>
     
       
@@ -320,6 +272,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#resourceidentifier-stream-processor" title="resourceIdentifier (Stream Processor)" class="md-nav__link">
+    resourceIdentifier (Stream Processor)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resourcebatch-window" title="resourceBatch (Window)" class="md-nav__link">
+    resourceBatch (Window)
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -333,6 +299,54 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.7/" title="1.0.7" class="md-nav__link">
+      1.0.7
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.6/" title="1.0.6" class="md-nav__link">
+      1.0.6
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.5/" title="1.0.5" class="md-nav__link">
+      1.0.5
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.4/" title="1.0.4" class="md-nav__link">
+      1.0.4
+    </a>
   </li>
 
         
@@ -476,6 +490,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#resourceidentifier-stream-processor" title="resourceIdentifier (Stream Processor)" class="md-nav__link">
+    resourceIdentifier (Stream Processor)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resourcebatch-window" title="resourceBatch (Window)" class="md-nav__link">
+    resourceBatch (Window)
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -498,7 +526,7 @@
               
                 
                 
-                <h1 id="api-docs-v104">API Docs - v1.0.4</h1>
+                <h1 id="api-docs-v108">API Docs - v1.0.8</h1>
 <h2 id="env">Env</h2>
 <h3 id="getenvironmentproperty-function">getEnvironmentProperty <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a></em></h3>
 <p style="word-wrap: break-word">This function returns Java environment property corresponding to the key provided</p>
@@ -730,6 +758,116 @@ insert into outputStream;
 </code></pre>
 
 <p style="word-wrap: break-word">This query returns corresponding YAML property for the corresponding key from keyStream as FunctionOutput to the outputStream</p>
+
+<h3 id="resourceidentifier-stream-processor">resourceIdentifier <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a></em></h3>
+<p style="word-wrap: break-word">The resource identify stream processor registering the resource name with reference in static map. And serve static resources count for specific resource name.</p>
+
+<p><span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
+<pre><code>env:resourceIdentifier(&lt;STRING&gt; resource.group.id)
+</code></pre>
+
+<p><span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">resource.group.id</td>
+        <td style="vertical-align: top; word-wrap: break-word">The resource group name.</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table></p>
+<p><span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span></p>
+<pre><code>@info(name='product_color_code_rule') 
+from SweetProductDefectsDetector#env:resourceIdentifier(&quot;rule-group-1&quot;)
+select productId, if(colorCode == '#FF0000', true, false) as isValid
+insert into DefectDetectionResult;
+
+@info(name='product_dimensions_rule') 
+from SweetProductDefectsDetector#env:resourceIdentifier(&quot;rule-group-1&quot;)
+select productId, if(height == 5 &amp;&amp; width ==10, true, false) as isValid
+insert into DefectDetectionResult;
+@info(name='defect_analyzer') 
+from DefectDetectionResult#window.env:resourceBatch(&quot;rule-group-1&quot;, productId, 60000)
+select productId, and(not isValid) as isDefected
+insert into SweetProductDefectAlert;
+</code></pre>
+
+<p style="word-wrap: break-word">These are two rule base queries, which processing the same events from the SweetProductDefectsDetector and output the process results into same stream DefectDetectionResult. Also, the queries like this can be newly introduce into Siddhi Application and the number of output events(in DefectDetectionResult) depends on the number of available queries. If we need to further aggregate results for particular correlation.id: productId from the DefectDetectionResult stream, follow-up queries should wait for events with same correlation.id from all these available queries. For that future queries should know the number of events which can expect from these 'rule' base queries for given correlation id.To address this requirement, in above example, we have defined the resource identifier with 'resource.group.id: rule-group-1' in both the 'rule' queries, so that the other extensions can be used the number of registered resource 'rule-group-1' count for their internal processing. Here the 'defect_analyzer' query has env:resourceBatch window where it uses registered resource 'rule-group-1' count to determine the event waiting condition for events from DefectDetectionResult stream.</p>
+
+<h3 id="resourcebatch-window">resourceBatch <em><a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#window">(Window)</a></em></h3>
+<p style="word-wrap: break-word">A resource batch (tumbling) window that holds a number of events with specified attribute as grouping key and based on the resource count inferred from env:resourceIdentifier extension. The window is updated each time a batch of events with same key value that equals the number of resources count.</p>
+
+<p><span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span></p>
+<pre><code>env:resourceBatch(&lt;STRING&gt; resource.group.id, &lt;INT|LONG|FLOAT|BOOL|DOUBLE&gt; correlation.id, &lt;INT|LONG|TIME&gt; time.in.milliseconds)
+</code></pre>
+
+<p><span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">resource.group.id</td>
+        <td style="vertical-align: top; word-wrap: break-word">The resource group name.</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">correlation.id</td>
+        <td style="vertical-align: top; word-wrap: break-word">The attribute that should be used for event correlation.</td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">INT<br>LONG<br>FLOAT<br>BOOL<br>DOUBLE</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">time.in.milliseconds</td>
+        <td style="vertical-align: top; word-wrap: break-word">Time to wait for arrival of new event, before flushing and giving output for events belonging to a specific batch.</td>
+        <td style="vertical-align: top">300000</td>
+        <td style="vertical-align: top">INT<br>LONG<br>TIME</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table></p>
+<p><span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span></p>
+<pre><code>define stream SweetProductDefectsDetector(productId string, colorCode string, height long, width long);
+define stream SweetProductDefectAlert(productId string, isDefected bool);
+
+@info(name='product_color_code_rule') 
+from SweetProductDefectsDetector#env:resourceIdentifier(&quot;rule-group-1&quot;)
+select productId, if(colorCode == '#FF0000', true, false) as isValid
+insert into DefectDetectionResult;
+
+@info(name='product_dimensions_rule') 
+from SweetProductDefectsDetector#env:resourceIdentifier(&quot;rule-group-1&quot;)
+select productId, if(height == 5 &amp;&amp; width ==10, true, false) as isValid
+insert into DefectDetectionResult;
+
+@info(name='defect_analyzer') 
+from DefectDetectionResult#window.env:resourceBatch(&quot;rule-group-1&quot;, productId, 60000)
+select productId, and(not isValid) as isDefected
+insert into SweetProductDefectAlert;
+</code></pre>
+
+<p style="word-wrap: break-word">This example demonstrate the usage of 'env:resourceBatch' widow extension with 'env:resourceIdentifier' stream processor and 'and' attribute aggregator extensions.<br>&nbsp;Use Case: The SweetProductDefectsDetector gets the Sweet Production data as an input stream and each event will be sent to the 'rule' queries( 'product_color_code_rule' and 'product_dimensions_rule') . The query 'defect_analyzer' should wait for both the output results from the 'rule' queries output and based on the aggregated results(take the logical AND aggregation of the 'isValid' attribute both events from 'product_color_code_rule' and 'product_dimensions_rule'), generate events and insert into the output stream  'SweetProductDefectAlert'.<br>In the above example, a number of 'rule' queries can be changed and the 'defect_analyzer' query should wait for results from the all available rules.<br><br>To address this use case, we have defined the same resource.group.id: rule-group-1 in all the 'rule' queries, and its registering the resources using 'resourceIdentifier' extension.  In the 'defect_analyzer' query we defined the env:resourceBatch("rule-group-1", productId, 2000) window as it will accumulating the events with correlation.id:productId, where it holds the events for same 'productId' until it matches the number of available "rule-group-1" resources or flushing the events if the timeout(time.in.milliseconds:2000) occurs.<br>To aggregate the results from 'rule' queries, we have used 'and(not isValid)' attribute aggregator where it logically computes AND operation of not isValid boolean attribute values and outputs the results as a boolean value.<br><br>Input 1: [SweetProductDefectsDetector]<br>{  <br>&nbsp;&nbsp;&nbsp;"event":{  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"productId":"Cake",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"colorCode":"FF0000",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"height": 5,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"width": 10<br><br>&nbsp;&nbsp;&nbsp;}<br>}<br><br>Output 1:[SweetProductDefectAlert]<br>{  <br>&nbsp;&nbsp;&nbsp;"event":{  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"productId":"Cake",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"isDefected":"false"<br>&nbsp;&nbsp;&nbsp;}<br>}<br><br>Input 2: [SweetProductDefectsDetector]<br>{  <br>&nbsp;&nbsp;&nbsp;"event":{  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"productId":"Cake",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"colorCode":"FF0000",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"height": 10,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"width": 20<br><br>&nbsp;&nbsp;&nbsp;}<br>}<br><br>Output 2:[SweetProductDefectAlert]<br>{  <br>&nbsp;&nbsp;&nbsp;"event":{  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"productId":"Cake",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"isDefected":"true"<br>&nbsp;&nbsp;&nbsp;}<br>}</p>
                 
                   
                 
@@ -750,7 +888,7 @@ insert into outputStream;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../1.0.5/" title="1.0.5" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../.." title="Welcome to Siddhi Execution Extension - Env" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -759,19 +897,19 @@ insert into outputStream;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                1.0.5
+                Welcome to Siddhi Execution Extension - Env
               </span>
             </div>
           </a>
         
         
-          <a href="../1.0.3/" title="1.0.3" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../1.0.7/" title="1.0.7" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                1.0.3
+                1.0.7
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
