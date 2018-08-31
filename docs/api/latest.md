@@ -1,10 +1,10 @@
-# API Docs - v1.0.8
+# API Docs - v1.0.9-SNAPSHOT
 
 ## Env
 
 ### getEnvironmentProperty *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
 
-<p style="word-wrap: break-word">This function returns Java environment property corresponding to the key provided</p>
+<p style="word-wrap: break-word">This function returns the Java environment property that corresponds with the key provided</p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
@@ -23,7 +23,7 @@
     </tr>
     <tr>
         <td style="vertical-align: top">key</td>
-        <td style="vertical-align: top; word-wrap: break-word">This specifies Key of the property to be read.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This specifies the key of the property to be read.</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">No</td>
@@ -31,7 +31,7 @@
     </tr>
     <tr>
         <td style="vertical-align: top">default.value</td>
-        <td style="vertical-align: top; word-wrap: break-word">This specifies the default Value to be returned if the property value is not available.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This specifies the default value to be returned if the property value is not available.</td>
         <td style="vertical-align: top">null</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
@@ -46,11 +46,11 @@ define stream keyStream (key string);
 from keyStream env:getEnvironmentProperty(key) as FunctionOutput 
 insert into outputStream;
 ```
-<p style="word-wrap: break-word">This query returns Java environment property corresponding to the key from keyStream as FunctionOutput to the outputStream</p>
+<p style="word-wrap: break-word">This query returns the Java environment property corresponding to the key from the 'keyStream' as 'FunctionOutput' to the outputStream.</p>
 
 ### getOriginIPFromXForwarded *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
 
-<p style="word-wrap: break-word">This function returns the public origin IP from the given X-Forwarded header</p>
+<p style="word-wrap: break-word">This function returns the public origin IP from the given X-Forwarded header.</p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
@@ -69,7 +69,7 @@ insert into outputStream;
     </tr>
     <tr>
         <td style="vertical-align: top">xforwardedheader</td>
-        <td style="vertical-align: top; word-wrap: break-word">X-Forwarded-For header of the request</td>
+        <td style="vertical-align: top; word-wrap: break-word">The 'X-Forwarded-For' header of the request.</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">No</td>
@@ -84,7 +84,7 @@ define stream InputStream (xForwardedHeader string);
 from InputStream select env:getOriginIPFromXForwarded(xForwardedHeader) as originIP 
 insert into OutputStream;
 ```
-<p style="word-wrap: break-word">This query returns the public origin IP from the given X-Forwarded header</p>
+<p style="word-wrap: break-word">This query returns the public origin IP from the given X-Forwarded header and inserts it to the 'OutputStream' stream.</p>
 
 ### getSystemProperty *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
 

@@ -39,18 +39,18 @@ import java.util.Map;
 @Extension(
         name = "getEnvironmentProperty",
         namespace = "env",
-        description = "This function returns Java environment property corresponding to the key provided",
+        description = "This function returns the Java environment property that corresponds with the key provided",
         returnAttributes = @ReturnAttribute(
-                description = "Returned type will be string.",
+                description = "A string value is returned.",
                 type = {org.wso2.siddhi.annotation.util.DataType.STRING}),
         parameters = {
                 @Parameter(name = "key",
-                        description = "This specifies Key of the property to be read.",
+                        description = "This specifies the key of the property to be read.",
                         type = {DataType.STRING},
                         optional = false),
                 @Parameter(name = "default.value",
-                        description = "This specifies the default Value to be returned " +
-                                "if the property value is not available.",
+                        description = "This specifies the default value to be returned if the property value is not" +
+                                " available.",
                         type = {DataType.STRING},
                         optional = true,
                         defaultValue = "null")
@@ -60,8 +60,8 @@ import java.util.Map;
                         syntax = "define stream keyStream (key string);\n" +
                                 "from keyStream env:getEnvironmentProperty(key) as FunctionOutput \n" +
                                 "insert into outputStream;",
-                        description = "This query returns Java environment property corresponding to " +
-                                "the key from keyStream as FunctionOutput to the outputStream"
+                        description = "This query returns the Java environment property corresponding to " +
+                                "the key from the 'keyStream' as 'FunctionOutput' to the outputStream."
                 )
         }
 )

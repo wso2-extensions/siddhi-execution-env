@@ -40,13 +40,14 @@ import java.util.regex.Pattern;
 @Extension(
         name = "getOriginIPFromXForwarded",
         namespace = "env",
-        description = "This function returns the public origin IP from the given X-Forwarded header",
+        description = "This function returns the public origin IP from the given X-Forwarded header.",
         returnAttributes = @ReturnAttribute(
-                description = "public IP related to the origin which is retrieved using the given X-Forwarded header",
+                description = "The public IP related to the origin that is retrieved using the given 'X-Forwarded' " +
+                        "header",
                 type = {DataType.STRING}),
         parameters = {
                 @Parameter(name = "xforwardedheader",
-                        description = "X-Forwarded-For header of the request",
+                        description = "The 'X-Forwarded-For' header of the request.",
                         type = {DataType.STRING}
                 )
         },
@@ -56,7 +57,8 @@ import java.util.regex.Pattern;
                                 "from InputStream " +
                                 "select env:getOriginIPFromXForwarded(xForwardedHeader) as originIP \n" +
                                 "insert into OutputStream;",
-                        description = "This query returns the public origin IP from the given X-Forwarded header"
+                        description = "This query returns the public origin IP from the given X-Forwarded header as" +
+                                " 'originIP', and inserts it to the 'OutputStream' stream."
                 )
         }
 )
