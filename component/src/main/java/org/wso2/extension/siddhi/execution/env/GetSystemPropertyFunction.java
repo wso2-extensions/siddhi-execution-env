@@ -41,17 +41,17 @@ import java.util.Map;
 @Extension(
         name = "getSystemProperty",
         namespace = "env",
-        description = "This function returns the system property pointed by the system property key",
+        description = "This function returns the system property referred to via the system property key.",
         returnAttributes = @ReturnAttribute(
-                description = "Return type will be string.",
+                description = "A string value is returned.",
                 type = {org.wso2.siddhi.annotation.util.DataType.STRING}),
         parameters = {
                 @Parameter(name = "key",
-                        description = "This specifies Key of the property to be read.",
+                        description = "This specifies the key of the property to be read.",
                         type = {DataType.STRING},
                         optional = false),
                 @Parameter(name = "default.value",
-                        description = "This specifies the default Value to be returned " +
+                        description = "This specifies the default value to be returned " +
                                 "if the property value is not available.",
                         type = {DataType.STRING},
                         optional = true,
@@ -59,11 +59,11 @@ import java.util.Map;
         },
         examples = {
                 @Example(
-                        syntax = "define stream keyStream (key string);\n" +
-                                "from keyStream env:getSystemProperty(key) as FunctionOutput \n" +
-                                "insert into outputStream;",
-                        description = "This query returns system property corresponding to the key from keyStream as"
-                                + " FunctionOutput to the outputStream"
+                        syntax = "define stream KeyStream (key string);\n" +
+                                "from KeyStream env:getSystemProperty(key) as FunctionOutput \n" +
+                                "insert into OutputStream;",
+                        description = "This query returns the system property that corresponds with the key from" +
+                                " the 'KeyStream' stream as the 'FunctionOutput' to the 'OutputStream' stream."
                 )
         }
 )
