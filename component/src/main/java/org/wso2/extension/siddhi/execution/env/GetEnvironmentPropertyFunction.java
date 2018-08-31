@@ -60,7 +60,7 @@ import java.util.Map;
                         syntax = "define stream keyStream (key string);\n" +
                                 "from keyStream env:getEnvironmentProperty(key) as FunctionOutput \n" +
                                 "insert into outputStream;",
-                        description = "This query returns the Java environment property corresponding to " +
+                        description = "This query returns the Java environment property that corresponds with " +
                                 "the key from the 'keyStream' as 'FunctionOutput' to the outputStream."
                 )
         }

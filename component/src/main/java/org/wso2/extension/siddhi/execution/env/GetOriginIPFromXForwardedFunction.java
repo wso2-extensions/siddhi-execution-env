@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
         description = "This function returns the public origin IP from the given X-Forwarded header.",
         returnAttributes = @ReturnAttribute(
                 description = "The public IP related to the origin that is retrieved using the given 'X-Forwarded' " +
-                        "header",
+                        "header.",
                 type = {DataType.STRING}),
         parameters = {
                 @Parameter(name = "xforwardedheader",
