@@ -46,7 +46,7 @@ define stream keyStream (key string);
 from keyStream env:getEnvironmentProperty(key) as FunctionOutput 
 insert into outputStream;
 ```
-<p style="word-wrap: break-word">This query returns the Java environment property corresponding to the key from the 'keyStream' as 'FunctionOutput' to the outputStream.</p>
+<p style="word-wrap: break-word">This query returns the Java environment property that corresponds with the key from the 'keyStream' as 'FunctionOutput' to the outputStream.</p>
 
 ### getOriginIPFromXForwarded *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
 
@@ -84,11 +84,11 @@ define stream InputStream (xForwardedHeader string);
 from InputStream select env:getOriginIPFromXForwarded(xForwardedHeader) as originIP 
 insert into OutputStream;
 ```
-<p style="word-wrap: break-word">This query returns the public origin IP from the given X-Forwarded header and inserts it to the 'OutputStream' stream.</p>
+<p style="word-wrap: break-word">This query returns the public origin IP from the given X-Forwarded header as 'originIP', and inserts it to the 'OutputStream' stream.</p>
 
 ### getSystemProperty *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
 
-<p style="word-wrap: break-word">This function returns the system property pointed by the system property key</p>
+<p style="word-wrap: break-word">This function returns the system property referred to via the system property key.</p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
@@ -107,7 +107,7 @@ insert into OutputStream;
     </tr>
     <tr>
         <td style="vertical-align: top">key</td>
-        <td style="vertical-align: top; word-wrap: break-word">This specifies Key of the property to be read.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This specifies the key of the property to be read.</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">No</td>
@@ -115,7 +115,7 @@ insert into OutputStream;
     </tr>
     <tr>
         <td style="vertical-align: top">default.value</td>
-        <td style="vertical-align: top; word-wrap: break-word">This specifies the default Value to be returned if the property value is not available.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This specifies the default value to be returned if the property value is not available.</td>
         <td style="vertical-align: top">null</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">Yes</td>
@@ -126,15 +126,15 @@ insert into OutputStream;
 <span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
 <span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
 ```
-define stream keyStream (key string);
-from keyStream env:getSystemProperty(key) as FunctionOutput 
-insert into outputStream;
+define stream KeyStream (key string);
+from KeyStream env:getSystemProperty(key) as FunctionOutput 
+insert into OutputStream;
 ```
-<p style="word-wrap: break-word">This query returns system property corresponding to the key from keyStream as FunctionOutput to the outputStream</p>
+<p style="word-wrap: break-word">This query returns the system property that corresponds with the key from the 'KeyStream' stream as the 'FunctionOutput' to the 'OutputStream' stream.</p>
 
 ### getUserAgentProperty *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
 
-<p style="word-wrap: break-word">This function returns the value corresponding to a given property name in a given user agent</p>
+<p style="word-wrap: break-word">This function returns the value that corresponds with a specified property name of a specified user agent</p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
@@ -153,7 +153,7 @@ insert into outputStream;
     </tr>
     <tr>
         <td style="vertical-align: top">user.agent</td>
-        <td style="vertical-align: top; word-wrap: break-word">This specifies the user agent from which property will be extracted.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This specifies the user agent from which the property needs to be extracted.</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">No</td>
@@ -161,7 +161,7 @@ insert into outputStream;
     </tr>
     <tr>
         <td style="vertical-align: top">property.name</td>
-        <td style="vertical-align: top; word-wrap: break-word">This specifies property name which should be extracted. Supported property names are <code>'browser'</code>, <code>'os'</code> and <code>'device'</code>.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This specifies the property name that needs to be extracted. Supported property names are 'browser', 'os', and 'device'.</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">No</td>
@@ -179,7 +179,7 @@ insert into outputStream;
     </tr>
     <tr>
         <td style="vertical-align: top">regexFilePath</td>
-        <td style="vertical-align: top; word-wrap: break-word">Location of the yaml file which contains the regex to process the user agent. </td>
+        <td style="vertical-align: top; word-wrap: break-word">The location of the yaml file that contains the regex to process the user agent.</td>
         <td style="vertical-align: top">Default regexes included in the ua_parser library</td>
         <td style="vertical-align: top">N/A</td>
     </tr>
@@ -193,11 +193,11 @@ from UserAgentStream
 select env:getUserAgentProperty(userAgent, "browser") as functionOutput 
 insert into OutputStream;
 ```
-<p style="word-wrap: break-word">This query returns browser name of the userAgent from UserAgentStream as <code>functionOutput</code> to the OutputStream</p>
+<p style="word-wrap: break-word">This query returns the browser name of the 'userAgent' from the 'UserAgentStream' stream as 'functionOutput', and inserts it into the 'OutputStream'stream.</p>
 
 ### getYAMLProperty *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#function">(Function)</a>*
 
-<p style="word-wrap: break-word">This function returns the YAML property requested or the default values specified if such avariable is not available in the deployment.yaml</p>
+<p style="word-wrap: break-word">This function returns the YAML property requested or the default values specified if such avariable is not specified in the 'deployment.yaml'.</p>
 
 <span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
 ```
@@ -216,7 +216,7 @@ insert into OutputStream;
     </tr>
     <tr>
         <td style="vertical-align: top">key</td>
-        <td style="vertical-align: top; word-wrap: break-word">This specifies Key of the property to be read.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This specifies key of the property to be read.</td>
         <td style="vertical-align: top"></td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">No</td>
@@ -224,7 +224,7 @@ insert into OutputStream;
     </tr>
     <tr>
         <td style="vertical-align: top">data.type</td>
-        <td style="vertical-align: top; word-wrap: break-word">A string constant parameter expressing the data type of the propertyusing one of the following string values: int, long, float, double, string, bool.</td>
+        <td style="vertical-align: top; word-wrap: break-word">A string constant parameter expressing the data type of the propertyusing one of the following string values:<br>&nbsp;int, long, float, double, string, bool.</td>
         <td style="vertical-align: top">string</td>
         <td style="vertical-align: top">STRING</td>
         <td style="vertical-align: top">No</td>
@@ -232,7 +232,7 @@ insert into OutputStream;
     </tr>
     <tr>
         <td style="vertical-align: top">default.value</td>
-        <td style="vertical-align: top; word-wrap: break-word">This specifies the default Value to be returned if the property value is not available.</td>
+        <td style="vertical-align: top; word-wrap: break-word">This specifies the default value to be returned if the property value is not available.</td>
         <td style="vertical-align: top">null</td>
         <td style="vertical-align: top">INT<br>LONG<br>DOUBLE<br>FLOAT<br>STRING<br>BOOL</td>
         <td style="vertical-align: top">Yes</td>
@@ -243,11 +243,11 @@ insert into OutputStream;
 <span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
 <span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
 ```
-define stream keyStream (key string);
-from keyStream  env:getYAMLProperty(key) as FunctionOutput 
+define stream KeyStream (key string);
+from KeyStream  env:getYAMLProperty(key) as FunctionOutput 
 insert into outputStream;
 ```
-<p style="word-wrap: break-word">This query returns corresponding YAML property for the corresponding key from keyStream as FunctionOutput to the outputStream</p>
+<p style="word-wrap: break-word">This query returns the corresponding YAML property for the corresponding key from the 'KeyStream' stream as 'FunctionOutput', and inserts it into the to the 'OutputStream' stream.</p>
 
 ### resourceIdentifier *<a target="_blank" href="https://wso2.github.io/siddhi/documentation/siddhi-4.0/#stream-processor">(Stream Processor)</a>*
 
