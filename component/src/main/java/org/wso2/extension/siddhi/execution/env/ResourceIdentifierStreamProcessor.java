@@ -42,17 +42,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Siddhi Resource Identify Stream Processor Extension to register the resources with name and serve registered
+ * Siddhi Resource Identifier Stream Processor Extension to register the resources with name, and serve registered
  * resource count for given name.
  */
 @Extension(
         name = "resourceIdentifier",
         namespace = "env",
-        description = "The resource identify stream processor registering the resource name with reference " +
-                "in static map. And serve static resources count for specific resource name.",
+        description = "The resource identifier stream processor is an extension to register a resource name with a" +
+                " reference in a static map and serve a static resources count for a specific resource name.",
         parameters = {
                 @Parameter(name = "resource.group.id",
-                        description = "The resource group name.",
+                        description = "The name of the resource group.",
                         type = {DataType.STRING})
         },
         examples = {
@@ -60,34 +60,39 @@ import java.util.concurrent.ConcurrentHashMap;
                         syntax =
                                 "@info(name='product_color_code_rule') \n" +
                                         "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
-                                        "select productId, if(colorCode == '#FF0000', true, false) as isValid\n" +
+                                        "select productId, ifThenElse(colorCode == '#FF0000', true, false) as " +
+                                        "isValid\n" +
                                         "insert into DefectDetectionResult;\n" +
                                         "\n" +
                                         "@info(name='product_dimensions_rule') \n" +
                                         "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
-                                        "select productId, if(height == 5 && width ==10, true, false) as isValid\n" +
+                                        "select productId, ifThenElse(height == 5 && width ==10, true, false) as " +
+                                        "isValid\n" +
                                         "insert into DefectDetectionResult;\n" +
                                         "@info(name='defect_analyzer') \n" +
                                         "from DefectDetectionResult#window.env:resourceBatch(\"rule-group-1\", " +
                                         "productId, 60000)\n" +
                                         "select productId, and(not isValid) as isDefected\n" +
                                         "insert into SweetProductDefectAlert;",
-                        description = "These are two rule base queries, which processing the same events from " +
-                                "the SweetProductDefectsDetector and output the process results into same stream " +
-                                "DefectDetectionResult. Also, the queries like this can be newly introduce into " +
-                                "Siddhi Application and the number of output events(in DefectDetectionResult) " +
-                                "depends on the number of available queries. If we need to further aggregate " +
-                                "results for particular correlation.id: productId from the DefectDetectionResult" +
-                                " stream, follow-up queries should wait for events with same correlation.id from " +
-                                "all these available queries. For that future queries should know the number of " +
-                                "events which can expect from these 'rule' base queries for given correlation id." +
-                                "To address this requirement, in above example, we have defined the resource " +
-                                "identifier with 'resource.group.id: rule-group-1' in both the 'rule' queries, so " +
-                                "that the other extensions can be used the number of registered " +
-                                "resource 'rule-group-1' count for their internal processing. Here the " +
-                                "'defect_analyzer' query has env:resourceBatch window where it uses registered " +
-                                "resource 'rule-group-1' count to determine the event waiting condition for events " +
-                                "from DefectDetectionResult stream."
+                        description = "'product_color_code_rule' and 'product_dimensions_rule' are two rule-based " +
+                                "queries that process the same events from the 'SweetProductDefectsDetector' stream." +
+                                " They both insert their process results as the output into the " +
+                                "'DefectDetectionResult' output stream.\n" +
+                                "\n" +
+                                "Multiple queries like this can be added in the Siddhi Application and the number of" +
+                                " output events inserted into the 'DefectDetectionResult' stream depends on the " +
+                                "number of available queries. If you need to further aggregate results for a " +
+                                "particular correlation ID ('productId' in this scenario) from the " +
+                                "'DefectDetectionResult' stream, follow-up queries need to wait for events with same" +
+                                " value for the 'productId' attribute from all the available queries. For this, " +
+                                "follow-up queries need to identify the number of events that can be expected from " +
+                                "these rule-based queries with a specific value for 'productID'. To address this " +
+                                "requirement, a resource identifier named 'rule-group-1' is assigned to both the " +
+                                "rule queries. The 'defect_analyzer' query includes the 'env:resourceBatch' window" +
+                                " to derive the count for the registered resource named 'rule-group-1' count from the" +
+                                " output of both the queries within a specific time period. All of these factors " +
+                                "determine the event waiting condition for events from the 'DefectDetectionResult'" +
+                                " stream."
                 )
         }
 )

@@ -51,21 +51,22 @@ import java.util.Map;
 @Extension(
         name = "resourceBatch",
         namespace = "env",
-        description = "A resource batch (tumbling) window that holds a number of events with specified attribute " +
-                "as grouping key and based on the resource count inferred from env:resourceIdentifier extension. " +
-                "The window is updated each time a batch of events with same key value that equals the number of " +
-                "resources count.",
+        description = "This extension is a resource batch (tumbling) window that holds a number of events based on" +
+                " the resource count inferred from the 'env:resourceIdentifier' extension, and with a specific" +
+                " attribute as the grouping key. " +
+                "The window is updated each time a batch of events arrive with a matching value for the grouping key," +
+                " and where the number of events is equal to the resource count.",
         parameters = {
                 @Parameter(name = "resource.group.id",
-                        description = "The resource group name.",
+                        description = "The name of the resource group.",
                         type = {DataType.STRING}),
                 @Parameter(name = "correlation.id",
                         description = "The attribute that should be used for event correlation.",
                         type = {DataType.INT, DataType.LONG, DataType.FLOAT,
                                 DataType.BOOL, DataType.DOUBLE}),
                 @Parameter(name = "time.in.milliseconds",
-                        description = "Time to wait for arrival of new event, before flushing " +
-                                "and giving output for events belonging to a specific batch.",
+                        description = "The time period to wait for the arrival of a new event before generating the" +
+                                " output for events belonging to a specific batch and flushing them.",
                         type = {DataType.INT, DataType.LONG, DataType.TIME},
                         optional = true,
                         defaultValue = "300000")
@@ -78,12 +79,12 @@ import java.util.Map;
                                 "\n" +
                                 "@info(name='product_color_code_rule') \n" +
                                 "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
-                                "select productId, if(colorCode == '#FF0000', true, false) as isValid\n" +
+                                "select productId, ifThenElse(colorCode == '#FF0000', true, false) as isValid\n" +
                                 "insert into DefectDetectionResult;\n" +
                                 "\n" +
                                 "@info(name='product_dimensions_rule') \n" +
                                 "from SweetProductDefectsDetector#env:resourceIdentifier(\"rule-group-1\")\n" +
-                                "select productId, if(height == 5 && width ==10, true, false) as isValid\n" +
+                                "select productId, ifThenElse(height == 5 && width ==10, true, false) as isValid\n" +
                                 "insert into DefectDetectionResult;\n" +
                                 "\n" +
                                 "@info(name='defect_analyzer') \n" +
@@ -91,31 +92,36 @@ import java.util.Map;
                                 "60000)\n" +
                                 "select productId, and(not isValid) as isDefected\n" +
                                 "insert into SweetProductDefectAlert;",
-                        description = "This example demonstrate the usage of 'env:resourceBatch' widow " +
-                                "extension with 'env:resourceIdentifier' stream processor and 'and' attribute " +
-                                "aggregator extensions.\n " +
-                                "Use Case: The SweetProductDefectsDetector gets the Sweet Production data as " +
-                                "an input stream and each event will be sent to the 'rule' queries( " +
-                                "'product_color_code_rule' and 'product_dimensions_rule') . The query " +
-                                "'defect_analyzer' should wait for both the output results from the 'rule' " +
-                                "queries output and based on the aggregated results(take the logical AND " +
-                                "aggregation of the 'isValid' attribute both events from 'product_color_code_rule' " +
-                                "and 'product_dimensions_rule'), generate events and insert into the output stream  " +
-                                "'SweetProductDefectAlert'.\n" +
-                                "In the above example, a number of 'rule' queries can be changed and the " +
-                                "'defect_analyzer' query should wait for results from the all available rules.\n" +
+                        description = "This example demonstrates the usage of the 'env:resourceBatch' widow " +
+                                "extension with the 'env:resourceIdentifier' stream processor and the 'and' attribute" +
+                                " aggregator extension.\n" +
                                 "\n" +
-                                "To address this use case, we have defined the same resource.group.id: rule-group-1 " +
-                                "in all the 'rule' queries, and its registering the resources using " +
-                                "'resourceIdentifier' extension.  In the 'defect_analyzer' " +
-                                "query we defined the env:resourceBatch(\"rule-group-1\", productId, 2000) " +
-                                "window as it will accumulating the events with correlation.id:productId, " +
-                                "where it holds the events for same 'productId' until it matches the number of " +
-                                "available \"rule-group-1\" resources or flushing the events if the " +
-                                "timeout(time.in.milliseconds:2000) occurs.\n" +
-                                "To aggregate the results from 'rule' queries, we have used 'and(not isValid)' " +
-                                "attribute aggregator where it logically computes AND operation of not isValid " +
-                                "boolean attribute values and outputs the results as a boolean value.\n" +
+                                "Data relating to the sweet production is received into the " +
+                                "'SweetProductDefectsDetector' input stream. This data is consumed by two rule " +
+                                "queries named 'product_color_code_rule' and 'product_dimensions_rule'.\n" +
+                                "\n" +
+                                "The follow-up query named 'defect_analyzer' needs to wait for the output results of" +
+                                " both the rule queries mentioned above, and generate an output based on aggregated" +
+                                " results.\n" +
+                                "\n" +
+                                "To ensure that each event from the 'SweetProductDefectsDetector' input stream is" +
+                                " processed by both the rule queries, they are grouped together. This is done by" +
+                                " assigning a resource identifier named 'rule-group-1' to each rule query.\n" +
+                                "\n" +
+                                "The 'defect_analyzer' follow-up query waits until an equal number of output events" +
+                                " with the same value for the 'productID' attribute are generated by both the rule" +
+                                " queries for the 'rule-group-1' resource identifier. Then it selects the events" +
+                                " where  the product ID is matching and the value for the 'isValid' attribute is not" +
+                                " 'true'.\n" +
+                                "\n" +
+                                "When deriving this output, a 'resourceBatch' time window of 2000 milliseconds is " +
+                                "considered. This checks whether events that match the criteria outlined above " +
+                                "occurs within a time period of 2000 milliseconds in a tumbling manner. If the " +
+                                "criteria is not met within 2000 events, the events within that time window are " +
+                                "considered expired and flushed from the window. If the criteria is met within the " +
+                                "time window of 2000 milliseconds, the output is inserted into the" +
+                                " \"SweetProductDefectAlert' output stream as boolean values where 'isDefected'" +
+                                " attribute is set to 'true'. The sample output can be as given below.\n" +
                                 "\n" +
                                 "Input 1: [SweetProductDefectsDetector]\n" +
                                 "{  \n" +
