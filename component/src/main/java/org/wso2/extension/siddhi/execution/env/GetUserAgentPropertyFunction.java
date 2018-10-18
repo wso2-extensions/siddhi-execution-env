@@ -50,23 +50,25 @@ import java.util.Map;
 @Extension(
         name = "getUserAgentProperty",
         namespace = "env",
-        description = "This function returns the value corresponding to a given property name in a given user agent",
+        description = "This function returns the value that corresponds with a specified property name of a specified" +
+                " user agent",
         returnAttributes = @ReturnAttribute(
-                description = "Property extracted from the user agent.",
+                description = "The property to be extracted from the user agent.",
                 type = {DataType.STRING}),
         parameters = {
                 @Parameter(name = "user.agent",
-                        description = "This specifies the user agent from which property will be extracted.",
+                        description = "This specifies the user agent from which the property needs to be extracted.",
                         type = {DataType.STRING}),
                 @Parameter(name = "property.name",
-                        description = "This specifies property name which should be extracted. " +
-                                "Supported property names are `'browser'`, `'os'` and `'device'`.",
+                        description = "This specifies the property name that needs to be extracted. " +
+                                "Supported property names are 'browser', 'os', and 'device'.",
                         type = {DataType.STRING})
         },
         systemParameter = {
                 @SystemParameter(
                         name = "regexFilePath",
-                        description = "Location of the yaml file which contains the regex to process the user agent. ",
+                        description = "The location of the yaml file that contains the regex to process the user " +
+                                "agent.",
                         defaultValue = "Default regexes included in the ua_parser library",
                         possibleParameters = "N/A"
                 )
@@ -78,8 +80,9 @@ import java.util.Map;
                                 "select env:getUserAgentProperty(userAgent, \"browser\") as " +
                                 "functionOutput \n" +
                                 "insert into OutputStream;",
-                        description = "This query returns browser name of the userAgent from UserAgentStream as " +
-                                "`functionOutput` to the OutputStream"
+                        description = "This query returns the browser name of the 'userAgent' from the" +
+                                " 'UserAgentStream' stream as 'functionOutput', and inserts it into the " +
+                                "'OutputStream'stream."
                 )
         }
 )

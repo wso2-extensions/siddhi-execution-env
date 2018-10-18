@@ -42,20 +42,20 @@ import java.util.Map;
         name = "getYAMLProperty",
         namespace = "env",
         description = "This function returns the YAML property requested or the default values specified if such a" +
-                "variable is not available in the deployment.yaml",
+                "variable is not specified in the 'deployment.yaml'.",
         parameters = {
                 @Parameter(name = "key",
-                        description = "This specifies Key of the property to be read.",
+                        description = "This specifies key of the property to be read.",
                         type = {DataType.STRING},
                         optional = false),
                 @Parameter(name = "data.type",
                         description = "A string constant parameter expressing the data type of the property" +
-                                "using one of the following string values: int, long, float, double, string, bool.",
+                                "using one of the following string values:\n int, long, float, double, string, bool.",
                         type = {DataType.STRING},
                         optional = false,
                         defaultValue = "string"),
                 @Parameter(name = "default.value",
-                        description = "This specifies the default Value to be returned " +
+                        description = "This specifies the default value to be returned " +
                                 "if the property value is not available.",
                         type = {DataType.INT, DataType.LONG, DataType.DOUBLE, DataType.FLOAT,
                                 DataType.STRING, DataType.BOOL},
@@ -63,19 +63,20 @@ import java.util.Map;
                         defaultValue = "null")
         },
         returnAttributes = @ReturnAttribute(
-                description = "Returned type will be default to string, but it could be any of the following: " +
-                        "int, long, float, double, string, bool.",
+                description = "The default return type is 'string', but it can also be any of the following:\n " +
+                        "'int', 'long', 'float', 'double', 'string',' bool'.",
                 type = {org.wso2.siddhi.annotation.util.DataType.INT, org.wso2.siddhi.annotation.util.DataType.LONG,
                         org.wso2.siddhi.annotation.util.DataType.DOUBLE, org.wso2.siddhi.annotation.util.DataType.FLOAT,
                         org.wso2.siddhi.annotation.util.DataType.STRING, org.wso2.siddhi.annotation.util.DataType.BOOL
                 }),
         examples = {
                 @Example(
-                        syntax = "define stream keyStream (key string);\n" +
-                                "from keyStream  env:getYAMLProperty(key) as FunctionOutput \n" +
+                        syntax = "define stream KeyStream (key string);\n" +
+                                "from KeyStream  env:getYAMLProperty(key) as FunctionOutput \n" +
                                 "insert into outputStream;",
-                        description = "This query returns corresponding YAML property for the corresponding key " +
-                                "from keyStream as FunctionOutput to the outputStream"
+                        description = "This query returns the corresponding YAML property for the corresponding key " +
+                                "from the 'KeyStream' stream as 'FunctionOutput', and inserts it into the to the" +
+                                " 'OutputStream' stream."
                 )
         }
 )
