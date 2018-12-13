@@ -18,5 +18,5 @@
     var extentionTitle = logoTitle.slice(7);
     var header = document.querySelector('.md-header-nav__title');
 
-    header.innerHTML = '<span class="extention-title">' + extentionTitle + '</span>' + header.textContent;
+    header.innerHTML = '<span class="extention-title">' + extentionTitle + '</span>' + headerContent;
     
