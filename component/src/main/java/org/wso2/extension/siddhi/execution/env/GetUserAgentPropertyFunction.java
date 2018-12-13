@@ -33,7 +33,9 @@ import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.query.api.definition.Attribute;
 import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 import ua_parser.Client;
+import ua_parser.OS;
 import ua_parser.Parser;
+import ua_parser.UserAgent;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -147,16 +149,17 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
 
     }
 
-    @Override
     protected Object execute(Object[] data) {
         String userAgent = (String) data[0];
-        Client clientParser = uaParser.parse(userAgent);
         switch (propertyName.toLowerCase(Locale.ENGLISH)) {
             case BROWSER:
-                return clientParser.userAgent.family;
+                UserAgent agent = uaParser.parseUserAgent(userAgent);
+                return agent.family;
             case OPERATING_SYSTEM:
-                return clientParser.os.family;
+                OS operatingSystem = uaParser.parseOS(userAgent);
+                return operatingSystem.family;
             case DEVICE:
+                Client clientParser = uaParser.parse(userAgent);
                 return clientParser.device.family;
             // Default condition will never occur.
             default:
