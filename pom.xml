@@ -29,7 +29,7 @@
     <groupId>org.wso2.extension.siddhi.execution.env</groupId>
     <artifactId>siddhi-execution-env-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.14-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>WSO2 Siddhi Execution Extension - env Pom</name>
     <url>http://wso2.org</url>
 
@@ -45,7 +45,7 @@
         </profile>
     </profiles>
     <properties>
-        <siddhi.version>4.2.17</siddhi.version>
+        <siddhi.version>4.4.8</siddhi.version>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <testng.version>6.11</testng.version>
         <jacoco.maven.version>0.7.9</jacoco.maven.version>

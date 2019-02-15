@@ -44,7 +44,7 @@ public class GetYAMLPropertyFunctionExtensionTestCase {
 
     private static Logger logger = Logger.getLogger(GetYAMLPropertyFunctionExtensionTestCase.class);
     private boolean isLogEventArrived;
-    private static String regexPattern = "The type of property value and parameter dataType does not match ";
+    private static String regexPattern = ".*(The type of property value and parameter dataType does not match).*";
 
     @Test
     public void testDefaultBehaviour() throws Exception {
