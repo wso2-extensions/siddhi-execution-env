@@ -186,7 +186,7 @@ public class GetYAMLPropertyFunction extends FunctionExecutor {
                 return value;
             } catch (NumberFormatException e) {
                 throw new SiddhiAppRuntimeException
-                        ("The type of property value and parameter dataType does not match");
+                        ("The type of property value and parameter dataType does not match", e);
             }
         } else {
             return ((hasDefaultValue) ? data[2] : null);
