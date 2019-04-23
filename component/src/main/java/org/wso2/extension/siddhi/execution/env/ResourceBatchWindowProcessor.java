@@ -17,26 +17,34 @@
  */
 package org.wso2.extension.siddhi.execution.env;
 
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.event.ComplexEvent;
-import org.wso2.siddhi.core.event.ComplexEventChunk;
-import org.wso2.siddhi.core.event.stream.StreamEvent;
-import org.wso2.siddhi.core.event.stream.StreamEventCloner;
-import org.wso2.siddhi.core.event.stream.holder.SnapshotableStreamEventQueue;
-import org.wso2.siddhi.core.executor.ConstantExpressionExecutor;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.query.processor.Processor;
-import org.wso2.siddhi.core.query.processor.SchedulingProcessor;
-import org.wso2.siddhi.core.query.processor.stream.window.WindowProcessor;
-import org.wso2.siddhi.core.util.Scheduler;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.core.util.snapshot.state.SnapshotStateList;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiAppContext;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.event.ComplexEvent;
+import io.siddhi.core.event.ComplexEventChunk;
+import io.siddhi.core.event.stream.MetaStreamEvent;
+import io.siddhi.core.event.stream.StreamEvent;
+import io.siddhi.core.event.stream.StreamEventCloner;
+import io.siddhi.core.event.stream.holder.SnapshotableStreamEventQueue;
+import io.siddhi.core.event.stream.holder.StreamEventClonerHolder;
+import io.siddhi.core.event.stream.populater.ComplexEventPopulater;
+import io.siddhi.core.executor.ConstantExpressionExecutor;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.query.processor.ProcessingMode;
+import io.siddhi.core.query.processor.Processor;
+import io.siddhi.core.query.processor.SchedulingProcessor;
+import io.siddhi.core.query.processor.stream.window.WindowProcessor;
+import io.siddhi.core.util.Scheduler;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.SnapshotStateList;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.AbstractDefinition;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.exception.SiddhiAppValidationException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,7 +171,8 @@ import java.util.Map;
                 )
         }
 )
-public class ResourceBatchWindowProcessor extends WindowProcessor implements SchedulingProcessor {
+public class ResourceBatchWindowProcessor extends WindowProcessor<ResourceBatchWindowProcessor.ExtensionState>
+        implements SchedulingProcessor {
     private static final int LATE_EVENT_FLUSHING_DURATION = 300000; //5 minutes
     private SnapshotableStreamEventQueue eventsToBeExpiredEventChunk =
             new SnapshotableStreamEventQueue(streamEventClonerHolder);
@@ -177,9 +186,13 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     private String resourceName;
 
     @Override
-    protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader configReader, boolean
-            outputExpectsExpiredEvents, SiddhiAppContext siddhiAppContext) {
-        this.siddhiAppContext = siddhiAppContext;
+    protected StateFactory<ExtensionState> init(MetaStreamEvent metaStreamEvent, AbstractDefinition inputDefinition,
+                                                ExpressionExecutor[] attributeExpressionExecutors,
+                                                ConfigReader configReader,
+                                                StreamEventClonerHolder streamEventClonerHolder,
+                                                boolean outputExpectsExpiredEvents, boolean findToBeExecuted,
+                                                SiddhiQueryContext siddhiQueryContext) {
+        this.siddhiAppContext = siddhiQueryContext.getSiddhiAppContext();
         this.outputExpectsExpiredEvents = outputExpectsExpiredEvents;
         if (attributeExpressionExecutors.length >= 2) {
             if (attributeExpressionExecutors[0] instanceof ConstantExpressionExecutor) {
@@ -221,11 +234,13 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
                     "Resource batch window should only have two or three parameters, but found "
                             + attributeExpressionExecutors.length + " input attributes");
         }
+        return () -> new ExtensionState();
     }
 
     @Override
-    protected void process(ComplexEventChunk<StreamEvent> streamEventChunk, Processor nextProcessor,
-                           StreamEventCloner streamEventCloner) {
+    protected void processEventChunk(ComplexEventChunk<StreamEvent> streamEventChunk, Processor nextProcessor,
+                                     StreamEventCloner streamEventCloner, ComplexEventPopulater complexEventPopulater,
+                                     ExtensionState state) {
         synchronized (this) {
             long currentTime = siddhiAppContext.getTimestampGenerator().currentTime();
             ComplexEventChunk<StreamEvent> outputStreamEventChunk = new ComplexEventChunk<StreamEvent>(true);
@@ -322,26 +337,6 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     }
 
     @Override
-    public Map<String, Object> currentState() {
-        Map<String, Object> state = new HashMap<>();
-        synchronized (this) {
-            if (eventsToBeExpiredEventChunk != null) {
-                state.put("ExpiredEventQueue", eventsToBeExpiredEventChunk.getSnapshot());
-            }
-            state.put("GroupEventMap", groupEventMap);
-        }
-        return state;
-    }
-
-    @Override
-    public synchronized void restoreState(Map<String, Object> state) {
-        if (eventsToBeExpiredEventChunk != null) {
-            eventsToBeExpiredEventChunk.restore((SnapshotStateList) state.get("ExpiredEventQueue"));
-        }
-        groupEventMap = (Map<Object, ResourceStreamEventList>) state.get("GroupEventMap");
-    }
-
-    @Override
     public Scheduler getScheduler() {
         return scheduler;
     }
@@ -349,6 +344,11 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
     @Override
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
+    }
+
+    @Override
+    public ProcessingMode getProcessingMode() {
+        return ProcessingMode.BATCH;
     }
 
     /**
@@ -366,6 +366,35 @@ public class ResourceBatchWindowProcessor extends WindowProcessor implements Sch
 
         public void setExpired(boolean isExpired) {
             this.isExpired = isExpired;
+        }
+    }
+
+    class ExtensionState extends State {
+
+        @Override
+        public boolean canDestroy() {
+
+            return false;
+        }
+
+        @Override
+        public Map<String, Object> snapshot() {
+            Map<String, Object> state = new HashMap<>();
+            synchronized (this) {
+                if (eventsToBeExpiredEventChunk != null) {
+                    state.put("ExpiredEventQueue", eventsToBeExpiredEventChunk.getSnapshot());
+                }
+                state.put("GroupEventMap", groupEventMap);
+            }
+            return state;
+        }
+
+        @Override
+        public synchronized void restore(Map<String, Object> state) {
+            if (eventsToBeExpiredEventChunk != null) {
+                eventsToBeExpiredEventChunk.restore((SnapshotStateList) state.get("ExpiredEventQueue"));
+            }
+            groupEventMap = (Map<Object, ResourceStreamEventList>) state.get("GroupEventMap");
         }
     }
 }
