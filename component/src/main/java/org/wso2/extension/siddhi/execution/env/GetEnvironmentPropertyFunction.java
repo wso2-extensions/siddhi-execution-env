@@ -17,20 +17,20 @@
  */
 package org.wso2.extension.siddhi.execution.env;
 
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.ReturnAttribute;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.executor.function.FunctionExecutor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
-
-import java.util.Map;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.exception.SiddhiAppRuntimeException;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.executor.function.FunctionExecutor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.exception.SiddhiAppValidationException;
 
 /**
  * Siddhi Function getEnvironmentProperty to read Java environment Properties.
@@ -42,7 +42,7 @@ import java.util.Map;
         description = "This function returns the Java environment property that corresponds with the key provided",
         returnAttributes = @ReturnAttribute(
                 description = "A string value is returned.",
-                type = {org.wso2.siddhi.annotation.util.DataType.STRING}),
+                type = {io.siddhi.annotation.util.DataType.STRING}),
         parameters = {
                 @Parameter(name = "key",
                         description = "This specifies the key of the property to be read.",
@@ -72,11 +72,11 @@ public class GetEnvironmentPropertyFunction extends FunctionExecutor {
      * this method will be called before the other methods.
      *
      * @param attributeExpressionExecutors the executors of each function parameter.
-     * @param siddhiAppContext             the context of the execution plan.
+     * @param siddhiQueryContext           the context of the siddhi query.
      */
 
-    protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader reader,
-                        SiddhiAppContext siddhiAppContext) {
+    protected StateFactory init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader reader,
+                                SiddhiQueryContext siddhiQueryContext) {
         int attributeExpressionExecutorsLength = attributeExpressionExecutors.length;
         if ((attributeExpressionExecutorsLength > 0) && (attributeExpressionExecutorsLength < 3)) {
             Attribute.Type typeofKeyAttribute = attributeExpressionExecutors[0].getReturnType();
@@ -100,6 +100,7 @@ public class GetEnvironmentPropertyFunction extends FunctionExecutor {
                     "env:getEnvironmentProperty(Key,default.value) function, " +
                     "required 1 or 2, but found " + attributeExpressionExecutors.length);
         }
+        return null;
     }
 
     /**
@@ -110,7 +111,7 @@ public class GetEnvironmentPropertyFunction extends FunctionExecutor {
      * @return the function result.
      */
     @Override
-    protected Object execute(Object[] data) {
+    protected Object execute(Object[] data, State state) {
 
         String key = (String) data[0];
         String defaultValue = (String) data[1];
@@ -127,7 +128,7 @@ public class GetEnvironmentPropertyFunction extends FunctionExecutor {
      * @return the function result.
      */
     @Override
-    protected Object execute(Object data) {
+    protected Object execute(Object data, State state) {
         if (data != null) {
             if (data instanceof String) {
                 String inputString = (String) data;
@@ -150,28 +151,5 @@ public class GetEnvironmentPropertyFunction extends FunctionExecutor {
     @Override
     public Attribute.Type getReturnType() {
         return Attribute.Type.STRING;
-    }
-
-    /**
-     * Used to collect the serializable state of the processing element, that need to be
-     * persisted for the reconstructing the element to the same state on a different point of time.
-     *
-     * @return stateful objects of the processing element as an array.
-     */
-    @Override
-    public Map<String, Object> currentState() {
-        return null;
-    }
-
-    /**
-     * Used to restore serialized state of the processing element, for reconstructing
-     * the element to the same state as if was on a previous point of time.
-     *
-     * @param state the stateful objects of the element as an array on
-     *              the same order provided by currentState().
-     */
-    @Override
-    public void restoreState(Map<String, Object> state) {
-        //Implement restore state logic.
     }
 }

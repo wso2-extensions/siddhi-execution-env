@@ -18,19 +18,20 @@
 
 package org.wso2.extension.siddhi.execution.env;
 
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.ReturnAttribute;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.executor.function.FunctionExecutor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.executor.function.FunctionExecutor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.exception.SiddhiAppValidationException;
 
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,10 +79,10 @@ public class GetOriginIPFromXForwardedFunction extends FunctionExecutor {
      * this method will be called before the other methods.
      *
      * @param attributeExpressionExecutors the executors of each function parameter.
-     * @param siddhiAppContext             the context of the execution plan.
+     * @param siddhiQueryContext           the context of the siddhi query.
      */
-    protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader reader,
-                        SiddhiAppContext siddhiAppContext) {
+    protected StateFactory init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader reader,
+                                SiddhiQueryContext siddhiQueryContext) {
         if (attributeExpressionExecutors.length != 1) {
             throw new SiddhiAppValidationException("Invalid no of arguments passed to env:getOriginIPFromXForwarded" +
                     "() function, required 1, but found " + attributeExpressionExecutors.length);
@@ -93,7 +94,7 @@ public class GetOriginIPFromXForwardedFunction extends FunctionExecutor {
                     "'xForwardedHeader' of env:getOriginIPFromXForwarded() function, required " + Attribute.Type
                     .STRING + ", but found " + attributeType.toString());
         }
-
+        return null;
     }
 
     /**
@@ -104,7 +105,7 @@ public class GetOriginIPFromXForwardedFunction extends FunctionExecutor {
      * @return the function result.
      */
     @Override
-    protected Object execute(Object[] data) {
+    protected Object execute(Object[] data, State state) {
         //we only allow single parameter for this function
         return null;
     }
@@ -118,7 +119,7 @@ public class GetOriginIPFromXForwardedFunction extends FunctionExecutor {
      * @return the function result.
      */
     @Override
-    protected Object execute(Object data) {
+    protected Object execute(Object data, State state) {
         String xForwardedFor = data.toString();
         if (xForwardedFor.isEmpty()) {
             return null;
@@ -153,28 +154,5 @@ public class GetOriginIPFromXForwardedFunction extends FunctionExecutor {
     @Override
     public Attribute.Type getReturnType() {
         return Attribute.Type.STRING;
-    }
-
-    /**
-     * Used to collect the serializable state of the processing element, that need to be
-     * persisted for the reconstructing the element to the same state on a different point of time.
-     *
-     * @return stateful objects of the processing element as an array.
-     */
-    @Override
-    public Map<String, Object> currentState() {
-        return null;
-    }
-
-    /**
-     * Used to restore serialized state of the processing element, for reconstructing
-     * the element to the same state as if was on a previous point of time.
-     *
-     * @param state the stateful objects of the element as an array on
-     *              the same order provided by currentState().
-     */
-    @Override
-    public void restoreState(Map<String, Object> state) {
-
     }
 }

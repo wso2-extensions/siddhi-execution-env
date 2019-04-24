@@ -18,21 +18,21 @@
 
 package org.wso2.extension.siddhi.execution.env;
 
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.ReturnAttribute;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
-import org.wso2.siddhi.core.executor.ConstantExpressionExecutor;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.executor.function.FunctionExecutor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
-
-import java.util.Map;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.exception.SiddhiAppRuntimeException;
+import io.siddhi.core.executor.ConstantExpressionExecutor;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.executor.function.FunctionExecutor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.exception.SiddhiAppValidationException;
 
 /**
  * Siddhi Function getYAMLProperty to read property values from deployment.yaml.
@@ -65,9 +65,9 @@ import java.util.Map;
         returnAttributes = @ReturnAttribute(
                 description = "The default return type is 'string', but it can also be any of the following:\n " +
                         "'int', 'long', 'float', 'double', 'string',' bool'.",
-                type = {org.wso2.siddhi.annotation.util.DataType.INT, org.wso2.siddhi.annotation.util.DataType.LONG,
-                        org.wso2.siddhi.annotation.util.DataType.DOUBLE, org.wso2.siddhi.annotation.util.DataType.FLOAT,
-                        org.wso2.siddhi.annotation.util.DataType.STRING, org.wso2.siddhi.annotation.util.DataType.BOOL
+                type = {io.siddhi.annotation.util.DataType.INT, io.siddhi.annotation.util.DataType.LONG,
+                        io.siddhi.annotation.util.DataType.DOUBLE, io.siddhi.annotation.util.DataType.FLOAT,
+                        io.siddhi.annotation.util.DataType.STRING, io.siddhi.annotation.util.DataType.BOOL
                 }),
         examples = {
                 @Example(
@@ -91,10 +91,10 @@ public class GetYAMLPropertyFunction extends FunctionExecutor {
      * The initialization method for TheFun, this method will be called before the other methods.
      *
      * @param attributeExpressionExecutors the executors of each function parameter.
-     * @param siddhiAppContext             the context of the execution plan.
+     * @param siddhiQueryContext           the context of the siddhi query.
      */
-    protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader reader,
-                        SiddhiAppContext siddhiAppContext) {
+    protected StateFactory init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader reader,
+                                SiddhiQueryContext siddhiQueryContext) {
         int attributeExpressionExecutorsLength = attributeExpressionExecutors.length;
         if ((attributeExpressionExecutorsLength > 0) && (attributeExpressionExecutorsLength < 4)) {
             Attribute.Type typeofKeyAttribute = attributeExpressionExecutors[0].getReturnType();
@@ -123,6 +123,7 @@ public class GetYAMLPropertyFunction extends FunctionExecutor {
 
         this.configReader = reader;
         hasDefaultValue = (attributeExpressionExecutorsLength > 2);
+        return null;
     }
 
     private Attribute.Type getReturnType(String type) {
@@ -164,7 +165,7 @@ public class GetYAMLPropertyFunction extends FunctionExecutor {
      */
 
     @Override
-    protected Object execute(Object[] data) {
+    protected Object execute(Object[] data, State state) {
         String key = (String) data[0];
         String value = configReader.readConfig(key, null);
         if (value != null) {
@@ -202,7 +203,7 @@ public class GetYAMLPropertyFunction extends FunctionExecutor {
      * @return the function result.
      */
     @Override
-    protected Object execute(Object data) {
+    protected Object execute(Object data, State state) {
         if (data != null) {
             if (data instanceof String) {
                 String key = (String) data;
@@ -225,28 +226,4 @@ public class GetYAMLPropertyFunction extends FunctionExecutor {
     public Attribute.Type getReturnType() {
         return returnType;
     }
-
-    /**
-     * Used to collect the serializable state of the processing element, that need to be
-     * persisted for the reconstructing the element to the same state on a different point of time.
-     *
-     * @return stateful objects of the processing element as an array.
-     */
-    @Override
-    public Map<String, Object> currentState() {
-        return null;
-    }
-
-    /**
-     * Used to restore serialized state of the processing element, for reconstructing
-     * the element to the same state as if was on a previous point of time.
-     *
-     * @param state the stateful objects of the element as an array on
-     *              the same order provided by currentState().
-     */
-    @Override
-    public void restoreState(Map<String, Object> state) {
-        //Implement restore state logic.
-    }
-
 }

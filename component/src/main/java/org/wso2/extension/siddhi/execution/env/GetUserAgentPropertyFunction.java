@@ -17,21 +17,23 @@
  */
 package org.wso2.extension.siddhi.execution.env;
 
-import org.wso2.siddhi.annotation.Example;
-import org.wso2.siddhi.annotation.Extension;
-import org.wso2.siddhi.annotation.Parameter;
-import org.wso2.siddhi.annotation.ReturnAttribute;
-import org.wso2.siddhi.annotation.SystemParameter;
-import org.wso2.siddhi.annotation.util.DataType;
-import org.wso2.siddhi.core.config.SiddhiAppContext;
-import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
-import org.wso2.siddhi.core.exception.SiddhiAppRuntimeException;
-import org.wso2.siddhi.core.executor.ConstantExpressionExecutor;
-import org.wso2.siddhi.core.executor.ExpressionExecutor;
-import org.wso2.siddhi.core.executor.function.FunctionExecutor;
-import org.wso2.siddhi.core.util.config.ConfigReader;
-import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
+import io.siddhi.annotation.Example;
+import io.siddhi.annotation.Extension;
+import io.siddhi.annotation.Parameter;
+import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.annotation.SystemParameter;
+import io.siddhi.annotation.util.DataType;
+import io.siddhi.core.config.SiddhiQueryContext;
+import io.siddhi.core.exception.SiddhiAppCreationException;
+import io.siddhi.core.exception.SiddhiAppRuntimeException;
+import io.siddhi.core.executor.ConstantExpressionExecutor;
+import io.siddhi.core.executor.ExpressionExecutor;
+import io.siddhi.core.executor.function.FunctionExecutor;
+import io.siddhi.core.util.config.ConfigReader;
+import io.siddhi.core.util.snapshot.state.State;
+import io.siddhi.core.util.snapshot.state.StateFactory;
+import io.siddhi.query.api.definition.Attribute;
+import io.siddhi.query.api.exception.SiddhiAppValidationException;
 import ua_parser.Client;
 import ua_parser.OS;
 import ua_parser.Parser;
@@ -44,7 +46,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Siddhi Function getUserAgentPropertyFunction to extract properties from the user agent.
@@ -99,8 +100,8 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
 
     @Override
 
-    protected void init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader configReader, SiddhiAppContext
-            siddhiAppContext) {
+    protected StateFactory init(ExpressionExecutor[] attributeExpressionExecutors, ConfigReader configReader,
+                                SiddhiQueryContext siddhiQueryContext) {
 
         int attributeExpressionExecutorsLength = attributeExpressionExecutors.length;
         if (attributeExpressionExecutorsLength == 2) {
@@ -146,10 +147,10 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
         } catch (IOException e) {
             throw new SiddhiAppCreationException("Failed to initiate user agent parser for the Siddhi app.", e);
         }
-
+        return null;
     }
 
-    protected Object execute(Object[] data) {
+    protected Object execute(Object[] data, State state) {
         String userAgent = (String) data[0];
         switch (propertyName.toLowerCase(Locale.ENGLISH)) {
             case BROWSER:
@@ -168,7 +169,7 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
     }
 
     @Override
-    protected Object execute(Object data) {
+    protected Object execute(Object data, State state) {
         // This function is never reached.
         throw new SiddhiAppRuntimeException("Number of parameters passed to getUserAgentProperty() function " +
                 "is invalid");
@@ -177,16 +178,6 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
     @Override
     public Attribute.Type getReturnType() {
         return Attribute.Type.STRING;
-    }
-
-    @Override
-    public Map<String, Object> currentState() {
-        return null;
-    }
-
-    @Override
-    public void restoreState(Map<String, Object> state) {
-
     }
 
 }
