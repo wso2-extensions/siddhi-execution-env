@@ -48,6 +48,7 @@ import io.siddhi.query.api.exception.SiddhiAppValidationException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -276,14 +277,16 @@ public class ResourceBatchWindowProcessor extends WindowProcessor<ResourceBatchW
                         }
                     }
                 }
-                for (Map.Entry<Object, ResourceStreamEventList> entry : groupEventMap.entrySet()) {
+                Iterator entryIterator = groupEventMap.entrySet().iterator();
+                while (entryIterator.hasNext()) {
+                    Map.Entry<Object, ResourceStreamEventList> entry = (Map.Entry) entryIterator.next();
                     int windowLength = ResourceIdentifierStreamProcessor.getResourceCount(resourceName);
                     List<StreamEvent> streamEventList = null;
                     if (entry.getValue().isExpired) {
                         //flushing the late events if the entries already expired and late event flushing interval
                         //less than the current time.
                         if ((entry.getValue().expiryTimestamp + LATE_EVENT_FLUSHING_DURATION) < currentTime) {
-                            groupEventMap.remove(entry.getKey());
+                            entryIterator.remove();
                         }
                     } else {
                         if (entry.getValue().streamEventList.size() >= windowLength ||
@@ -291,7 +294,7 @@ public class ResourceBatchWindowProcessor extends WindowProcessor<ResourceBatchW
                             //events add into output stream event list and remove entry map entry as
                             // the LATE_EVENT_FLUSHING_DURATION interval exceed
                             streamEventList = entry.getValue().streamEventList;
-                            groupEventMap.remove(entry.getKey());
+                            entryIterator.remove();
                         } else if (entry.getValue().expiryTimestamp < currentTime) {
                             //events add into output stream event list, and wait 'LATE_EVENT_FLUSHING_DURATION' for
                             // late events before removing the map entry
