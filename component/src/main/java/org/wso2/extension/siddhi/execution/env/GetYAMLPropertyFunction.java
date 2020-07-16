@@ -72,7 +72,8 @@ import io.siddhi.query.api.exception.SiddhiAppValidationException;
         examples = {
                 @Example(
                         syntax = "define stream KeyStream (key string);\n" +
-                                "from KeyStream  env:getYAMLProperty(key) as FunctionOutput \n" +
+                                "from KeyStream \n" +
+                                "select env:getYAMLProperty(key) as FunctionOutput \n" +
                                 "insert into outputStream;",
                         description = "This query returns the corresponding YAML property for the corresponding key " +
                                 "from the 'KeyStream' stream as 'FunctionOutput', and inserts it into the to the" +
