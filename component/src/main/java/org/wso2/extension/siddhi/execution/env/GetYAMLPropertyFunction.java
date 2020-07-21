@@ -41,8 +41,16 @@ import io.siddhi.query.api.exception.SiddhiAppValidationException;
 @Extension(
         name = "getYAMLProperty",
         namespace = "env",
-        description = "This function returns the YAML property requested or the default values specified if such a" +
-                "variable is not specified in the 'deployment.yaml'.",
+        description = "This function returns the YAML property specified in the 'deployment.yaml' file with the 'env'" +
+                " namespace as shown in the sample below.\n" +
+                "siddhi:\n" +
+                "  extensions:\n" +
+                "    -\n" +
+                "      extension:\n" +
+                "        name: 'getYAMLProperty'\n" +
+                "        namespace: 'env'\n" +
+                "        properties:\n" +
+                "          prop1Key: prop1Val",
         parameters = {
                 @Parameter(name = "key",
                         description = "This specifies key of the property to be read.",
