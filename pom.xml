@@ -45,7 +45,7 @@
         </profile>
     </profiles>
     <properties>
-        <siddhi.version>5.0.0</siddhi.version>
+        <siddhi.version>5.1.15</siddhi.version>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <testng.version>6.11</testng.version>
         <jacoco.maven.version>0.7.9</jacoco.maven.version>
