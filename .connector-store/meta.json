@@ -1,0 +1,14 @@
+{
+    "name": "env",
+    "owner": "WSO2",
+    "category": "Siddhi Execution",
+    "documentationUrl": "https://wso2-extensions.github.io/siddhi-execution-env/",
+    "description": "The siddhi-execution-env extension is an extension to Siddhi that provides the capability to read environment properties inside Siddhi stream definitions and use it inside queries. ",
+    "status": "Active",
+    "labels": [
+        "siddhi",
+        "siddhi-execution",
+        "env"
+    ],
+    "releases": []
+}
