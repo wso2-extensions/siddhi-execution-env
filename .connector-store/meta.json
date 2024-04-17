@@ -10,5 +10,10 @@
         "siddhi-execution",
         "env"
     ],
-    "releases": []
+    "releases": [
+        {
+            "tagName": "1.1.0",
+            "products": []
+        }
+    ]
 }
