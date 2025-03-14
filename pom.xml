@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.wso2</groupId>
         <artifactId>wso2</artifactId>
-        <version>5</version>
+        <version>5.3</version>
     </parent>
 
     <groupId>org.wso2.extension.siddhi.execution.env</groupId>
@@ -50,11 +50,11 @@
         <testng.version>6.11</testng.version>
         <jacoco.maven.version>0.7.9</jacoco.maven.version>
         <orbit.version.ua_parser>1.3.0.wso2v1</orbit.version.ua_parser>
-        <org.snakeyaml.version>1.17</org.snakeyaml.version>
+        <org.snakeyaml.version>2.2</org.snakeyaml.version>
         <siddhi.import.version.range>[5.0.0, 6.0.0)</siddhi.import.version.range>
-        <org.snakeyaml.package.import.version.range>[1.17.0,2.0.0)</org.snakeyaml.package.import.version.range>
+        <org.snakeyaml.package.import.version.range>[2.0,3.0)</org.snakeyaml.package.import.version.range>
         <awaitility.version>3.0.0</awaitility.version>
-        <mavan.findbugsplugin.exclude.file>findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
+        <maven.findbugsplugin.version.exclude>findbugs-exclude.xml</maven.findbugsplugin.version.exclude>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/wso2-extensions/siddhi-execution-env.git</connection>
@@ -123,6 +123,27 @@
                     <preparationGoals>clean install -Pdocumentation-deploy</preparationGoals>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
+            </plugin>
+            <plugin><!-- Overridden from parent pom to exclude generated sources -->
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <configuration combine.self="override">
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <xmlOutput>true</xmlOutput>
+                    <spotbugsXmlOutputDirectory>${project.build.directory}/findbugs</spotbugsXmlOutputDirectory>
+                    <excludeFilterFile>${maven.findbugsplugin.version.exclude}</excludeFilterFile>
+                    <!--Exclude generated sources-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>analyze-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

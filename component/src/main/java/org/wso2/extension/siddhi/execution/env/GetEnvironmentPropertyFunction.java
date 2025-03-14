@@ -67,6 +67,8 @@ import io.siddhi.query.api.exception.SiddhiAppValidationException;
 )
 public class GetEnvironmentPropertyFunction extends FunctionExecutor {
 
+    private static final long serialVersionUID = -6067933171153918531L;
+
     /**
      * The initialization method for GetEnvironmentPropertyFunction,
      * this method will be called before the other methods.

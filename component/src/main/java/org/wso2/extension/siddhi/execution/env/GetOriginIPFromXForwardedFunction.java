@@ -71,6 +71,7 @@ public class GetOriginIPFromXForwardedFunction extends FunctionExecutor {
             "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
     private static final String PRIVATE_IP_ADDRESS_PATTERN = "(^127\\..*)|(^10\\..*)|(^172\\.1[6-9]\\..*)|" +
             "(^172\\.2[0-9]\\..*)|(^172\\.3[0-1]\\..*)|(^192\\.168\\..*)";
+    private static final long serialVersionUID = -6722358068189372942L;
     private static Pattern ipPAddressPattern = Pattern.compile(IP_ADDRESS_PATTERN);
     private static Pattern privateIPPAddressPattern = Pattern.compile(PRIVATE_IP_ADDRESS_PATTERN);
 
