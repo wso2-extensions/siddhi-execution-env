@@ -70,6 +70,8 @@ import io.siddhi.query.api.exception.SiddhiAppValidationException;
 
 public class GetSystemPropertyFunction extends FunctionExecutor {
 
+    private static final long serialVersionUID = 1571891872192572307L;
+
     /**
      * The initialization method for GetSystemPropertyFunction, this method will be called before the other methods.
      *

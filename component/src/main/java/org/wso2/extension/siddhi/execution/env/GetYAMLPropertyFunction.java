@@ -92,6 +92,7 @@ import io.siddhi.query.api.exception.SiddhiAppValidationException;
 
 public class GetYAMLPropertyFunction extends FunctionExecutor {
 
+    private static final long serialVersionUID = -960310933079487853L;
     private ConfigReader configReader;
     private Attribute.Type returnType = Attribute.Type.STRING;
     private boolean hasDefaultValue = false;

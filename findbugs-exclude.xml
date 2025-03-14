@@ -22,5 +22,13 @@
         <Class name="org.wso2.extension.siddhi.execution.env.ResourceBatchWindowProcessor"/>
         <Bug pattern="IS2_INCONSISTENT_SYNC"/>
     </Match>
+    <Match>
+        <Class name="org.wso2.extension.siddhi.execution.env.GetYAMLPropertyFunction"/>
+        <Bug pattern="SE_BAD_FIELD"/>
+    </Match>
+    <Match>
+        <Class name="org.wso2.extension.siddhi.execution.env.GetUserAgentPropertyFunction"/>
+        <Bug pattern="SE_BAD_FIELD"/>
+    </Match>
 
 </FindBugsFilter>

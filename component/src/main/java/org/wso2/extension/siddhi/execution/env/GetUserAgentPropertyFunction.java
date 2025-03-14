@@ -94,6 +94,7 @@ public class GetUserAgentPropertyFunction extends FunctionExecutor {
     private static final String BROWSER = "browser";
     private static final String OPERATING_SYSTEM = "os";
     private static final String DEVICE = "device";
+    private static final long serialVersionUID = 1450454241260394288L;
     private final List<String> listOfProperties = Arrays.asList(DEVICE, OPERATING_SYSTEM, BROWSER);
     private Parser uaParser;
     private String propertyName;
